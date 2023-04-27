@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Primavera</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="otp">OTP Verification</string>
+    <string name="message_verification">You will receive verification code on this mobile number</string>
+    <string name="phone">Enter your phone number</string>
+    <string name="code">+2-</string>
+    <string name="phone_hint">0123456789</string>
+    <string name="otp_get">Get OTP</string>
+    <string name="verification_code">Enter verification code</string>
+    <string name="resend_code">Didn\'t receive the verification code?</string>
+    <string name="resend_otp">Resend Code</string>
+    <string name="verify">Verify</string>
+    <string name="title_activity_information">InformationActivity</string>
+    <string name="father">Father</string>
+    <string name="teacher">Teacher</string>
+    <string name="fragment">Fragment</string>
+    <string name="information">Please Enter Your Information</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="name">Name</string>
+    <string name="child_information">Please Enter Your Child Information</string>
+    <string name="child_watch">Select Your Child  Watch</string>
+    <string name="turn_on">Turn On</string>
+    <string name="search">Search</string>
+    <string name="bluetooth">Bluetooth</string>
+</resources>

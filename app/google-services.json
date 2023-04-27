@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "260783633092",
+    "project_id": "primavera-942dc",
+    "storage_bucket": "primavera-942dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:260783633092:android:cb07ea8cebee53f52b4f91",
+        "android_client_info": {
+          "package_name": "com.m391.primavera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "260783633092-eqfjsp71f3a1v69ipu8s2b9lvdqiftmv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.m391.primavera",
+            "certificate_hash": "7f39626ade08aaaab392060efd10caece475af06"
+          }
+        },
+        {
+          "client_id": "260783633092-uekp6bdncglrsl9so5eh42qjtaaldotk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7axjvOKNgT8rqVOOGPrH92QsF3vkj22w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "260783633092-uekp6bdncglrsl9so5eh42qjtaaldotk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
