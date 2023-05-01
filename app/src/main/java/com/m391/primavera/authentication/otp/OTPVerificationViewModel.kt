@@ -7,9 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants
+import com.m391.primavera.utils.Constants.FATHER
+import com.m391.primavera.utils.Constants.SUCCESSFUL_LOGIN
 import kotlinx.coroutines.launch
 
 class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
@@ -24,7 +27,12 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
     val response: LiveData<String?> = _response
     private val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
     private val storedVerificationId = MutableLiveData<String>()
-    private val auth = ServerDatabase().authentication
+    private val auth = ServerDatabase(app.applicationContext).authentication
+    private val fathers = ServerDatabase(app.applicationContext).fatherInformation
+    private val dataStoreManager = DataStoreManager(app.applicationContext)
+    private val _alreadySigned = MutableLiveData<String?>()
+    val alreadySigned: LiveData<String?> = _alreadySigned
+
     fun setupData(
         phone: String, token: PhoneAuthProvider.ForceResendingToken, verificationId: String
     ) {
@@ -45,7 +53,15 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     storedVerificationId.value!!, codeOTP
                 )
-                _response.postValue(auth.signInWithPhoneAuthCredential(credential))
+                val login = auth.signInWithPhoneAuthCredential(credential)
+
+                if (login == SUCCESSFUL_LOGIN) {
+                    if (fathers.checkAlreadyFatherOrNot()) {
+                        _alreadySigned.postValue(FATHER)
+                        dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
+                    } else _alreadySigned.postValue("Not")
+                }
+                _response.postValue(login)
                 showLoading.value = false
             }
         }

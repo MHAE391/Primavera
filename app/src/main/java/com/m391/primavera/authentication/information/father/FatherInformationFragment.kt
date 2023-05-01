@@ -1,27 +1,37 @@
 package com.m391.primavera.authentication.information.father
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.m391.primavera.R
 import com.m391.primavera.authentication.information.father.bluetooth.BluetoothFragment
 import com.m391.primavera.databinding.FragmentFatherInformationBinding
+import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Binding
+import com.m391.primavera.utils.Constants.SUCCESS
+import kotlinx.coroutines.launch
 
 class FatherInformationFragment : BaseFragment() {
 
     private lateinit var binding: FragmentFatherInformationBinding
     override val viewModel: FatherInformationViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,6 +55,32 @@ class FatherInformationFragment : BaseFragment() {
         binding.childImage.setOnClickListener {
             chooseChildPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.academic_years_array,
+            R.layout.spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(R.layout.spinner_item)
+            // Apply the adapter to the spinner
+            binding.academicYear.adapter = adapter
+            binding.academicYear.onItemSelectedListener = spinnerClickListener
+        }
+        binding.setData.setOnClickListener {
+            it.isEnabled = false
+            lifecycleScope.launch {
+                viewModel.setData()
+            }
+            it.isEnabled = true
+        }
+        viewModel.response.observe(viewLifecycleOwner, Observer {
+            if (it == SUCCESS) {
+                startActivity(Intent(activity, FatherActivity::class.java))
+                activity?.finish()
+            } else {
+                viewModel.showSnackBar.value = it.toString()
+            }
+        })
     }
 
     private val chooseFatherPhoto =
@@ -66,5 +102,14 @@ class FatherInformationFragment : BaseFragment() {
     private fun showBluetoothSheet() {
         val bluetoothFragment = BluetoothFragment()
         bluetoothFragment.show(parentFragmentManager, "Bluetooth")
+    }
+
+    private val spinnerClickListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+            viewModel.getChildAcademicYear(parent.getItemAtPosition(pos).toString())
+        }
+
+        override fun onNothingSelected(perant: AdapterView<*>?) {}
+
     }
 }

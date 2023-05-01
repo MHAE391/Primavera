@@ -7,9 +7,11 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.m391.primavera.R
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream

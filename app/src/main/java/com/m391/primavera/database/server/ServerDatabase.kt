@@ -1,5 +1,10 @@
 package com.m391.primavera.database.server
 
-class ServerDatabase {
+import android.content.Context
+
+class
+ServerDatabase(private val context: Context) {
     val authentication = Authentication()
+    val fatherInformation = FatherInformation(context)
+    val childInformation = ChildInformation(context)
 }

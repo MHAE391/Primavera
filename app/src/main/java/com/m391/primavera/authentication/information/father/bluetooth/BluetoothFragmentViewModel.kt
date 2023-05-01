@@ -43,6 +43,11 @@ class BluetoothFragmentViewModel(val app: Application) : BaseViewModel(app) {
         showLoading.value = false
     }
 
+    fun setBluetoothStatus(status: Boolean) {
+        if (status) _bluetoothStatus.value = "ON"
+        else _bluetoothStatus.value = "OFF"
+    }
+
     private val devicesSet = HashSet<BluetoothDevice>()
     val discoverDevicesReceiver = object : BroadcastReceiver() {
         @SuppressLint("MissingPermission")

@@ -27,4 +27,22 @@
     <string name="turn_on">Turn On</string>
     <string name="search">Search</string>
     <string name="bluetooth">Bluetooth</string>
+    <string name="age">Age</string>
+    <string name="academic">Academic Year</string>
+    <string name="set_data">Set Data</string>
+    <string-array name="academic_years_array">
+        <item>None</item>
+        <item>First Primary</item>
+        <item>Second Primary</item>
+        <item>Third Primary</item>
+        <item>Fourth Primary</item>
+        <item>Fifth Primary</item>
+        <item>Sixth Primary</item>
+        <item>First Preparatory</item>
+        <item>Second Preparatory</item>
+        <item>Third Preparatory</item>
+        <item>First Secondary</item>
+        <item>Second Secondary</item>
+        <item>Third Secondary</item>
+    </string-array>
 </resources>

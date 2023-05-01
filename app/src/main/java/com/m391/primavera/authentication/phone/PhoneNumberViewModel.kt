@@ -14,7 +14,7 @@ import java.util.regex.Pattern
 
 class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
     val phoneNumber = MutableLiveData<String>()
-    private val serverDatabase = ServerDatabase()
+    private val serverDatabase = ServerDatabase(app.applicationContext)
     fun sendOTPCode(activity: Activity?): String {
         if (phoneNumber.value.isNullOrBlank()) {
             showSnackBar.value = "Please Enter Yor Phone"
