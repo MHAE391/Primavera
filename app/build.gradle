@@ -78,10 +78,10 @@ dependencies {
     //////////////////////////////////////////////////////////////////////
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-database-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
-    implementation 'com.google.firebase:firebase-auth-ktx:21.3.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.5.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.6.0'
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
@@ -98,4 +98,9 @@ dependencies {
     implementation 'com.guolindev.permissionx:permissionx:1.7.1'
     /////////////////////////////////////////////////////////////////////
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+    /////////////////////////////////////////////////////////////////////
+    implementation 'com.google.zxing:core:3.4.0'
+    implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
+
+
 }

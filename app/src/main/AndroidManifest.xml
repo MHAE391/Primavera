@@ -53,6 +53,7 @@
             android:label="@string/title_activity_information"
             android:theme="@style/Theme.Primavera.NoActionBar"
             android:windowSoftInputMode="adjustResize">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

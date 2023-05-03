@@ -8,6 +8,7 @@ import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants.SUCCESS
+import com.m391.primavera.utils.capitalize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -42,10 +43,10 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
         showLoading.value = true
         if (validateEnteredData() == "Complete Data") {
             _response.value = serverDatabase.uploadFather(
-                fatherFirstName = fatherFirstName.value!!,
-                fatherLastName = fatherLastName.value!!,
+                fatherFirstName = capitalize(fatherFirstName.value!!.trim()),
+                fatherLastName = capitalize(fatherLastName.value!!.trim()),
                 fatherImage = fatherImage.value!!,
-                childName = childName.value!!,
+                childName = capitalize(childName.value!!.trim()),
                 childAge = childAge.value!!,
                 childImage = childImage.value!!,
                 watchUid = childWatchAddress.value!!,

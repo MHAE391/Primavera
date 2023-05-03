@@ -4,6 +4,7 @@ object Constants {
     const val INVALID_CODE = "Wrong OTP"
     const val IMAGES = "Images"
     const val SUCCESS = "Success"
+    const val TEACHER_UID = "teacherUID"
     const val FATHER_UID = "fatherUID"
     const val FATHER_FIRST_NAME = "firstName"
     const val FATHER_LAST_NAME = "lastName"
@@ -26,10 +27,14 @@ object Constants {
     const val PERMISSION_CANCEL = "Cancel"
     const val CHILDREN = "Children"
     const val FATHER = "Father"
+    const val TEACHERS = "Teachers"
     const val ERROR = "ERROR"
     const val TEACHER = "Teacher"
     const val NO = "NO"
     const val YES = "YES"
     const val FATHERS = "Fathers"
-
+    const val TEACHER_ACADEMIC_YEARS = "academicYears"
+    const val TEACHERS_SUBJECTS = "subjects"
+    const val LATITUDE = "Latitude"
+    const val LONGITUDE = "Longitude"
 }

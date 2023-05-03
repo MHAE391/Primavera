@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.m391.primavera.authentication.information.teacher.TeacherInformationViewModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        tools:context=".authentication.information.teacher.SelectTeacherLocationFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:gravity="center"
+            android:text="@{viewModel.selectTeacherLocation}"
+            android:textColor="#0F228C"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</layout>

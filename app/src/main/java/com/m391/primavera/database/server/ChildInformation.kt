@@ -22,11 +22,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class ChildInformation(private val context: Context) {
+class ChildInformation(
+    private val context: Context,
+    private val dataStoreManager: DataStoreManager
+) {
     private val firestore = FirebaseFirestore.getInstance()
     private val mediaUploader = MediaUploader()
     private var currentUser: FirebaseUser?
-    private val dataStoreManager = DataStoreManager(context)
     private var children: CollectionReference
     private val auth = Authentication()
 

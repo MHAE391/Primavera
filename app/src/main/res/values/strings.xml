@@ -30,6 +30,31 @@
     <string name="age">Age</string>
     <string name="academic">Academic Year</string>
     <string name="set_data">Set Data</string>
+    <string name="first_primary">First Primary</string>
+    <string name="second_primary">Second Primary</string>
+    <string name="third_primary">Third Primary</string>
+    <string name="fourth_primary">Fourth Primary</string>
+    <string name="fifth_primary">Fifth Primary</string>
+    <string name="sixth_primary">Sixth Primary</string>
+    <string name="first_preparatory">First Preparatory</string>
+    <string name="second_preparatory">Second Preparatory</string>
+    <string name="third_preparatory">Third Preparatory</string>
+    <string name="first_secondary">First Secondary</string>
+    <string name="second_secondary">Second Secondary</string>
+    <string name="third_secondary">Third Secondary</string>
+    <string name="english">English</string>
+    <string name="biology">Biology</string>
+    <string name="chemistry">Chemistry</string>
+    <string name="mathematics">Mathematics</string>
+    <string name="french">French</string>
+    <string name="arabic">Arabic</string>
+    <string name="physics">Physics</string>
+    <string name="geology">Geology</string>
+    <string name="philosophy">Philosophy</string>
+    <string name="german">German</string>
+    <string name="history">History</string>
+    <string name="science">Science</string>
+    <string name="geography">Geography</string>
     <string-array name="academic_years_array">
         <item>None</item>
         <item>First Primary</item>
