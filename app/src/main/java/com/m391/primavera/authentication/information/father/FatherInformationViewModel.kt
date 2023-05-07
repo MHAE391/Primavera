@@ -30,9 +30,9 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
         childWatch.value = "Select Your Child Watch"
     }
 
-    fun getChildWatch(name: String, macAddress: String) {
+    fun getChildWatch(name: String) {
         childWatch.value = name
-        childWatchAddress.value = macAddress
+        childWatchAddress.value = name
     }
 
     fun getChildAcademicYear(year: String) {

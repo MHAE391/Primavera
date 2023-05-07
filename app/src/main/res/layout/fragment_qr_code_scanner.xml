@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="fatherViewModel"
+            type="com.m391.primavera.authentication.information.father.FatherInformationViewModel" />
+
+        <variable
+            name="qrViewModel"
+            type="com.m391.primavera.authentication.information.father.watch.QRCodeScannerViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".authentication.information.father.watch.QRCodeScannerFragment">
+
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcodeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+</layout>

@@ -1,5 +1,6 @@
 package com.m391.primavera.authentication.information.father
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.m391.primavera.R
-import com.m391.primavera.authentication.information.father.bluetooth.BluetoothFragment
+import com.m391.primavera.authentication.information.father.watch.QRCodeScannerFragment
 import com.m391.primavera.databinding.FragmentFatherInformationBinding
 import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.utils.BaseFragment
@@ -47,7 +48,7 @@ class FatherInformationFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         binding.childWatch.setOnClickListener {
-            showBluetoothSheet()
+            showQRScanner()
         }
         binding.fatherImage.setOnClickListener {
             chooseFatherPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -83,6 +84,21 @@ class FatherInformationFragment : BaseFragment() {
         })
     }
 
+    private fun showQRScanner() {
+        val fragment = QRCodeScannerFragment()
+        fragment.show(parentFragmentManager, "QR")
+    }
+
+    private val qrCodeScanLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val qrCodeText = data?.getStringExtra("SCAN_RESULT")
+                Toast.makeText(requireContext(), qrCodeText, Toast.LENGTH_SHORT).show()
+            } else {
+                // The QR code scanning was cancelled or failed, handle the result here
+            }
+        }
     private val chooseFatherPhoto =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
@@ -99,10 +115,6 @@ class FatherInformationFragment : BaseFragment() {
             }
         }
 
-    private fun showBluetoothSheet() {
-        val bluetoothFragment = BluetoothFragment()
-        bluetoothFragment.show(parentFragmentManager, "Bluetooth")
-    }
 
     private val spinnerClickListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {

@@ -14,7 +14,7 @@ class DataBindingViewHolder<T>(private val binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: T) {
         when (item) {
-            is BluetoothDeviceModel -> binding.setVariable(BR.device, item)
+
         }
         binding.executePendingBindings()
     }

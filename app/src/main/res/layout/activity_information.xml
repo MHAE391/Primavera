@@ -19,14 +19,15 @@
             android:layout_height="50dp"
             android:layout_margin="8dp"
             app:tabGravity="fill"
-            app:tabTextColor="@color/black"
             app:tabIndicator="@drawable/tab_indicator"
             app:tabIndicatorAnimationMode="elastic"
             app:tabIndicatorColor="@color/colorPrimaryDark"
             app:tabIndicatorGravity="stretch"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget" />
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/black"
+            tools:ignore="SpeakableTextPresentCheck" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/information_view_pager"
