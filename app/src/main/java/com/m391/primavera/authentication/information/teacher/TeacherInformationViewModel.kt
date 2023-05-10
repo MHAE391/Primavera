@@ -20,8 +20,8 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     private val _selectedAcademicSubjects = MutableLiveData<List<String>>()
     val selectedAcademicYears: LiveData<List<String>> = _selectedAcademicYears
     val selectedAcademicSubjects: MutableLiveData<List<String>> = _selectedAcademicSubjects
-    private val selectedLatitude = MutableLiveData<Number>()
-    private val selectedLongitude = MutableLiveData<Number>()
+    val selectedLatitude = MutableLiveData<Number>()
+    val selectedLongitude = MutableLiveData<Number>()
     private val subjects = HashSet<String>()
     private val years = HashSet<String>()
     val teacherFirstName = MutableLiveData<String>()
@@ -38,8 +38,6 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
         selectAcademicYears.value = "Select Your Academic Years"
         selectAcademicSubjects.value = "Select Your Academic Subjects"
         selectTeacherLocation.value = "Select Teacher Location"
-        selectedLatitude.value = 0
-        selectedLongitude.value = 0
     }
 
     fun setLocation(longitude: Number, latitude: Number) {
@@ -93,7 +91,13 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
             "Please, Select Teacher Academic Years"
         else if (selectedAcademicSubjects.value.isNullOrEmpty())
             "Please, Select Teacher Academic Subjects"
+        else if (selectTeacherLocation.value == "Select Teacher Location")
+            "Please, Select Your Location"
         else "Complete Data"
+    }
+
+    fun setLocationString(location: String) {
+        selectTeacherLocation.value = location
     }
 
 }
