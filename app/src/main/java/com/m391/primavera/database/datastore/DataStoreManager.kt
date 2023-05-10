@@ -17,7 +17,17 @@ class DataStoreManager(context: Context) {
         val currentUserUid = stringPreferencesKey("CURRENT_USER_DATA_KEY")
         val currentUserType = stringPreferencesKey("CURRENT_USER_TYPE_KEY")
         val currentChildUid = stringPreferencesKey("CURRENT_CHILD_UID")
+
+        @Volatile
+        private var instance: DataStoreManager? = null
+
+        fun getInstance(context: Context): DataStoreManager {
+            return instance ?: synchronized(this) {
+                instance ?: DataStoreManager(context).also { instance = it }
+            }
+        }
     }
+
 
     suspend fun setUserUid(uid: String) {
         dataStore.edit { preferences ->

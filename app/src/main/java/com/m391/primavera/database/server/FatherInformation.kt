@@ -7,6 +7,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.m391.primavera.database.datastore.DataStoreManager
+import com.m391.primavera.notification.Notification
+import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CHILDREN
 import com.m391.primavera.utils.Constants.ERROR
 import com.m391.primavera.utils.Constants.FATHER
@@ -16,6 +18,8 @@ import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
 import com.m391.primavera.utils.Constants.FATHER_UID
 import com.m391.primavera.utils.Constants.IMAGE_PATH
 import com.m391.primavera.utils.Constants.IMAGE_URI
+import com.m391.primavera.utils.Constants.LATITUDE
+import com.m391.primavera.utils.Constants.LONGITUDE
 import com.m391.primavera.utils.Constants.NO
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
@@ -28,18 +32,15 @@ class FatherInformation(
     private val dataStoreManager: DataStoreManager
 ) {
     private val firestore = FirebaseFirestore.getInstance()
-    private var fathers: CollectionReference
+    private val fathers: CollectionReference = firestore.collection(FATHERS)
     private val mediaUploader = MediaUploader()
     private val childInformation = ChildInformation(context, dataStoreManager)
+    private val watchInformation = WatchInformation(context)
+    private val notification = Notification()
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
 
     init {
-        val settings = firestoreSettings {
-            isPersistenceEnabled = false
-        }
-        firestore.firestoreSettings = settings
-        fathers = firestore.collection(FATHERS)
         currentUser = auth.getCurrentUser()
     }
 
@@ -51,7 +52,9 @@ class FatherInformation(
         watchUid: String,
         fatherImage: String,
         childAcademicYear: String,
-        childImage: String
+        childImage: String,
+        latitude: Number,
+        longitude: Number
     ): String = withContext(Dispatchers.IO) {
         var response: String = SUCCESS
         val fatherUid = currentUser?.uid
@@ -71,7 +74,9 @@ class FatherInformation(
             IMAGE_PATH to image.imagePath,
             IMAGE_URI to image.imageUri,
             CHILDREN to listOf(childUid),
-            TEACHER to NO
+            TEACHER to NO,
+            LONGITUDE to longitude,
+            LATITUDE to latitude,
         )
         fathers.document(fatherUid!!).set(father).addOnFailureListener {
             response = it.message!!
@@ -79,6 +84,14 @@ class FatherInformation(
         if (response == SUCCESS) {
             dataStoreManager.setUserUid(fatherUid)
             dataStoreManager.setUserType(FATHER)
+            val token = watchInformation.getWatchToken(watchUid)
+            notification.sendAssignFCMToChildWatch(
+                childName = childName,
+                childUID = childUid,
+                watchToken = token,
+                fatherName = fatherFirstName,
+                fatherUID = fatherUid
+            )
         }
         return@withContext response
     }

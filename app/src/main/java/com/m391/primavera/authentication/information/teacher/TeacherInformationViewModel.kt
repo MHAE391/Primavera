@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.capitalize
@@ -27,7 +28,9 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     val teacherLastName = MutableLiveData<String>()
     val teacherAge = MutableLiveData<String>()
     val teacherImage = MutableLiveData<String>()
-    private val teachers = ServerDatabase(context = app.applicationContext).teacherInformation
+    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
+    private val teachers =
+        ServerDatabase(context = app.applicationContext, dataStoreManager).teacherInformation
     private val _response = MutableLiveData<String?>()
     val response: LiveData<String?> = _response
 

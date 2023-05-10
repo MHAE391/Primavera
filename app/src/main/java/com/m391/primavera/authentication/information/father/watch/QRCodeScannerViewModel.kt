@@ -26,13 +26,4 @@ class QRCodeScannerViewModel(app: Application) : BaseViewModel(app) {
     fun onBarcodeScanned(barcode: String) {
         _barcodeResult.postValue(barcode)
     }
-
-    fun setScanned(watch: String) {
-        FirebaseFirestore.getInstance().collection("Watches").document(watch).set(
-            mapOf(
-                "id" to watch,
-                "scanned" to "Yes"
-            )
-        )
-    }
 }

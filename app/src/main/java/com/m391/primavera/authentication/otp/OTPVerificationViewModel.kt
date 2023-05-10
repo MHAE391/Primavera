@@ -26,10 +26,10 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
     private val _response = MutableLiveData<String?>()
     val response: LiveData<String?> = _response
     private val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
+    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val storedVerificationId = MutableLiveData<String>()
-    private val auth = ServerDatabase(app.applicationContext).authentication
-    private val fathers = ServerDatabase(app.applicationContext).fatherInformation
-    private val dataStoreManager = DataStoreManager(app.applicationContext)
+    private val auth = ServerDatabase(app.applicationContext, dataStoreManager).authentication
+    private val fathers = ServerDatabase(app.applicationContext, dataStoreManager).fatherInformation
     private val _alreadySigned = MutableLiveData<String?>()
     val alreadySigned: LiveData<String?> = _alreadySigned
 

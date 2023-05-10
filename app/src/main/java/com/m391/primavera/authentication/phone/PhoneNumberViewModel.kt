@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants
@@ -14,7 +15,8 @@ import java.util.regex.Pattern
 
 class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
     val phoneNumber = MutableLiveData<String>()
-    private val serverDatabase = ServerDatabase(app.applicationContext)
+    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase = ServerDatabase(app.applicationContext, dataStoreManager)
     fun sendOTPCode(activity: Activity?): String {
         if (phoneNumber.value.isNullOrBlank()) {
             showSnackBar.value = "Please Enter Yor Phone"

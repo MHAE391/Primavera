@@ -36,8 +36,8 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
     private val fatherViewModel: FatherInformationViewModel by activityViewModels()
     private lateinit var dialog: BottomSheetDialog
     private lateinit var behavior: BottomSheetBehavior<View>
-    private lateinit var captureManager: CaptureManager
-    private lateinit var barcodeView: DecoratedBarcodeView
+    private var captureManager: CaptureManager? = null
+    private var barcodeView: DecoratedBarcodeView? = null
     private val startTimestamp = System.currentTimeMillis()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -52,6 +52,9 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        if (!checkPermission()) {
+            requestPermission()
+        }
         return dialog
     }
 
@@ -101,9 +104,9 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
     private fun setupCamera(savedInstanceState: Bundle?) {
         barcodeView = binding.barcodeView
         captureManager = CaptureManager(requireActivity(), barcodeView)
-        captureManager.initializeFromIntent(requireActivity().intent, savedInstanceState)
-        captureManager.decode()
-        barcodeView.decodeSingle(barcodeCallback)
+        captureManager!!.initializeFromIntent(requireActivity().intent, savedInstanceState)
+        captureManager!!.decode()
+        barcodeView!!.decodeSingle(barcodeCallback)
         viewModel.barcodeResult.observe(viewLifecycleOwner)
         { result ->
             Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_SHORT).show()
@@ -113,7 +116,6 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
     private val barcodeCallback = object : BarcodeCallback {
         override fun barcodeResult(result: BarcodeResult?) {
             viewModel.onBarcodeScanned(result?.text!!)
-            viewModel.setScanned(result.text)
             fatherViewModel.getChildWatch(result.text)
             dismiss()
         }
@@ -129,23 +131,27 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        captureManager.onSaveInstanceState(outState)
+        if (checkPermission() && captureManager != null) captureManager!!.onSaveInstanceState(
+            outState
+        )
     }
 
     override fun onPause() {
         super.onPause()
-        barcodeView.pause()
+        if (checkPermission() && barcodeView != null) {
+            barcodeView!!.pause()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (checkPermission()) {
-            barcodeView.resume()
+        if (checkPermission() && barcodeView != null) {
+            barcodeView!!.resume()
         } else requestPermission()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        captureManager.onDestroy()
+        if (checkPermission() && captureManager != null) captureManager!!.onDestroy()
     }
 }

@@ -16,19 +16,36 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
     val childWatch = MutableLiveData<String>()
     val fatherImage = MutableLiveData<String>()
     val childImage = MutableLiveData<String>()
+    val fatherLocation = MutableLiveData<String>()
     private val childWatchAddress = MutableLiveData<String>()
     val fatherFirstName = MutableLiveData<String>()
     val fatherLastName = MutableLiveData<String>()
     val childName = MutableLiveData<String>()
     val childAge = MutableLiveData<String>()
     private val childAcademicYear = MutableLiveData<String>()
-    private val serverDatabase = ServerDatabase(context = app.applicationContext).fatherInformation
+    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase =
+        ServerDatabase(context = app.applicationContext, dataStoreManager).fatherInformation
     private val _response = MutableLiveData<String?>()
     val response: LiveData<String?> = _response
 
+    val selectedLatitude = MutableLiveData<Number>()
+    val selectedLongitude = MutableLiveData<Number>()
+
+    fun setLocation(longitude: Number, latitude: Number) {
+        selectedLatitude.value = latitude
+        selectedLongitude.value = longitude
+    }
+
+    fun setLocationString(location: String) {
+        fatherLocation.value = location
+    }
+
     init {
         childWatch.value = "Select Your Child Watch"
+        fatherLocation.value = "Select Your Location"
     }
+
 
     fun getChildWatch(name: String) {
         childWatch.value = name
@@ -50,7 +67,9 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
                 childAge = childAge.value!!,
                 childImage = childImage.value!!,
                 watchUid = childWatchAddress.value!!,
-                childAcademicYear = childAcademicYear.value!!
+                childAcademicYear = childAcademicYear.value!!,
+                latitude = selectedLatitude.value!!,
+                longitude = selectedLongitude.value!!
             )
         } else showToast.value = validateEnteredData()
         showLoading.value = false
@@ -67,6 +86,8 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
             "Please, Select Your Child Watch"
         else if (childAcademicYear.value == "None")
             "Select Your Child Academic Year"
+        else if (fatherLocation.value == "Select Your Location")
+            "Please, Select Your Location"
         else "Complete Data"
     }
 }

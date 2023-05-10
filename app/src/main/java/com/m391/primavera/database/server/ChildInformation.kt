@@ -25,19 +25,15 @@ import kotlinx.coroutines.withContext
 class ChildInformation(
     private val context: Context,
     private val dataStoreManager: DataStoreManager
+
 ) {
     private val firestore = FirebaseFirestore.getInstance()
     private val mediaUploader = MediaUploader()
     private var currentUser: FirebaseUser?
-    private var children: CollectionReference
+    private val children: CollectionReference = firestore.collection(CHILDREN)
     private val auth = Authentication()
 
     init {
-        val settings = firestoreSettings {
-            isPersistenceEnabled = false
-        }
-        firestore.firestoreSettings = settings
-        children = firestore.collection(CHILDREN)
         currentUser = auth.getCurrentUser()
     }
 

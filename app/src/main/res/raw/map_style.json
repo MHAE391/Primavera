@@ -1,0 +1,29 @@
+{
+  "version": 8,
+  "name": "My Map Style",
+  "sources": {
+    "mapbox-streets": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v8"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#ffffff"
+      }
+    },
+    {
+      "id": "roads",
+      "type": "line",
+      "source": "mapbox-streets",
+      "source-layer": "road",
+      "paint": {
+        "line-color": "#000000",
+        "line-width": 1
+      }
+    }
+  ]
+}

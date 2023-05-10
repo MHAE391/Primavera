@@ -70,4 +70,9 @@
         <item>Second Secondary</item>
         <item>Third Secondary</item>
     </string-array>
+    <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
+    <string name="dropped_pin">Dropped Pin</string>
+    <string name="my_selected_location">My Selected Location</string>
+    <string name="google_maps_key">AIzaSyD7axjvOKNgT8rqVOOGPrH92QsF3vkj22w</string>
+    <string name="my_location">My Location</string>
 </resources>

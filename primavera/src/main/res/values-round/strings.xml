@@ -1,3 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="hello_world">Hello Round World!</string>
+    <string name="my_notification_channel_id" tools:ignore="ExtraTranslation">Notification Channel</string>
 </resources>

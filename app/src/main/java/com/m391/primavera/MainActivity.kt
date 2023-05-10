@@ -15,6 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.ktx.messaging
 import com.m391.primavera.authentication.AuthenticationActivity
 import com.m391.primavera.authentication.information.InformationActivity
 import com.m391.primavera.database.datastore.DataStoreManager
@@ -39,12 +44,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        auth = ServerDatabase(applicationContext).authentication
-        fathers = ServerDatabase(applicationContext).fatherInformation
-        dataStoreManager = DataStoreManager(applicationContext)
+        dataStoreManager = DataStoreManager.getInstance(applicationContext)
+        auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
+        fathers = ServerDatabase(applicationContext, dataStoreManager!!).fatherInformation
         userType = dataStoreManager!!.getUserType().asLiveData()
-
         if (auth.getCurrentUser() == null) {
             startActivity(Intent(this@MainActivity, AuthenticationActivity::class.java))
             finish()
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+
     }
 
 

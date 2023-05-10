@@ -33,17 +33,12 @@ class TeacherInformation(
     private val dataStoreManager: DataStoreManager
 ) {
     private val firestore = FirebaseFirestore.getInstance()
-    private var teachers: CollectionReference
+    private val teachers: CollectionReference = firestore.collection(TEACHERS)
     private val mediaUploader = MediaUploader()
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
 
     init {
-        val settings = firestoreSettings {
-            isPersistenceEnabled = false
-        }
-        firestore.firestoreSettings = settings
-        teachers = firestore.collection(TEACHERS)
         currentUser = auth.getCurrentUser()
     }
 
