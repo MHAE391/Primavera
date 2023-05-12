@@ -38,4 +38,5 @@ object Constants {
     const val TEACHERS_SUBJECTS = "subjects"
     const val LATITUDE = "Latitude"
     const val LONGITUDE = "Longitude"
+    const val BOTH = "Both"
 }

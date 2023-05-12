@@ -9,10 +9,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.provider.Settings
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,14 +19,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.m391.primavera.R
-import com.m391.primavera.database.server.TeacherInformation
 import com.m391.primavera.databinding.FragmentTeacherInformationBinding
-import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.user.teacher.TeacherActivity
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Binding

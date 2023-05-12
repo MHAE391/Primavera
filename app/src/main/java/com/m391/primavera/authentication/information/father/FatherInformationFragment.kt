@@ -2,7 +2,6 @@ package com.m391.primavera.authentication.information.father
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -17,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -26,26 +24,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.m391.primavera.R
 import com.m391.primavera.authentication.information.father.location.FatherLocationFragment
 import com.m391.primavera.authentication.information.father.watch.QRCodeScannerFragment
 import com.m391.primavera.databinding.FragmentFatherInformationBinding
-import com.m391.primavera.notification.Notification
 import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Binding
 import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.permissionx.guolindev.PermissionX
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.IOException
 
 class FatherInformationFragment : BaseFragment() {
 
@@ -196,16 +186,7 @@ class FatherInformationFragment : BaseFragment() {
         fragment.show(parentFragmentManager, "Location")
     }
 
-    private val qrCodeScanLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                val qrCodeText = data?.getStringExtra("SCAN_RESULT")
-                Toast.makeText(requireContext(), qrCodeText, Toast.LENGTH_SHORT).show()
-            } else {
-                // The QR code scanning was cancelled or failed, handle the result here
-            }
-        }
+
     private val chooseFatherPhoto =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {

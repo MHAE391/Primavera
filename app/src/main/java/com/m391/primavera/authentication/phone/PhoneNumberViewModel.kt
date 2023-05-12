@@ -41,6 +41,7 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
                         )
                     } else if (it != null) {
                         showLoading.value = false
+                        println(it)
                         showSnackBar.value = it
                     }
                 }

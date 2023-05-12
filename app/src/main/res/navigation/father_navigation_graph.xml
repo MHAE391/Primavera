@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/father_navigation_graph"
+    app:startDestination="@id/fatherHomeFragment">
+
+    <fragment
+        android:id="@+id/fatherHomeFragment"
+        android:name="com.m391.primavera.user.father.home.FatherHomeFragment"
+        android:label="FatherHomeFragment"
+        tools:layout="@layout/fragment_father_home">
+        <action
+            android:id="@+id/action_fatherHomeFragment_to_fatherConversationsFragment"
+            app:destination="@id/fatherConversationsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/fatherConversationsFragment"
+        android:name="com.m391.primavera.user.father.conversations.FatherConversationsFragment"
+        android:label="FatherConversationsFragment"
+        tools:layout="@layout/fragment_father_conversations">
+        <action
+            android:id="@+id/action_fatherConversationsFragment_to_fatherTeacherSearchFragment"
+            app:destination="@id/fatherTeacherSearchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/fatherTeacherSearchFragment"
+        android:name="com.m391.primavera.user.father.search.FatherTeacherSearchFragment"
+        android:label="FatherTeacherSearchFragment"
+        tools:layout="@layout/fragment_father_teacher_search" />
+</navigation>

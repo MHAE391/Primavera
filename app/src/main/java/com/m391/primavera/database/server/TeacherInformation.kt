@@ -1,9 +1,12 @@
 package com.m391.primavera.database.server
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants
@@ -12,6 +15,7 @@ import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHERS
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
+import com.m391.primavera.utils.Constants.FATHER_PHONE
 import com.m391.primavera.utils.Constants.IMAGE_PATH
 import com.m391.primavera.utils.Constants.IMAGE_URI
 import com.m391.primavera.utils.Constants.LATITUDE
@@ -24,9 +28,11 @@ import com.m391.primavera.utils.Constants.TEACHERS_SUBJECTS
 import com.m391.primavera.utils.Constants.TEACHER_ACADEMIC_YEARS
 import com.m391.primavera.utils.Constants.TEACHER_UID
 import com.m391.primavera.utils.Constants.YES
+import com.m391.primavera.utils.models.ServerTeacherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class TeacherInformation(
     private val context: Context,
@@ -35,6 +41,7 @@ class TeacherInformation(
     private val firestore = FirebaseFirestore.getInstance()
     private val teachers: CollectionReference = firestore.collection(TEACHERS)
     private val mediaUploader = MediaUploader()
+    private var registration: ListenerRegistration? = null
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
 
@@ -42,6 +49,60 @@ class TeacherInformation(
         currentUser = auth.getCurrentUser()
     }
 
+    @Suppress("UNCHECKED_CAST")
+    suspend fun getTeachers(): ArrayList<ServerTeacherModel> = withContext(Dispatchers.IO) {
+        val teachersList = ArrayList<ServerTeacherModel>()
+        val data = teachers.get().await()
+        for (teacher in data) {
+            teachersList.add(
+                ServerTeacherModel(
+                    teacherId = teacher.data[TEACHER_UID].toString(),
+                    firstName = teacher.data[FATHER_FIRST_NAME].toString(),
+                    lastName = teacher.data[FATHER_LAST_NAME].toString(),
+                    longitude = teacher.data[LONGITUDE] as Number,
+                    latitude = teacher.data[LATITUDE] as Number,
+                    phone = teacher.data[FATHER_PHONE].toString(),
+                    image = mediaUploader.imageDownloader(teacher.data[IMAGE_PATH].toString()),
+                    imageUri = teacher.data[IMAGE_URI].toString(),
+                    age = teacher.data[CHILD_AGE].toString(),
+                    subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
+                    academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>
+                )
+            )
+        }
+        return@withContext teachersList
+    }
+
+    suspend fun streamTeachers(): LiveData<List<ServerTeacherModel>> = withContext(Dispatchers.IO) {
+        val _teachersList = MutableLiveData<List<ServerTeacherModel>>()
+        val teachersList: LiveData<List<ServerTeacherModel>> = _teachersList
+        registration = teachers.addSnapshotListener { value, error ->
+            if (error != null) {
+                Timber.tag("Teachers Database").e(error, "Listen failed.")
+                return@addSnapshotListener
+            }
+            val teacherList = ArrayList<ServerTeacherModel>()
+            for (teacher in value!!) {
+                teacherList.add(
+                    ServerTeacherModel(
+                        teacherId = teacher.data[TEACHER_UID].toString(),
+                        firstName = teacher.data[FATHER_FIRST_NAME].toString(),
+                        lastName = teacher.data[FATHER_LAST_NAME].toString(),
+                        longitude = teacher.data[LONGITUDE] as Number,
+                        latitude = teacher.data[LATITUDE] as Number,
+                        phone = teacher.data[FATHER_PHONE].toString(),
+                        image = teacher.data[IMAGE_PATH].toString(),
+                        imageUri = teacher.data[IMAGE_URI].toString(),
+                        age = teacher.data[CHILD_AGE].toString(),
+                        subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
+                        academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>
+                    )
+                )
+            }
+            _teachersList.value = teacherList
+        }
+        return@withContext teachersList
+    }
 
     suspend fun uploadTeacher(
         teacherFirstName: String,
@@ -53,7 +114,7 @@ class TeacherInformation(
         latitude: Number,
         longitude: Number
     ): String = withContext(Dispatchers.IO) {
-        var response: String = Constants.SUCCESS
+        var response: String = SUCCESS
         val teacherUid = currentUser?.uid
         val image = mediaUploader.uploadImage(teacherImage)
         val teacher = hashMapOf(
@@ -67,6 +128,7 @@ class TeacherInformation(
             TEACHERS_SUBJECTS to subjects,
             LONGITUDE to longitude,
             LATITUDE to latitude,
+            FATHER_PHONE to currentUser?.phoneNumber,
             FATHER to NO
         )
         teachers.document(teacherUid!!).set(teacher).addOnFailureListener {
@@ -87,5 +149,11 @@ class TeacherInformation(
             return@withContext response.exists()
         }
         return@withContext false
+    }
+
+    suspend fun closeUsersStream() = withContext(Dispatchers.IO) {
+        if (registration != null) {
+            registration!!.remove()
+        }
     }
 }

@@ -10,19 +10,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.m391.primavera.Primavera
 import com.m391.primavera.R
 import com.m391.primavera.authentication.information.InformationActivity
 import com.m391.primavera.databinding.FragmentOtpVerificationBinding
 import com.m391.primavera.user.father.FatherActivity
+import com.m391.primavera.user.teacher.TeacherActivity
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Constants
+import com.m391.primavera.utils.Constants.BOTH
 import com.m391.primavera.utils.Constants.FATHER
+import com.m391.primavera.utils.Constants.TEACHER
 import kotlinx.coroutines.launch
 
 class OTPVerificationFragment : BaseFragment() {
@@ -39,7 +43,6 @@ class OTPVerificationFragment : BaseFragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_otp_verification, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        setupEditText()
         return binding.root
     }
 
@@ -86,12 +89,11 @@ class OTPVerificationFragment : BaseFragment() {
                 viewModel.signInWithPhone()
                 viewModel.response.observe(viewLifecycleOwner, Observer {
                     if (it == Constants.SUCCESSFUL_LOGIN) {
-                        if (viewModel.alreadySigned.value == FATHER) {
-                            startActivity(Intent(activity, FatherActivity::class.java))
-                            activity!!.finish()
-                        } else {
-                            startActivity(Intent(activity, InformationActivity::class.java))
-                            activity!!.finish()
+                        when (viewModel.alreadySigned.value) {
+                            FATHER -> showFatherActivity()
+                            TEACHER -> showTeacherActivity()
+                            BOTH -> showPrimaveraActivity()
+                            else -> showInformationActivity()
                         }
                     } else if (it != null) {
                         viewModel.showSnackBar.value = it
@@ -104,8 +106,21 @@ class OTPVerificationFragment : BaseFragment() {
         view.addTextChangedListener(textWatcher)
     }
 
+    private val userStatus = MutableLiveData<String?>()
+
+    private fun showPrimaveraActivity() {
+        startActivity(Intent(activity, Primavera::class.java))
+        activity?.finish()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        userStatus.removeObservers(viewLifecycleOwner)
+    }
+
     override fun onStart() {
         super.onStart()
+        setupEditText()
         viewModel.setupData(
             args.phoneNumber, args.resendToken, args.storedVerificationId
         )
@@ -117,6 +132,21 @@ class OTPVerificationFragment : BaseFragment() {
                 resendOTPCodeVisibility()
             }
         }
+    }
+
+    private fun showFatherActivity() {
+        startActivity(Intent(activity, FatherActivity::class.java))
+        activity?.finish()
+    }
+
+    private fun showTeacherActivity() {
+        startActivity(Intent(activity, TeacherActivity::class.java))
+        activity?.finish()
+    }
+
+    private fun showInformationActivity() {
+        startActivity(Intent(activity, InformationActivity::class.java))
+        activity?.finish()
     }
 
 }

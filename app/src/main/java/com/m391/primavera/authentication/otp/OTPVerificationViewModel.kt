@@ -11,9 +11,12 @@ import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants
+import com.m391.primavera.utils.Constants.BOTH
 import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.SUCCESSFUL_LOGIN
+import com.m391.primavera.utils.Constants.TEACHER
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
     val firstCode = MutableLiveData<String?>()
@@ -26,10 +29,11 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
     private val _response = MutableLiveData<String?>()
     val response: LiveData<String?> = _response
     private val resendToken = MutableLiveData<PhoneAuthProvider.ForceResendingToken>()
-    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
+    val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val storedVerificationId = MutableLiveData<String>()
     private val auth = ServerDatabase(app.applicationContext, dataStoreManager).authentication
-    private val fathers = ServerDatabase(app.applicationContext, dataStoreManager).fatherInformation
+    private var father by Delegates.notNull<Boolean>()
+    private var teacher by Delegates.notNull<Boolean>()
     private val _alreadySigned = MutableLiveData<String?>()
     val alreadySigned: LiveData<String?> = _alreadySigned
 
@@ -56,9 +60,27 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
                 val login = auth.signInWithPhoneAuthCredential(credential)
 
                 if (login == SUCCESSFUL_LOGIN) {
-                    if (fathers.checkAlreadyFatherOrNot()) {
+                    father = ServerDatabase(
+                        app.applicationContext,
+                        dataStoreManager
+                    ).fatherInformation.checkAlreadyFatherOrNot()
+                    teacher =
+                        ServerDatabase(
+                            app.applicationContext,
+                            dataStoreManager
+                        ).teacherInformation.checkAlreadyTeacherOrNot()
+
+                    if (father && teacher) {
+                        _alreadySigned.postValue(BOTH)
+                        dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
+                    } else if (father) {
                         _alreadySigned.postValue(FATHER)
                         dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
+                        dataStoreManager.setUserType(FATHER)
+                    } else if (teacher) {
+                        _alreadySigned.postValue(TEACHER)
+                        dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
+                        dataStoreManager.setUserType(TEACHER)
                     } else _alreadySigned.postValue("Not")
                 }
                 _response.postValue(login)

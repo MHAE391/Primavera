@@ -27,7 +27,8 @@ class Notification {
                 "childName" to childName,
                 "childUID" to childUID,
                 "fatherUID" to fatherUID,
-                "fatherName" to fatherName
+                "fatherName" to fatherName,
+                "type" to "Assign"
             )
         )
         runBlocking(Dispatchers.IO) {

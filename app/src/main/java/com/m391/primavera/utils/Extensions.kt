@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.m391.primavera.R
+import com.m391.primavera.utils.models.LocalTeacherModel
+import com.m391.primavera.utils.models.ServerTeacherModel
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -19,33 +21,43 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-/*
-fun List<ServerUser>.asLocalModel(): Array<LocalUser> {
+
+fun List<ServerTeacherModel>.asLocalModel(): Array<LocalTeacherModel> {
     return map {
-        LocalUser(
-            uid = it.userId,
+        LocalTeacherModel(
+            teacherId = it.teacherId,
             firstName = it.firstName,
             lastName = it.lastName,
-            email = it.email,
+            phone = it.phone,
             image = it.image as ByteArray,
-            imageUri = it.imageUri
+            imageUri = it.imageUri,
+            longitude = it.longitude,
+            latitude = it.latitude,
+            academicYears = it.academicYears,
+            subjects = it.subjects,
+            age = it.age
         )
     }.toTypedArray()
 }
 
-fun List<LocalUser>.asDomainModel(): List<ServerUser> {
+fun List<LocalTeacherModel>.asServerModel(): List<ServerTeacherModel> {
     return map {
-        ServerUser(
-            userId = it.uid,
+        ServerTeacherModel(
+            teacherId = it.teacherId,
             firstName = it.firstName,
             lastName = it.lastName,
-            email = it.email,
+            phone = it.phone,
             image = it.image,
-            imageUri = it.imageUri
+            imageUri = it.imageUri,
+            longitude = it.longitude,
+            latitude = it.latitude,
+            academicYears = it.academicYears,
+            subjects = it.subjects,
+            age = it.age
         )
     }
 }
-*/
+
 fun <T> RecyclerView.setup(
     adapter: BaseRecyclerViewAdapter<T>
 ) {

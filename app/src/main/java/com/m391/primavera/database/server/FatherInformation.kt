@@ -15,6 +15,7 @@ import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHERS
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
+import com.m391.primavera.utils.Constants.FATHER_PHONE
 import com.m391.primavera.utils.Constants.FATHER_UID
 import com.m391.primavera.utils.Constants.IMAGE_PATH
 import com.m391.primavera.utils.Constants.IMAGE_URI
@@ -77,6 +78,7 @@ class FatherInformation(
             TEACHER to NO,
             LONGITUDE to longitude,
             LATITUDE to latitude,
+            FATHER_PHONE to currentUser?.phoneNumber
         )
         fathers.document(fatherUid!!).set(father).addOnFailureListener {
             response = it.message!!

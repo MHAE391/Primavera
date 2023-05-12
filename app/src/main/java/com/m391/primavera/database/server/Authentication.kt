@@ -3,7 +3,10 @@ package com.m391.primavera.database.server
 import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseException
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.google.firebase.auth.*
 import com.m391.primavera.utils.Constants
 import kotlinx.coroutines.*
@@ -27,6 +30,7 @@ class Authentication {
         phone: String, activity: Activity
     ) = withContext(Dispatchers.IO) {
         init()
+        appCheck(activity)
         val options =
             PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phone) // Phone number to verify
                 .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -109,6 +113,14 @@ class Authentication {
 
     suspend fun init() = withContext(Dispatchers.IO) {
         if (response.value != null) _response.postValue(null)
+    }
+
+    private fun appCheck(activity: Activity) {
+        FirebaseApp.initializeApp(activity)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance()
+        )
     }
 
     suspend fun logOut() {

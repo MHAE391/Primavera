@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/audio_message_bg"
+    android:orientation="horizontal"
+    android:padding="8dp">
+    <!-- Audio message icon -->
+    <ImageView
+        android:id="@+id/audio_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/ic_baseline_record_voice_over_24" />
+
+    <!-- Audio message duration -->
+    <TextView
+        android:id="@+id/audio_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="00:00"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <!-- Audio message progress bar -->
+    <ProgressBar
+        android:id="@+id/audio_progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/audio_message_progress_bar"
+        android:progressDrawable="@drawable/audio_message_progress_bar" />
+
+    <!-- Audio message play/pause button -->
+    <ImageButton
+        android:id="@+id/audio_play_pause_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@null"
+        android:src="@drawable/ic_baseline_play_arrow_24" />
+</LinearLayout>

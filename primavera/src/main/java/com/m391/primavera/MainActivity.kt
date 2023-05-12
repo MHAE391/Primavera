@@ -34,6 +34,7 @@ import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.zxing.BarcodeFormat
@@ -54,12 +55,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var id: String
     private val firestore = FirebaseFirestore.getInstance()
-
+    private var registration: ListenerRegistration? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         id = generateDeviceId()
+        registration =
+            firestore.collection("Watches").document(id).addSnapshotListener { value, _ ->
+                if (value!!["childName"] != null) {
+                    startActivity(Intent(this@MainActivity, ChatActivity::class.java))
+                    finish()
+                }
+            }
         val qrCodeSize = 512 // Set the size of the QR code
         val hints = mapOf(
             Pair(EncodeHintType.CHARACTER_SET, "UTF-8"), // Set the character set
@@ -88,16 +96,10 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-        /*
-         firestore.collection("Watches").document(id).addSnapshotListener { value, _ ->
-             if (value!!["scanned"] == "Yes") {
-
-                 startActivity(Intent(this@MainActivity, SecondActivity::class.java))
-                 finish()
-             }
-         }*/
-
     }
 
-
+    override fun onPause() {
+        super.onPause()
+        if (registration != null) registration!!.remove()
+    }
 }

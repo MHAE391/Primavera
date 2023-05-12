@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -41,29 +42,19 @@ class DataStoreManager(context: Context) {
         }
     }
 
-    fun getUserUid(): Flow<String?> {
-        return dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }.map { preferences ->
-            val uploaded = preferences[currentUserUid]
-            uploaded
-        }
+    suspend fun getUserUid(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[currentUserUid]
     }
 
-    fun getUserType(): Flow<String?> {
-        return dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }.map { preferences ->
-            val uploaded = preferences[currentUserType]
-            uploaded
+    suspend fun getUserType(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[currentUserType]
+    }
+
+    fun userType(): Flow<String?> {
+        return dataStore.data.map { pre ->
+            pre[currentUserType]
         }
     }
 
@@ -74,16 +65,8 @@ class DataStoreManager(context: Context) {
         }
     }
 
-    fun getCurrentChildUid(): Flow<String?> {
-        return dataStore.data.catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }.map { preferences ->
-            val uid = preferences[currentChildUid]
-            uid
-        }
+    suspend fun getCurrentChildUid(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[currentChildUid]
     }
 }
