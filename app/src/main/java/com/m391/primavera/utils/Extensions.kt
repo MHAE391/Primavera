@@ -35,7 +35,8 @@ fun List<ServerTeacherModel>.asLocalModel(): Array<LocalTeacherModel> {
             latitude = it.latitude,
             academicYears = it.academicYears,
             subjects = it.subjects,
-            age = it.age
+            age = it.age,
+            rate = it.rate
         )
     }.toTypedArray()
 }
@@ -53,16 +54,17 @@ fun List<LocalTeacherModel>.asServerModel(): List<ServerTeacherModel> {
             latitude = it.latitude,
             academicYears = it.academicYears,
             subjects = it.subjects,
-            age = it.age
+            age = it.age,
+            rate = it.rate
         )
     }
 }
 
-fun <T> RecyclerView.setup(
+fun <T> RecyclerView.setupGridRecycler(
     adapter: BaseRecyclerViewAdapter<T>
 ) {
     this.apply {
-        layoutManager = LinearLayoutManager(this.context)
+        layoutManager = GridLayoutManager(this.context, 2)
         this.adapter = adapter
     }
 }

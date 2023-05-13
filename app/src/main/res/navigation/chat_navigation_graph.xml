@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_navigation_graph"
+    app:startDestination="@id/fatherTeacherChatFragment">
+
+    <fragment
+        android:id="@+id/fatherChildChatFragment"
+        android:name="com.m391.primavera.chat.child.FatherChildChatFragment"
+        android:label="FatherChildChatFragment"
+        tools:layout="@layout/fragment_father_child_chat" />
+    <fragment
+        android:id="@+id/fatherTeacherChatFragment"
+        android:name="com.m391.primavera.chat.father.FatherTeacherChatFragment"
+        android:label="FatherTeacherChatFragment"
+        tools:layout="@layout/fragment_father_teacher_chat" >
+        <action
+            android:id="@+id/action_fatherTeacherChatFragment_to_fatherChildChatFragment"
+            app:destination="@id/fatherChildChatFragment"
+            app:popUpTo="@id/chat_navigation_graph" />
+    </fragment>
+</navigation>

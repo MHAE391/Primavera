@@ -21,6 +21,7 @@ import com.m391.primavera.utils.Constants.IMAGE_URI
 import com.m391.primavera.utils.Constants.LATITUDE
 import com.m391.primavera.utils.Constants.LONGITUDE
 import com.m391.primavera.utils.Constants.NO
+import com.m391.primavera.utils.Constants.RATE
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.Constants.TEACHERS
@@ -66,7 +67,8 @@ class TeacherInformation(
                     imageUri = teacher.data[IMAGE_URI].toString(),
                     age = teacher.data[CHILD_AGE].toString(),
                     subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
-                    academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>
+                    academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
+                    rate = teacher.data[RATE] as Number
                 )
             )
         }
@@ -95,7 +97,8 @@ class TeacherInformation(
                         imageUri = teacher.data[IMAGE_URI].toString(),
                         age = teacher.data[CHILD_AGE].toString(),
                         subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
-                        academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>
+                        academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
+                        rate = teacher.data[RATE] as Number
                     )
                 )
             }
@@ -129,7 +132,8 @@ class TeacherInformation(
             LONGITUDE to longitude,
             LATITUDE to latitude,
             FATHER_PHONE to currentUser?.phoneNumber,
-            FATHER to NO
+            FATHER to NO,
+            RATE to 5
         )
         teachers.document(teacherUid!!).set(teacher).addOnFailureListener {
             response = it.message!!
@@ -156,4 +160,32 @@ class TeacherInformation(
             registration!!.remove()
         }
     }
+
+    suspend fun streamTeacherByUid(teacherUid: String): LiveData<ServerTeacherModel> =
+        withContext(Dispatchers.IO) {
+            val teacher = MutableLiveData<ServerTeacherModel>()
+            registration = teachers.document(teacherUid).addSnapshotListener { value, error ->
+                if (error != null) {
+                    Timber.tag("Teachers Database").e(error, "Listen failed.")
+                    return@addSnapshotListener
+                } else {
+                    val serverTeacher = ServerTeacherModel(
+                        teacherId = value!!.data!![TEACHER_UID].toString(),
+                        firstName = value.data!![FATHER_FIRST_NAME].toString(),
+                        lastName = value.data!![FATHER_LAST_NAME].toString(),
+                        longitude = value.data!![LONGITUDE] as Number,
+                        latitude = value.data!![LATITUDE] as Number,
+                        phone = value.data!![FATHER_PHONE].toString(),
+                        image = value.data!![IMAGE_PATH].toString(),
+                        imageUri = value.data!![IMAGE_URI].toString(),
+                        age = value.data!![CHILD_AGE].toString(),
+                        subjects = value.data!![TEACHERS_SUBJECTS]!! as ArrayList<String>,
+                        academicYears = value.data!![TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
+                        rate = value.data!![RATE] as Number
+                    )
+                    teacher.value = serverTeacher
+                }
+            }
+            return@withContext teacher
+        }
 }

@@ -1,5 +1,6 @@
 package com.m391.primavera.utils
 
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.text.Editable
@@ -7,12 +8,18 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
+import com.google.firebase.storage.FirebaseStorage
 import com.m391.primavera.R
+import com.m391.primavera.user.father.teacher.TeacherProfileViewModel
+import com.m391.primavera.utils.models.ServerTeacherModel
 import com.squareup.picasso.Picasso
 
 object Binding {
@@ -51,22 +58,27 @@ object Binding {
 
     }
 
-
-    @BindingAdapter("android:loadImage")
+    @BindingAdapter(value = ["imageByteArray", "imageUrl"], requireAll = false)
     @JvmStatic
-    fun loadImage(imageView: ImageView, image: Any) {
-        val circularProgressDrawable = CircularProgressDrawable(imageView.context)
-        circularProgressDrawable.strokeWidth = 5f
-        circularProgressDrawable.centerRadius = 30f
-        circularProgressDrawable.setColorSchemeColors(Color.TRANSPARENT)
-        circularProgressDrawable.start()
-
-        if (image is String) {
-            Picasso.get().load(image.toUri()).fit()
-                .placeholder(circularProgressDrawable)
-                .fit().into(imageView)
+    fun loadImage(imageView: ImageView, imageByteArray: Any?, imageUrl: String?) {
+        if (imageByteArray != null && imageUrl != null) {
+            val circularProgressDrawable = CircularProgressDrawable(imageView.context)
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.setColorSchemeColors(Color.TRANSPARENT)
+            circularProgressDrawable.start()
+            if (imageByteArray is ByteArray) {
+                val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+                if (bitmap == null) {
+                    Picasso.get().load(imageUrl.toUri())
+                        .placeholder(circularProgressDrawable)
+                        .into(imageView)
+                } else imageView.setImageBitmap(bitmap)
+            } else if (imageByteArray is String) {
+                Picasso.get().load(imageUrl.toUri())
+                    .placeholder(circularProgressDrawable)
+                    .into(imageView)
+            }
         }
     }
-
-
 }

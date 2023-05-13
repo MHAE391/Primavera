@@ -16,7 +16,8 @@ data class LocalTeacherModel(
     @ColumnInfo(name = "longitude") val longitude: Number,
     @ColumnInfo(name = "teacher_age") val age: String,
     @ColumnInfo(name = "academic_years") val academicYears: ArrayList<String>,
-    @ColumnInfo(name = "subjects") val subjects: ArrayList<String>
+    @ColumnInfo(name = "subjects") val subjects: ArrayList<String>,
+    @ColumnInfo(name = "rate") val rate: Number
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -35,6 +36,7 @@ data class LocalTeacherModel(
         if (age != other.age) return false
         if (academicYears != other.academicYears) return false
         if (subjects != other.subjects) return false
+        if (rate != other.rate) return false
 
         return true
     }
@@ -51,6 +53,7 @@ data class LocalTeacherModel(
         result = 31 * result + age.hashCode()
         result = 31 * result + academicYears.hashCode()
         result = 31 * result + subjects.hashCode()
+        result = 31 * result + rate.hashCode()
         return result
     }
 }

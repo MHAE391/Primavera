@@ -55,7 +55,7 @@ class TeacherInformationFragment : BaseFragment() {
     private val chooseTeacherPhoto =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                Binding.loadImage(binding.teacherImage, uri.toString())
+                Binding.loadImage(binding.teacherImage, uri.toString(), uri.toString())
                 viewModel.teacherImage.value = uri.toString()
             }
         }

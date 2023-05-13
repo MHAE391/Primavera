@@ -190,7 +190,7 @@ class FatherInformationFragment : BaseFragment() {
     private val chooseFatherPhoto =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                Binding.loadImage(binding.fatherImage, uri.toString())
+                Binding.loadImage(binding.fatherImage, uri.toString(), uri.toString())
                 viewModel.fatherImage.value = uri.toString()
             }
         }
@@ -198,7 +198,7 @@ class FatherInformationFragment : BaseFragment() {
     private val chooseChildPhoto =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
-                Binding.loadImage(binding.childImage, uri.toString())
+                Binding.loadImage(binding.childImage, uri.toString(), uri.toString())
                 viewModel.childImage.value = uri.toString()
             }
         }

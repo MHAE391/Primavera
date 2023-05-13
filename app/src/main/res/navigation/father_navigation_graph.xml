@@ -35,5 +35,23 @@
         android:id="@+id/fatherTeacherSearchFragment"
         android:name="com.m391.primavera.user.father.search.FatherTeacherSearchFragment"
         android:label="FatherTeacherSearchFragment"
-        tools:layout="@layout/fragment_father_teacher_search" />
+        tools:layout="@layout/fragment_father_teacher_search">
+        <action
+            android:id="@+id/action_fatherTeacherSearchFragment_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+
+        android:id="@+id/teacherProfileFragment"
+        android:name="com.m391.primavera.user.father.teacher.TeacherProfileFragment"
+        android:label="TeacherProfileFragment"
+        tools:layout="@layout/fragment_teacher_profile">
+        <argument
+            android:name="teacherUid"
+            app:argType="string" />
+    </fragment>
 </navigation>

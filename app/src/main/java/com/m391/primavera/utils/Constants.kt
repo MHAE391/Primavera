@@ -39,4 +39,7 @@ object Constants {
     const val LATITUDE = "Latitude"
     const val LONGITUDE = "Longitude"
     const val BOTH = "Both"
+    const val RATE = "rate"
+    const val TYPE = "type"
+    const val CHILD = "child"
 }

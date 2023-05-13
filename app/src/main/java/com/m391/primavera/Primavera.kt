@@ -33,74 +33,78 @@ class Primavera : AppCompatActivity() {
         binding = PrimaveraBinding.inflate(layoutInflater)
         dataStoreManager = DataStoreManager.getInstance(applicationContext)
         auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
-        lifecycleScope.launch {
-            val userType = dataStoreManager?.getUserType()
-            if (userType != null) {
-                when (userType) {
-                    TEACHER -> {
-                        startActivity(
-                            Intent(
-                                this@Primavera,
-                                TeacherActivity::class.java
-                            )
-                        )
-                        finish()
-                    }
-                    FATHER -> {
-                        startActivity(Intent(this@Primavera, FatherActivity::class.java))
-                        finish()
-                    }
-                }
-            } else {
-                if (auth.getCurrentUser() == null) {
-                    startActivity(
-                        Intent(
-                            this@Primavera,
-                            AuthenticationActivity::class.java
-                        )
-                    )
-                    finish()
-                } else {
-                    fathers = ServerDatabase(
-                        applicationContext,
-                        dataStoreManager!!
-                    ).fatherInformation.checkAlreadyFatherOrNot()
-                    teachers = ServerDatabase(
-                        applicationContext,
-                        dataStoreManager!!
-                    ).teacherInformation.checkAlreadyTeacherOrNot()
-                    when {
-                        !fathers && !teachers -> {
-                            startActivity(Intent(this@Primavera, InformationActivity::class.java))
-                            finish()
-                        }
-                        fathers && teachers -> {
-                            Toast.makeText(this@Primavera, "poth", Toast.LENGTH_SHORT).show()
-                            /* Show Fragment to Choose Which Ui Want to Use*/
-                        }
-                        fathers -> {
-                            startActivity(Intent(this@Primavera, FatherActivity::class.java))
-                            dataStoreManager!!.setUserType(FATHER)
-                            finish()
-                        }
-                        teachers -> {
-                            startActivity(Intent(this@Primavera, TeacherActivity::class.java))
-                            dataStoreManager!!.setUserType(TEACHER)
-                            finish()
-                        }
-                        else -> {
-                            startActivity(
-                                Intent(
-                                    this@Primavera,
-                                    AuthenticationActivity::class.java
-                                )
-                            )
-                            finish()
-                        }
-                    }
-                }
-            }
-        }
+        /* lifecycleScope.launch {
+             val userType = dataStoreManager?.getUserType()
+             if (userType != null) {
+                 when (userType) {
+                     TEACHER -> {
+                         startActivity(
+                             Intent(
+                                 this@Primavera,
+                                 TeacherActivity::class.java
+                             )
+                         )
+                         finish()
+                     }
+                     FATHER -> {
+                         startActivity(Intent(this@Primavera, FatherActivity::class.java))
+                         finish()
+                     }
+                 }
+             } else {
+                 if (auth.getCurrentUser() == null) {
+                     startActivity(
+                         Intent(
+                             this@Primavera,
+                             AuthenticationActivity::class.java
+                         )
+                     )
+                     finish()
+                 } else {
+                     fathers = ServerDatabase(
+                         applicationContext,
+                         dataStoreManager!!
+                     ).fatherInformation.checkAlreadyFatherOrNot()
+                     teachers = ServerDatabase(
+                         applicationContext,
+                         dataStoreManager!!
+                     ).teacherInformation.checkAlreadyTeacherOrNot()
+                     when {
+                         !fathers && !teachers -> {
+                             startActivity(Intent(this@Primavera, InformationActivity::class.java))
+                             finish()
+                         }
+                         fathers && teachers -> {
+                             Toast.makeText(this@Primavera, "poth", Toast.LENGTH_SHORT).show()
+                             /* Show Fragment to Choose Which Ui Want to Use*/
+                             startActivity(Intent(this@Primavera, FatherActivity::class.java))
+                             finish()
+                         }
+                         fathers -> {
+                             startActivity(Intent(this@Primavera, FatherActivity::class.java))
+                             dataStoreManager!!.setUserType(FATHER)
+                             finish()
+                         }
+                         teachers -> {
+                             startActivity(Intent(this@Primavera, TeacherActivity::class.java))
+                             dataStoreManager!!.setUserType(TEACHER)
+                             finish()
+                         }
+                         else -> {
+                             startActivity(
+                                 Intent(
+                                     this@Primavera,
+                                     AuthenticationActivity::class.java
+                                 )
+                             )
+                             finish()
+                         }
+                     }
+                 }
+             }
+         }*/
+        startActivity(Intent(this, FatherActivity::class.java))
+        finish()
         setContentView(binding.root)
     }
 

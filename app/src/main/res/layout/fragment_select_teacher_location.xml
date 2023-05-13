@@ -33,7 +33,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:maxImageSize="26dp"
             app:shapeAppearanceOverlay="@style/fab_square"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map"

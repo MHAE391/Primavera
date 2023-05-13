@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.m391.primavera.user.father.search.FatherTeacherSearchViewModel" />
+            type="com.m391.primavera.user.father.teacher.TeacherProfileViewModel" />
     </data>
 
     <LinearLayout
@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical"
-        tools:context=".user.father.search.FatherTeacherSearchFragment">
+        tools:context=".user.father.teacher.TeacherProfileFragment">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -37,7 +38,7 @@
                 android:background="@color/white"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center"
-                android:onClick="@{()-> viewModel.backToConversation()}"
+                android:onClick="@{()-> viewModel.backToSearch()}"
                 android:src="@drawable/ic_baseline_arrow_back_24"
                 tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
@@ -47,52 +48,55 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_centerVertical="true"
-
-                android:text="@string/search"
+                android:text="@string/profile"
                 android:textColor="@color/black"
                 android:textSize="@dimen/font_size_25"
                 android:textStyle="italic|bold"
                 android:visibility="visible"
                 tools:ignore="RelativeOverlap" />
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-
-                android:layout_gravity="end"
-                android:layout_marginStart="@dimen/margin_30"
-                android:layout_marginBottom="@dimen/padding_5"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                app:background="@drawable/searchview_background"
-                app:iconifiedByDefault="true"
-                app:queryHint="Teacher Name" />
         </RelativeLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/margin_20"
-            android:layout_marginEnd="@dimen/margin_20">
+            android:scrollbars="none">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/users_recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:liveData="@{viewModel.teachersList}"
-                android:padding="@dimen/padding_5"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            </androidx.recyclerview.widget.RecyclerView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_10"
+                    android:gravity="center"
+                    android:text='@{viewModel.teacherData.firstName + " " + viewModel.teacherData.lastName}'
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/font_size_20" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_10"
+                    android:src="@drawable/profile"
+                    app:imageByteArray="@{viewModel.teacherData.image}"
+                    app:imageUrl="@{viewModel.teacherData.imageUri}" />
 
+                <Button
+                    android:id="@+id/chat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/background_button"
+                    android:gravity="center"
+                    android:text="Chat"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </layout>

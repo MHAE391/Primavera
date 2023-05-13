@@ -11,6 +11,7 @@ data class ServerTeacherModel(
     val longitude: Number,
     val age: String,
     val academicYears: ArrayList<String>,
-    val subjects: ArrayList<String>
+    val subjects: ArrayList<String>,
+    val rate: Number
 
 )
