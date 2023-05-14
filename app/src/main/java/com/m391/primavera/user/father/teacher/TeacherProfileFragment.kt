@@ -18,6 +18,7 @@ import com.m391.primavera.databinding.FragmentTeacherProfileBinding
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Constants.CHILD
 import com.m391.primavera.utils.Constants.FATHER
+import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.Constants.TEACHER_UID
 import com.m391.primavera.utils.Constants.TYPE
@@ -52,6 +53,7 @@ class TeacherProfileFragment : BaseFragment() {
             val intent = Intent(activity, ChatActivity::class.java)
             intent.putExtra(TYPE, TEACHER)
             intent.putExtra(TEACHER_UID, viewModel.teacherData.value!!.teacherId)
+            intent.putExtra(FATHER_FIRST_NAME, viewModel.teacherData.value!!.firstName)
             startActivity(intent)
         }
     }

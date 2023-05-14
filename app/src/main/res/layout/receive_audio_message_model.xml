@@ -16,17 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_5"
-        android:gravity="end"
+        android:gravity="start"
         android:orientation="vertical"
-        app:playAudio="@{message.message}">
+        app:playVoice="@{message.message}">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="72dp"
             android:layout_marginBottom="@dimen/margin_5"
-            android:background="@drawable/bg_sender_message"
+            android:background="@drawable/bg_receiver_message"
             tools:ignore="UselessParent">
 
             <ImageButton
@@ -38,8 +38,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_10"
-                android:background="@drawable/voice_rounded_button"
-                android:src="@drawable/ic_baseline_play_arrow_reversed"
+                android:background="@drawable/rounded_button"
+                android:src="@drawable/ic_baseline_play_arrow_24"
                 android:tag="@string/play"
                 tools:ignore="ContentDescription" />
 
@@ -47,12 +47,11 @@
                 android:id="@+id/voice_seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:thumb="@drawable/custom_seek_bar_thumb"
-                android:progressTint="@color/topBack"
                 android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/padding_60" />
+                android:layout_marginStart="@dimen/padding_60"
+                android:progressTint="#E34234" />
 
             <TextView
                 android:id="@+id/voice_duration"
@@ -61,13 +60,13 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="@dimen/margin_10"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_10"
+            android:layout_marginStart="@dimen/margin_10"
             android:text="@string/message"
             android:textColor="@color/black"
             android:textSize="12sp"

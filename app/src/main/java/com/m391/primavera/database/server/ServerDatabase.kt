@@ -9,4 +9,5 @@ ServerDatabase(context: Context, dataStoreManager: DataStoreManager) {
     val fatherInformation = FatherInformation(context, dataStoreManager)
     val childInformation = ChildInformation(context, dataStoreManager)
     val teacherInformation = TeacherInformation(context, dataStoreManager)
+    val messageInformation = MessageInformation(context, dataStoreManager)
 }

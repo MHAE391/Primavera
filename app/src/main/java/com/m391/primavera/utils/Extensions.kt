@@ -69,6 +69,14 @@ fun <T> RecyclerView.setupGridRecycler(
     }
 }
 
+fun <T> RecyclerView.setupLinearRecycler(
+    adapter: BaseRecyclerViewAdapter<T>
+) {
+    this.apply {
+        layoutManager = LinearLayoutManager(this.context)
+        this.adapter = adapter
+    }
+}
 
 //animate changing the view visibility
 fun View.fadeIn() {

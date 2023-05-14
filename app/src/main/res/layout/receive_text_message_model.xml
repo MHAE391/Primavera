@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="message"
+            type="com.m391.primavera.utils.models.ServerMessageModel" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/layout_sender_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="72dp"
+        android:gravity="start"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_sender_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_receiver_message"
+            android:gravity="start"
+            android:padding="@dimen/margin_10"
+            android:text="@{message.message}"
+            android:textColor="@color/black"
+            android:textDirection="anyRtl"
+            android:textSize="@dimen/font_size_18" />
+
+        <TextView
+            android:id="@+id/text_sender_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_5"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:time="@{message.timeSent}" />
+
+    </LinearLayout>
+
+</layout>
