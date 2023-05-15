@@ -55,7 +55,7 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
 
     private val dataStore = DataStoreManager.getInstance(app.applicationContext)
     private val teachers = ServerDatabase(app.applicationContext, dataStore).teacherInformation
-
+    private val conversations = ServerDatabase(app.applicationContext, dataStore).conversations
     private val _teacherData = MutableLiveData<ServerTeacherModel>()
     val teacherData: LiveData<ServerTeacherModel> = _teacherData
 
@@ -86,5 +86,9 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
         withContext(Dispatchers.IO) {
             teachers.closeUsersStream()
         }
+    }
+
+    suspend fun createConversation() = withContext(Dispatchers.IO) {
+        conversations.createConversation(_teacherData.value!!.teacherId)
     }
 }

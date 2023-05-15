@@ -62,10 +62,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-
+                android:layout_centerVertical="true"
                 android:layout_gravity="end"
                 android:layout_marginStart="@dimen/margin_30"
-                android:layout_marginBottom="@dimen/padding_5"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 app:background="@drawable/searchview_background"

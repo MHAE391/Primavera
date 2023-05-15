@@ -51,6 +51,9 @@ class TeacherProfileFragment : BaseFragment() {
         }
         binding.chat.setOnClickListener {
             val intent = Intent(activity, ChatActivity::class.java)
+            lifecycleScope.launch {
+                viewModel.createConversation()
+            }
             intent.putExtra(TYPE, TEACHER)
             intent.putExtra(TEACHER_UID, viewModel.teacherData.value!!.teacherId)
             intent.putExtra(FATHER_FIRST_NAME, viewModel.teacherData.value!!.firstName)

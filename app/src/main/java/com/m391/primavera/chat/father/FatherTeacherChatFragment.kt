@@ -119,6 +119,9 @@ class FatherTeacherChatFragment : BaseFragment() {
         binding.sendImage.setOnClickListener {
             chooseSendingPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+        binding.arrowBtn.setOnClickListener {
+            activity?.finish()
+        }
         setSendMessageClick()
     }
 
