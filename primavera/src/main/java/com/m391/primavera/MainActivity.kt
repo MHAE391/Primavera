@@ -60,14 +60,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+       
         id = generateDeviceId()
-        registration =
-            firestore.collection("Watches").document(id).addSnapshotListener { value, _ ->
-                if (value!!["childName"] != null) {
-                    startActivity(Intent(this@MainActivity, ChatActivity::class.java))
-                    finish()
-                }
-            }
+
         val qrCodeSize = 512 // Set the size of the QR code
         val hints = mapOf(
             Pair(EncodeHintType.CHARACTER_SET, "UTF-8"), // Set the character set

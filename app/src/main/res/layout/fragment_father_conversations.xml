@@ -83,6 +83,33 @@
             android:padding="@dimen/padding_5"
             android:scrollbars="none" />
 
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawableTop="@drawable/ic_no_data"
+            android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
+            android:gravity="center"
+            android:text="@string/no_data"
+            android:textColor="@color/black"
+            android:textSize="@dimen/margin_20"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_new_conversation"
             android:layout_width="wrap_content"

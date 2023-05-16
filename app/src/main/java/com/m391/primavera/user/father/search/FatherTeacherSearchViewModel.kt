@@ -77,14 +77,16 @@ class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
                     _teachersList.value = teachersArray.sortedBy {
                         it.rate.toInt()
                     }.reversed()
+                    validateData()
                 }
             })
-            invalidateShowNoData()
+            validateData()
         }
     }
 
     suspend fun closeStream(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
         serverTeachers.streamTeachers().removeObservers(lifecycleOwner)
+        _teachersList.removeObservers(lifecycleOwner)
         withContext(Dispatchers.IO) {
             serverTeachers.closeUsersStream()
         }
@@ -106,6 +108,7 @@ class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
                         _teachersList.value = searchTeacherArray.sortedBy {
                             it.rate.toInt()
                         }.reversed()
+                        validateData()
                     }
                 }
             }
@@ -126,14 +129,21 @@ class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
                         _teachersList.value = searchTeacherArray.sortedBy {
                             it.rate.toInt()
                         }.reversed()
+                        validateData()
                     }
                 }
             }
             _teachersList.value = searchTeacherArray.sortedBy {
                 it.rate.toInt()
             }.reversed()
+            validateData()
 
             return true
         }
+    }
+
+    fun validateData() {
+
+        showNoData.value = _teachersList.value.isNullOrEmpty()
     }
 }

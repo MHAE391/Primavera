@@ -7,7 +7,7 @@
     <string name="phone">Enter your phone number</string>
     <string name="code">+2-</string>
     <string name="phone_hint">0123456789</string>
-    <string name="otp_get">Get OTP</string>
+    <string name="otp_get">Get Code</string>
     <string name="verification_code">Enter verification code</string>
     <string name="resend_code">Didn\'t receive the verification code?</string>
     <string name="resend_otp">Resend Code</string>
@@ -94,4 +94,8 @@
     <string name="play">play</string>
     <string name="pause">pause</string>
     <string name="conversations">Conversations</string>
+    <string name="log_out">Log out</string>
+    <string name="switch_to_father_account">Switch To Father Account</string>
+    <string name="no_data">No Data</string>
+    <string name="child_chat">Child Chat</string>
 </resources>

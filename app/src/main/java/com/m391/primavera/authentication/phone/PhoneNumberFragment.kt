@@ -43,7 +43,7 @@ class PhoneNumberFragment : BaseFragment() {
         super.onStart()
 
         binding.getCode.setOnClickListener {
-            it.isEnabled = false
+           it.isEnabled = false
             if (viewModel.sendOTPCode(requireActivity()) == Constants.DONE) {
                 it.isEnabled = true
             }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_navigation_graph"
+    app:startDestination="@id/teacherHomeFragment">
+
+    <fragment
+        android:id="@+id/teacherHomeFragment"
+        android:name="com.m391.primavera.user.teacher.home.TeacherHomeFragment"
+        android:label="TeacherHomeFragment"
+        tools:layout="@layout/fragment_teacher_home">
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_teacherChildSearchFragment"
+            app:destination="@id/teacherChildSearchFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/teacherChildSearchFragment"
+        android:name="com.m391.primavera.user.teacher.search.TeacherChildSearchFragment"
+        android:label="TeacherChildSearchFragment"
+        tools:layout="@layout/fragment_teacher_child_search" />
+</navigation>

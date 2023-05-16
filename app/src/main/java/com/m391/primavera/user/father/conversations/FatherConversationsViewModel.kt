@@ -26,13 +26,17 @@ class FatherConversationsViewModel(app: Application) : BaseViewModel(app) {
     private val _conversationsList = MutableLiveData<List<ServerConversationModel>>()
     val conversationsList: LiveData<List<ServerConversationModel>> = _conversationsList
     val conversationsArrayList = kotlin.collections.ArrayList<ServerConversationModel>()
+
+
     suspend fun openStreamConversations(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
-        conversations.streamConversations().observe(lifecycleOwner, Observer {
+        conversations.streamFatherConversations().observe(lifecycleOwner, Observer {
             _conversationsList.postValue(it)
+            validateData()
             it?.forEach { s ->
                 conversationsArrayList.add(s)
             }
         })
+        validateData()
     }
 
     fun backToHome() {
@@ -40,7 +44,8 @@ class FatherConversationsViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun closeStreamConversation(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
-        conversations.streamConversations().removeObservers(lifecycleOwner)
+        conversations.streamFatherConversations().removeObservers(lifecycleOwner)
+        _conversationsList.removeObservers(lifecycleOwner)
         withContext(Dispatchers.IO) {
             conversations.closeConversationsStream()
         }
@@ -62,14 +67,23 @@ class FatherConversationsViewModel(app: Application) : BaseViewModel(app) {
                         || storedTeacher.lastName.lowercase(Locale.getDefault())
                             .contains(text.lowercase(Locale.getDefault()).toRegex())
                     ) {
-                        conversationsArray.add(storedTeacher)
+                        if (!conversationsArray.contains(storedTeacher)) conversationsArray.add(
+                            storedTeacher
+                        )
                         _conversationsList.value = conversationsArray
+                        validateData()
                     }
                 }
             }
             _conversationsList.value = conversationsArray
+            validateData()
 
             return true
         }
+    }
+
+    fun validateData() {
+
+        showNoData.value = _conversationsList.value.isNullOrEmpty()
     }
 }

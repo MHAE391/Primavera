@@ -31,8 +31,8 @@ class Primavera : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         // appCheck()
         binding = PrimaveraBinding.inflate(layoutInflater)
-        dataStoreManager = DataStoreManager.getInstance(applicationContext)
-        auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
+      //  dataStoreManager = DataStoreManager.getInstance(applicationContext)
+//        auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
         /* lifecycleScope.launch {
              val userType = dataStoreManager?.getUserType()
              if (userType != null) {

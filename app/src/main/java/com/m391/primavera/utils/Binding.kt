@@ -4,12 +4,15 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
@@ -18,11 +21,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.google.firebase.storage.FirebaseStorage
 import com.m391.primavera.R
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.user.father.teacher.TeacherProfileViewModel
 import com.m391.primavera.utils.Animation.animateImageChange
 import com.m391.primavera.utils.models.ServerMessageModel
 import com.m391.primavera.utils.models.ServerTeacherModel
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -77,7 +82,7 @@ object Binding {
     }
 
     @SuppressLint("SimpleDateFormat")
-    @BindingAdapter("android:time")
+    @BindingAdapter("time")
     @JvmStatic
     fun setTime(textView: TextView, date: Date) {
         val sdf = SimpleDateFormat("hh:mm a")
@@ -157,6 +162,7 @@ object Binding {
             })
         }
     }
+
     @JvmStatic
     @BindingAdapter("playVoice")
     fun playVoice(
@@ -254,4 +260,11 @@ object Binding {
         }
     }
 
+    @JvmStatic
+    @BindingAdapter(value = ["childUid", "storedChildUid"], requireAll = true)
+    fun clickCardView(imageView: ImageView, childUid: String, storedChildUid: String) {
+        if (childUid == storedChildUid) {
+            imageView.visibility = View.VISIBLE
+        } else imageView.visibility = View.INVISIBLE
+    }
 }

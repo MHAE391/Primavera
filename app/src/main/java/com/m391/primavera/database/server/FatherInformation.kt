@@ -1,14 +1,14 @@
 package com.m391.primavera.database.server
 
 import android.content.Context
-import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestoreSettings
+import com.google.firebase.firestore.ListenerRegistration
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.notification.Notification
-import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CHILDREN
 import com.m391.primavera.utils.Constants.ERROR
 import com.m391.primavera.utils.Constants.FATHER
@@ -24,9 +24,11 @@ import com.m391.primavera.utils.Constants.LONGITUDE
 import com.m391.primavera.utils.Constants.NO
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
+import com.m391.primavera.utils.models.ServerFatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class FatherInformation(
     private val context: Context,
@@ -64,7 +66,8 @@ class FatherInformation(
             age = childAge,
             watchUid = watchUid,
             image = childImage,
-            academicYear = childAcademicYear
+            academicYear = childAcademicYear,
+            fatherName = fatherFirstName
         )
         if (childUid == ERROR) return@withContext ERROR
         val image = mediaUploader.uploadImage(fatherImage)
@@ -108,4 +111,38 @@ class FatherInformation(
         return@withContext false
     }
 
+    private var registration: ListenerRegistration? = null
+
+    suspend fun streamFatherInformationByUID(UID: String): LiveData<ServerFatherModel> =
+        withContext(Dispatchers.IO)
+        {
+            val father = MutableLiveData<ServerFatherModel>()
+            registration = fathers.document(UID).addSnapshotListener { value, error ->
+                if (error != null) {
+                    Timber.tag("Fathers Database").e(error, "Listen failed.")
+                    return@addSnapshotListener
+                }
+                father.postValue(
+                    ServerFatherModel(
+                        fatherUID = value!![FATHER_UID].toString(),
+                        firstName = value[FATHER_FIRST_NAME].toString(),
+                        lastName = value[FATHER_LAST_NAME].toString(),
+                        longitude = value[LONGITUDE] as Number,
+                        latitude = value[LATITUDE] as Number,
+                        phone = value[FATHER_PHONE].toString(),
+                        image = value[IMAGE_PATH].toString(),
+                        imageUri = value[IMAGE_URI].toString(),
+                        children = value[CHILDREN]!! as ArrayList<String>
+                    )
+                )
+            }
+            return@withContext father
+        }
+
+
+    suspend fun closeFatherStream() = withContext(Dispatchers.IO) {
+        if (registration != null) {
+            registration!!.remove()
+        }
+    }
 }

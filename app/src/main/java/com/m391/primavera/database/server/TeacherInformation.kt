@@ -7,12 +7,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.ktx.firestoreSettings
 import com.m391.primavera.database.datastore.DataStoreManager
-import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CHILD_AGE
 import com.m391.primavera.utils.Constants.FATHER
-import com.m391.primavera.utils.Constants.FATHERS
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
 import com.m391.primavera.utils.Constants.FATHER_PHONE
@@ -28,7 +25,6 @@ import com.m391.primavera.utils.Constants.TEACHERS
 import com.m391.primavera.utils.Constants.TEACHERS_SUBJECTS
 import com.m391.primavera.utils.Constants.TEACHER_ACADEMIC_YEARS
 import com.m391.primavera.utils.Constants.TEACHER_UID
-import com.m391.primavera.utils.Constants.YES
 import com.m391.primavera.utils.models.ServerTeacherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -76,8 +72,7 @@ class TeacherInformation(
     }
 
     suspend fun streamTeachers(): LiveData<List<ServerTeacherModel>> = withContext(Dispatchers.IO) {
-        val _teachersList = MutableLiveData<List<ServerTeacherModel>>()
-        val teachersList: LiveData<List<ServerTeacherModel>> = _teachersList
+        val teachersList = MutableLiveData<List<ServerTeacherModel>>()
         registration = teachers.addSnapshotListener { value, error ->
             if (error != null) {
                 Timber.tag("Teachers Database").e(error, "Listen failed.")
@@ -102,7 +97,7 @@ class TeacherInformation(
                     )
                 )
             }
-            _teachersList.value = teacherList
+            teachersList.value = teacherList
         }
         return@withContext teachersList
     }

@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text='@{"Mr: "+ conversation.firstName + "\n" + conversation.lastName}'
+                    android:text='@{ conversation.firstName + "\n" + conversation.lastName}'
                     android:textAlignment="center"
                     android:textColor="#0F228C"
                     android:textSize="16sp"

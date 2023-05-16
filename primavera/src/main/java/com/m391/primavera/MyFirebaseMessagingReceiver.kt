@@ -75,10 +75,11 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                 intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 val pendingIntent = PendingIntent.getActivity(context, 0, intentActivity, 0)
                 // Create the notification
+                val childName = intent.extras!!.getString("childName")
                 val notificationBuilder =
                     NotificationCompat.Builder(context, "MHAE391").setSmallIcon(R.drawable.logo)
                         .setContentTitle("Message")
-                        .setContentText("Your Father Sent You Voice Message")
+                        .setContentText("$childName Your Father Sent You Voice Message")
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentIntent(pendingIntent)
                         .setSilent(false)

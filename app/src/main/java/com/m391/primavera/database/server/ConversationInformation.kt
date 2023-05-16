@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CONVERSATIONS
+import com.m391.primavera.utils.Constants.FATHERS
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
 import com.m391.primavera.utils.Constants.FATHER_PHONE
@@ -36,7 +37,7 @@ class ConversationInformation(
     private lateinit var senderUID: String
 
     init {
-        senderUID = currentUser!!.uid
+        if(currentUser != null) senderUID = currentUser!!.uid
     }
 
     suspend fun createConversation(receiver: String) = withContext(Dispatchers.IO) {
@@ -55,7 +56,7 @@ class ConversationInformation(
         }
     }
 
-    suspend fun streamConversations(): LiveData<List<ServerConversationModel>> =
+    suspend fun streamFatherConversations(): LiveData<List<ServerConversationModel>> =
         withContext(Dispatchers.IO) {
             val conversationsList = MutableLiveData<List<ServerConversationModel>>()
             registration = conversations.document(senderUID).collection(CONVERSATIONS)
@@ -68,6 +69,40 @@ class ConversationInformation(
                     for (conversation in value!!) {
                         val receiver = conversation["receiverUid"].toString()
                         firestore.collection(TEACHERS).document(receiver).get()
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    conversationsArray.add(
+                                        ServerConversationModel(
+                                            receiverUID = receiver,
+                                            firstName = task.result[FATHER_FIRST_NAME].toString(),
+                                            lastName = task.result[FATHER_LAST_NAME].toString(),
+                                            imageUrl = task.result[Constants.IMAGE_URI].toString(),
+                                            phone = task.result[FATHER_PHONE].toString()
+                                        )
+                                    )
+                                }
+                                conversationsList.postValue(conversationsArray)
+                            }
+                        conversationsList.postValue(conversationsArray)
+                    }
+                }
+            return@withContext conversationsList
+        }
+
+
+    suspend fun streamTeacherConversations(): LiveData<List<ServerConversationModel>> =
+        withContext(Dispatchers.IO) {
+            val conversationsList = MutableLiveData<List<ServerConversationModel>>()
+            registration = conversations.document(senderUID).collection(CONVERSATIONS)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        Timber.tag("Conversations Database").e(error, "Listen failed.")
+                        return@addSnapshotListener
+                    }
+                    val conversationsArray = ArrayList<ServerConversationModel>()
+                    for (conversation in value!!) {
+                        val receiver = conversation["receiverUid"].toString()
+                        firestore.collection(FATHERS).document(receiver).get()
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     conversationsArray.add(

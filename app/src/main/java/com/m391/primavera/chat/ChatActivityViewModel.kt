@@ -44,6 +44,7 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
             .observe(lifecycleOwner, Observer {
                 _serverMessages.postValue(it)
             })
+
     }
 
     val messageText = MutableLiveData<String?>()
@@ -57,6 +58,14 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
             senderUID = _senderUid.value!!
         )
 
+    }
+
+    suspend fun closeMessagesStream(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
+        messaging.streamMessages(_senderUid.value!! + _receiverUid.value!!)
+            .removeObservers(lifecycleOwner)
+        withContext(Dispatchers.IO) {
+            messaging.closeMessagesStream()
+        }
     }
 
     suspend fun sendImageMessage(uri: String): String = withContext(Dispatchers.IO) {

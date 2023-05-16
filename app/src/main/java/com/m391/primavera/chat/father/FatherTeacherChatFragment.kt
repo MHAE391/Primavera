@@ -33,6 +33,7 @@ import com.m391.primavera.utils.Animation.hideTextViewWithAnimation
 import com.m391.primavera.utils.Animation.showButtonWithAnimation
 import com.m391.primavera.utils.Animation.showTextViewWithAnimation
 import com.m391.primavera.utils.Constants.CHILD
+import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
@@ -58,6 +59,14 @@ class FatherTeacherChatFragment : BaseFragment() {
                 viewModel.setChatSenderAndReceiver(
                     teacherUid!!,
                     teacherFirstName!!
+                )
+            }
+            FATHER -> {
+                val fatherUid = activity?.intent!!.extras!!.getString(Constants.FATHER_UID)
+                val fatherFirstName = activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)
+                viewModel.setChatSenderAndReceiver(
+                    fatherUid!!,
+                    fatherFirstName!!
                 )
             }
             CHILD -> {
@@ -111,9 +120,6 @@ class FatherTeacherChatFragment : BaseFragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onStart() {
         super.onStart()
-        lifecycleScope.launch {
-            viewModel.openMessagesStream(viewLifecycleOwner)
-        }
         binding.textMessage.addTextChangedListener(textWatcher)
         binding.cancelVoiceMessage.setOnClickListener { onCancelClick() }
         binding.sendImage.setOnClickListener {
@@ -141,7 +147,7 @@ class FatherTeacherChatFragment : BaseFragment() {
     private fun onSendVoiceClick(it: ImageButton) {
         hideButtonWithAnimation(binding.cancelVoiceMessage)
         hideTextViewWithAnimation(binding.timer)
-        fatherTeacherChatViewModel.stopTimer(binding.textMessage)
+        fatherTeacherChatViewModel.stopTimer(binding.timer)
         it.background = ContextCompat.getDrawable(requireContext(), R.drawable.rounded_button)
         it.tag = getString(R.string.voice_message)
         animateImageChange(binding.sendMessage, R.drawable.ic_baseline_mic_24)
@@ -200,6 +206,9 @@ class FatherTeacherChatFragment : BaseFragment() {
 
     override fun onPause() {
         super.onPause()
+        lifecycleScope.launch {
+            viewModel.closeMessagesStream(viewLifecycleOwner)
+        }
     }
 
     private fun checkRecordAudioPermission(): Boolean {
@@ -278,6 +287,13 @@ class FatherTeacherChatFragment : BaseFragment() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            viewModel.openMessagesStream(viewLifecycleOwner)
         }
     }
 }

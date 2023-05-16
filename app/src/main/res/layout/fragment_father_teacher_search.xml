@@ -10,7 +10,7 @@
             type="com.m391.primavera.user.father.search.FatherTeacherSearchViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -72,16 +72,46 @@
                 app:queryHint="Teacher Name" />
         </RelativeLayout>
 
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:drawableTop="@drawable/ic_no_data"
+            android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
+            android:gravity="center"
+            android:text="@string/no_data"
+            android:textColor="@color/black"
+            android:textSize="@dimen/margin_20"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/padding_60"
             android:layout_marginEnd="@dimen/margin_20">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/users_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/padding_10"
                 android:liveData="@{viewModel.teachersList}"
                 android:padding="@dimen/padding_5"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -93,5 +123,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

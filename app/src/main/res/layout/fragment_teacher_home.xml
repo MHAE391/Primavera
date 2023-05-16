@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.m391.primavera.user.teacher.home.TeacherConversationViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".user.teacher.home.TeacherHomeFragment">
+
+        <TextView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
+            android:gravity="center"
+            android:text="@string/no_data"
+            android:textColor="@color/black"
+            android:textSize="@dimen/margin_20"
+            android:textStyle="bold"
+            app:drawableTopCompat="@drawable/ic_no_data"
+            tools:ignore="SpUsage" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/padding_5"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_5">
+
+            <ImageButton
+                android:id="@+id/teacher_father_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="start|center"
+                android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:src="@drawable/ic_baseline_switch_account_24"
+                tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/conversations"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_25"
+                android:textStyle="italic|bold"
+                android:visibility="visible"
+                tools:ignore="RelativeOverlap" />
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="end"
+                android:layout_marginStart="@dimen/margin_30"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                app:background="@drawable/searchview_background"
+                app:iconifiedByDefault="true"
+                app:queryHint="Father Name" />
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/header"
+            android:layout_marginStart="@dimen/padding_5"
+            android:layout_marginTop="@dimen/padding_50"
+            android:layout_marginEnd="@dimen/padding_5"
+            android:liveData="@{viewModel.conversationsList}"
+            android:padding="@dimen/padding_5"
+            android:scrollbars="none" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/add_new_conversation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:alpha="0.8"
+            android:foregroundGravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_add_24"
+            android:visibility="visible"
+            app:backgroundTint="#ff595e"
+            app:fabCustomSize="64dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|right|end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="40dp"
+            tools:ignore="ContentDescription" />
+
+    </RelativeLayout>
+</layout>
