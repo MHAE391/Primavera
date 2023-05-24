@@ -4,30 +4,24 @@ import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.*
-import androidx.annotation.RequiresApi
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
+import android.widget.MediaController.MediaPlayerControl
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
-import com.google.firebase.storage.FirebaseStorage
 import com.m391.primavera.R
-import com.m391.primavera.database.datastore.DataStoreManager
-import com.m391.primavera.user.father.teacher.TeacherProfileViewModel
 import com.m391.primavera.utils.Animation.animateImageChange
-import com.m391.primavera.utils.models.ServerMessageModel
-import com.m391.primavera.utils.models.ServerTeacherModel
+import com.m391.primavera.utils.MediaPlayerManager.setupView
+import com.m391.primavera.utils.MediaPlayerManager.startReceiverAudio
+import com.m391.primavera.utils.MediaPlayerManager.startSenderAudio
+import com.m391.primavera.utils.MediaPlayerManager.stopReceiverAudio
+import com.m391.primavera.utils.MediaPlayerManager.stopSenderAudio
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -56,7 +50,7 @@ object Binding {
             (recyclerView.adapter as? BaseRecyclerViewAdapter<T>)?.apply {
                 clear()
                 addData(itemList)
-                recyclerView.scrollToPosition(items.value!!.size - 1)
+                recyclerView.smoothScrollToPosition(items.value!!.size)
             }
         }
     }
@@ -82,7 +76,7 @@ object Binding {
     }
 
     @SuppressLint("SimpleDateFormat")
-    @BindingAdapter("time")
+    @BindingAdapter("android:time")
     @JvmStatic
     fun setTime(textView: TextView, date: Date) {
         val sdf = SimpleDateFormat("hh:mm a")
@@ -100,66 +94,17 @@ object Binding {
             val button = view.findViewById<ImageButton>(R.id.play_pause_button)
             val seekBar = view.findViewById<SeekBar>(R.id.voice_seek_bar)
             val durationTextView = view.findViewById<TextView>(R.id.voice_duration)
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepare()
-            val duration = mediaPlayer.duration
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong())
-            val seconds =
-                TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(
-                    minutes
-                )
-            val durationString = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-            durationTextView.text = durationString
-            seekBar.max = duration
-            val handler = Handler(Looper.myLooper()!!)
-            var flags: Boolean = false
-            handler.postDelayed(object : Runnable {
-                override fun run() {
-                    val currentPosition = mediaPlayer.currentPosition
-                    if (!flags) seekBar.progress = (currentPosition)
-                    handler.postDelayed(this, 100)
-                }
-            }, 100)
+            setupView(url, durationTextView, seekBar)
 
-
-            mediaPlayer.setOnCompletionListener {
-                flags = true
-                seekBar.progress = 0
-                animateImageChange(button, R.drawable.ic_baseline_play_arrow_reversed)
-                button.tag = view.context.getString(R.string.play)
-            }
             button.setOnClickListener {
-                if (it.tag == view.context.getString(R.string.play)) {
-                    animateImageChange(button, R.drawable.pause_other)
-                    it.tag = view.context.getString(R.string.pause)
-                    mediaPlayer.start()
-                    flags = false
+                if (button.tag == view.context.getString(R.string.play_sender)) {
+                    button.tag = view.context.getString(R.string.pause_sender)
+                    startSenderAudio(button, view.context, url , seekBar)
                 } else {
-                    animateImageChange(button, R.drawable.ic_baseline_play_arrow_reversed)
-                    it.tag = view.context.getString(R.string.play)
-                    mediaPlayer.pause()
+                    button.tag = view.context.getString(R.string.play_sender)
+                    stopSenderAudio(button)
                 }
             }
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    if (fromUser) {
-                        mediaPlayer.seekTo(progress)
-                    }
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                    // Do nothing
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    // Do nothing
-                }
-            })
         }
     }
 
@@ -172,66 +117,16 @@ object Binding {
             val button = view.findViewById<ImageButton>(R.id.play_pause_button)
             val seekBar = view.findViewById<SeekBar>(R.id.voice_seek_bar)
             val durationTextView = view.findViewById<TextView>(R.id.voice_duration)
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepare()
-            val duration = mediaPlayer.duration
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong())
-            val seconds =
-                TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(
-                    minutes
-                )
-            val durationString = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-            durationTextView.text = durationString
-            seekBar.max = duration
-            val handler = Handler(Looper.myLooper()!!)
-            var flags: Boolean = false
-            handler.postDelayed(object : Runnable {
-                override fun run() {
-                    val currentPosition = mediaPlayer.currentPosition
-                    if (!flags) seekBar.progress = (currentPosition)
-                    handler.postDelayed(this, 100)
-                }
-            }, 100)
-
-
-            mediaPlayer.setOnCompletionListener {
-                flags = true
-                seekBar.progress = 0
-                animateImageChange(button, R.drawable.ic_baseline_play_arrow_24)
-                button.tag = view.context.getString(R.string.play)
-            }
+            setupView(url, durationTextView, seekBar)
             button.setOnClickListener {
-                if (it.tag == view.context.getString(R.string.play)) {
-                    animateImageChange(button, R.drawable.ic_baseline_pause_24)
-                    it.tag = view.context.getString(R.string.pause)
-                    mediaPlayer.start()
-                    flags = false
+                if (button.tag == view.context.getString(R.string.play_receiver)) {
+                    button.tag = view.context.getString(R.string.pause_receiver)
+                    startReceiverAudio(button, view.context, url , seekBar)
                 } else {
-                    animateImageChange(button, R.drawable.ic_baseline_play_arrow_24)
-                    it.tag = view.context.getString(R.string.play)
-                    mediaPlayer.pause()
+                    button.tag = view.context.getString(R.string.play_receiver)
+                    stopReceiverAudio(button)
                 }
             }
-            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
-                ) {
-                    if (fromUser) {
-                        mediaPlayer.seekTo(progress)
-                    }
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                    // Do nothing
-                }
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    // Do nothing
-                }
-            })
         }
     }
 

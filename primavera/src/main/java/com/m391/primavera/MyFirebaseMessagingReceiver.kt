@@ -18,7 +18,7 @@ import kotlinx.coroutines.tasks.await
 
 class MyFirebaseMessagingReceiver : BroadcastReceiver() {
 
-    @SuppressLint("ObsoleteSdkInt", "HardwareIds")
+    @SuppressLint("ObsoleteSdkInt", "HardwareIds", "MissingPermission")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.extras != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -41,7 +41,12 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                 val fatherUID = intent.extras!!.getString("fatherUID")
                 val intentActivity = Intent(context, ChatActivity::class.java)
                 intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                val pendingIntent = PendingIntent.getActivity(context, 0, intentActivity, 0)
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    intentActivity,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
                 // Create the notification
                 val notificationBuilder =
                     NotificationCompat.Builder(context, "MHAE391").setSmallIcon(R.drawable.logo)
@@ -73,7 +78,12 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
             } else {
                 val intentActivity = Intent(context, ChatActivity::class.java)
                 intentActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                val pendingIntent = PendingIntent.getActivity(context, 0, intentActivity, 0)
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    intentActivity,
+                    PendingIntent.FLAG_IMMUTABLE
+                )
                 // Create the notification
                 val childName = intent.extras!!.getString("childName")
                 val notificationBuilder =

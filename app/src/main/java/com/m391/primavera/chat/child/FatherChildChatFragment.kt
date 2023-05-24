@@ -23,6 +23,7 @@ import com.m391.primavera.chat.ChatActivityViewModel
 import com.m391.primavera.chat.father.ChatAdapter
 import com.m391.primavera.databinding.FragmentFatherChildChatBinding
 import com.m391.primavera.utils.*
+import com.m391.primavera.utils.MediaPlayerManager.stopAudio
 import com.permissionx.guolindev.PermissionX
 import kotlinx.coroutines.launch
 import java.io.File
@@ -79,6 +80,8 @@ class FatherChildChatFragment : BaseFragment() {
         lifecycleScope.launch {
             viewModel.closeMessagesStream(viewLifecycleOwner)
         }
+        stopAudio()
+        if (mediaRecorder != null) onCancelClick()
     }
 
     private fun setupRecyclerView() {
@@ -195,6 +198,7 @@ class FatherChildChatFragment : BaseFragment() {
                     if (checkRecordAudioPermission()) onRecordClick(binding.sendMessage)
                     else requestRecordAudioPermission()
                 }
+
                 getString(R.string.send_voice) -> {
                     onSendVoiceClick(binding.sendMessage)
                 }

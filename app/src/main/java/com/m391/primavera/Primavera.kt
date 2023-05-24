@@ -2,20 +2,12 @@ package com.m391.primavera
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.m391.primavera.authentication.AuthenticationActivity
-import com.m391.primavera.authentication.information.InformationActivity
+
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
-import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.databinding.PrimaveraBinding
 import com.m391.primavera.user.father.FatherActivity
-import com.m391.primavera.user.teacher.TeacherActivity
-import com.m391.primavera.utils.Constants.FATHER
-import com.m391.primavera.utils.Constants.TEACHER
-import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 
@@ -26,12 +18,11 @@ class Primavera : AppCompatActivity() {
     private var teachers by Delegates.notNull<Boolean>()
     private var dataStoreManager: DataStoreManager? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // appCheck()
         binding = PrimaveraBinding.inflate(layoutInflater)
-      //  dataStoreManager = DataStoreManager.getInstance(applicationContext)
+        //  dataStoreManager = DataStoreManager.getInstance(applicationContext)
 //        auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
         /* lifecycleScope.launch {
              val userType = dataStoreManager?.getUserType()
@@ -108,9 +99,10 @@ class Primavera : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-
     override fun onPause() {
         super.onPause()
         dataStoreManager = null
     }
+
+
 }

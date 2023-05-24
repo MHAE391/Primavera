@@ -61,6 +61,8 @@ class FatherChildViewModel(app: Application) : BaseViewModel(app) {
     private val _receiverUid = MutableLiveData<String>()
     private val _serverMessages = MutableLiveData<List<ServerMessageModel>>()
     private val messaging = ServerDatabase(app.applicationContext, dataStore).messageInformation
+    private val watches = ServerDatabase(app.applicationContext, dataStore).watches
+    private val children = ServerDatabase(app.applicationContext, dataStore).childInformation
     val serverMessages: LiveData<List<ServerMessageModel>> = _serverMessages
 
     fun setChatSenderAndReceiver(uid: String, firstName: String) {
@@ -96,8 +98,10 @@ class FatherChildViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun sendFcm() = withContext(Dispatchers.IO) {
+        val watchUID = children.getChildInformationByUID(_receiverUid.value!!).watchUID
+        val watchToken = watches.getWatchToken(watchUID)
         Notification().sendMessageFCMToChildWatch(
-"ehgDNACsTt63C0NKE_vBDK:APA91bEMYcaMAmuaxbJEy-BYCK04qY1L2c2ELy_rBf__0L4VkV139qDy5QVbuT7xZmjHCGpL4g6bOMjg9OVs6Kz2lLLgJZJV8Te3uJrukrY8ISJbdUVz5thYPbCHoC0cCw-aZ_h9B21I",
+            watchToken,
             receiverFirstName.value!!
         )
     }

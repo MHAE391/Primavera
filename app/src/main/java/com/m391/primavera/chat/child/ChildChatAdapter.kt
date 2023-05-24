@@ -5,6 +5,7 @@ import com.m391.primavera.R
 import com.m391.primavera.utils.BaseRecyclerViewAdapter
 import com.m391.primavera.utils.Constants.TEXT_MESSAGE
 import com.m391.primavera.utils.Constants.VOICE_MESSAGE
+import com.m391.primavera.utils.DataBindingViewHolder
 import com.m391.primavera.utils.models.ServerMessageModel
 
 class ChildChatAdapter(callback: (teacher: ServerMessageModel) -> Unit) :
@@ -36,4 +37,14 @@ class ChildChatAdapter(callback: (teacher: ServerMessageModel) -> Unit) :
 
         }
     }
+    override fun onBindViewHolder(holder: DataBindingViewHolder<ServerMessageModel>, position: Int) {
+        val item = getItem(position)
+        holder.bind(item)
+        holder.itemView.setOnClickListener {
+            callback?.invoke(item)
+        }
+    }
+
+    private fun getItem(position: Int) = _items[position]
+
 }

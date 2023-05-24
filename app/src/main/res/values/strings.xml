@@ -98,4 +98,10 @@
     <string name="switch_to_father_account">Switch To Father Account</string>
     <string name="no_data">No Data</string>
     <string name="child_chat">Child Chat</string>
+    <string name="still_working">Still Working</string>
+    <string name="play_sender">playSender</string>
+    <string name="pause_sender">pauseSender</string>
+    <string name="play_receiver">playReceiver</string>
+    <string name="pause_receiver">pauseReceiver</string>
+
 </resources>

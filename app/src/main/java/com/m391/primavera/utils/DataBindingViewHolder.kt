@@ -12,7 +12,6 @@ import kotlinx.coroutines.runBlocking
 class DataBindingViewHolder<T>(private val binding: ViewDataBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: T) {
-
         when (item) {
             is ServerTeacherModel -> binding.setVariable(BR.teacher, item)
             is ServerMessageModel -> binding.setVariable(BR.message, item)

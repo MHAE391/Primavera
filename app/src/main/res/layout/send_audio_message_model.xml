@@ -40,7 +40,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/voice_rounded_button"
                 android:src="@drawable/ic_baseline_play_arrow_reversed"
-                android:tag="@string/play"
+                android:tag="@string/play_sender"
                 tools:ignore="ContentDescription" />
 
             <SeekBar

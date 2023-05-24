@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import java.util.logging.Handler
 
-abstract class BaseRecyclerViewAdapter<T>(private val callback: ((item: T) -> Unit)? = null) :
+abstract class BaseRecyclerViewAdapter<T>(protected val callback: ((item: T) -> Unit)? = null) :
     RecyclerView.Adapter<DataBindingViewHolder<T>>() {
 
     protected var _items: MutableList<T> = mutableListOf()

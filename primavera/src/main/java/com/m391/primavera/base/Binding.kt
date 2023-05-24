@@ -42,22 +42,13 @@ object Binding {
         if (view is RelativeLayout && url != null) {
             val button = view.findViewById<ImageButton>(R.id.play_pause_button)
 
-            val mediaPlayer = MediaPlayer()
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepare()
-            mediaPlayer.setOnCompletionListener {
-                button.tag = view.context.getString(R.string.play)
-                animateImageChange(button, R.drawable.ic_baseline_play_arrow_reversed)
-            }
             button.setOnClickListener {
                 if (it.tag == view.context.getString(R.string.play)) {
-                    animateImageChange(button, R.drawable.pause_other)
-                    it.tag = view.context.getString(R.string.pause)
-                    mediaPlayer.start()
+                    button.tag = view.context.getString(R.string.pause)
+                    MediaPlayerManager.startReceiverAudio(button, view.context, url)
                 } else {
-                    animateImageChange(button, R.drawable.ic_baseline_play_arrow_reversed)
-                    it.tag = view.context.getString(R.string.play)
-                    mediaPlayer.pause()
+                    button.tag = view.context.getString(R.string.play)
+                    MediaPlayerManager.stopReceiverAudio(button)
                 }
             }
         }

@@ -61,6 +61,7 @@ class FatherTeacherChatFragment : BaseFragment() {
                     teacherFirstName!!
                 )
             }
+
             FATHER -> {
                 val fatherUid = activity?.intent!!.extras!!.getString(Constants.FATHER_UID)
                 val fatherFirstName = activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)
@@ -69,6 +70,7 @@ class FatherTeacherChatFragment : BaseFragment() {
                     fatherFirstName!!
                 )
             }
+
             CHILD -> {
                 findNavController().navigate(R.id.action_fatherTeacherChatFragment_to_fatherChildChatFragment)
             }
@@ -99,9 +101,11 @@ class FatherTeacherChatFragment : BaseFragment() {
                     if (checkRecordAudioPermission()) onRecordClick(binding.sendMessage)
                     else requestRecordAudioPermission()
                 }
+
                 getString(R.string.send_voice) -> {
                     onSendVoiceClick(binding.sendMessage)
                 }
+
                 getString(R.string.text_message) -> {
                     lifecycleScope.launch {
                         if (viewModel.sendTextMessage() == SUCCESS) {
@@ -209,6 +213,8 @@ class FatherTeacherChatFragment : BaseFragment() {
         lifecycleScope.launch {
             viewModel.closeMessagesStream(viewLifecycleOwner)
         }
+        MediaPlayerManager.stopAudio()
+        if (mediaRecorder != null) onCancelClick()
     }
 
     private fun checkRecordAudioPermission(): Boolean {
@@ -247,7 +253,7 @@ class FatherTeacherChatFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecordAudio() {
-        mediaRecorder = MediaRecorder(requireContext())
+        mediaRecorder = MediaRecorder()
         output =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/tempRecordings-" + Date().time + ".mp3"
         mediaRecorder!!.setOutputFile(output)

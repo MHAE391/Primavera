@@ -43,13 +43,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="70dp"
                 android:gravity="center"
                 android:text="@{viewModel.currentChildInformation.childName}"
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_size_18" />
+                android:textSize="@dimen/font_size_25"
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/text"
@@ -59,20 +60,45 @@
                 android:layout_centerVertical="true"
                 android:text="@string/app_name"
                 android:textColor="@color/black"
-                android:textSize="@dimen/font_size_20"
+                android:textSize="@dimen/font_size_16"
                 android:textStyle="italic|bold"
                 android:visibility="visible"
                 tools:ignore="RelativeOverlap" />
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/child_chat"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="@string/child_chat"
-            android:textAllCaps="false" />
+            android:text="@string/still_working"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="@dimen/margin_30"
+            android:textStyle="bold|italic"
+            tools:ignore="SpUsage" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/child_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="100dp"
+            android:alpha="0.8"
+            android:foregroundGravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_baseline_record_voice_over_24"
+            android:visibility="visible"
+            app:backgroundTint="#ff595e"
+            app:fabCustomSize="64dp"
+            app:fabSize="normal"
+            app:layout_anchorGravity="bottom|right|end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="40dp"
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/navigate_to_conversations"

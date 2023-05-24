@@ -19,6 +19,7 @@ import android.hardware.SensorPrivacyManager.Sensors
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ import androidx.health.services.client.HealthServices
 import androidx.health.services.client.MeasureCallback
 import androidx.health.services.client.data.*
 import androidx.work.await
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.wearable.DataMap
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
@@ -49,6 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       
         id = generateDeviceId()
 
         val qrCodeSize = 512 // Set the size of the QR code
@@ -73,6 +75,10 @@ class MainActivity : AppCompatActivity() {
             MultiFormatWriter().encode(id, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize, hints)
         val qrCodeBitmap = BarcodeEncoder().createBitmap(bitMatrix)
         binding.qrCode.setImageBitmap(qrCodeBitmap)
+        binding.qrCode.setOnClickListener {
+            startActivity(Intent(this , ChatActivity::class.java))
+        }
+
 
     }
 
