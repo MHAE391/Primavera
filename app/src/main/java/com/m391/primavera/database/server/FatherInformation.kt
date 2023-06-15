@@ -145,4 +145,12 @@ class FatherInformation(
             registration!!.remove()
         }
     }
+
+    suspend fun getRandomChildUID(): String = withContext(Dispatchers.IO) {
+        currentUser = auth.getCurrentUser()
+        val fatherUid = currentUser!!.uid
+        val response = fathers.document(fatherUid).get().await()
+        val childUID = response[CHILDREN]!! as ArrayList<String>
+        return@withContext childUID.random()
+    }
 }

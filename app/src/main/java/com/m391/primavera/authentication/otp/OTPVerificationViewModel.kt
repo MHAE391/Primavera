@@ -77,6 +77,12 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
                         _alreadySigned.postValue(FATHER)
                         dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
                         dataStoreManager.setUserType(FATHER)
+                        dataStoreManager.setCurrentChildUid(
+                            ServerDatabase(
+                                app.applicationContext,
+                                dataStoreManager
+                            ).fatherInformation.getRandomChildUID()
+                        )
                     } else if (teacher) {
                         _alreadySigned.postValue(TEACHER)
                         dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)

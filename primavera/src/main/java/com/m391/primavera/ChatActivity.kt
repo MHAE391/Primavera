@@ -168,6 +168,7 @@ class ChatActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.openStreamMessage()
         }
+        if (mediaRecorder != null) onCancelClick()
     }
 
     override fun onPause() {

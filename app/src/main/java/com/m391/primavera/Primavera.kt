@@ -2,12 +2,15 @@ package com.m391.primavera
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.m391.primavera.authentication.AuthenticationActivity
 
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
 import com.m391.primavera.databinding.PrimaveraBinding
 import com.m391.primavera.user.father.FatherActivity
+import com.m391.primavera.utils.Constants.TYPE
 import kotlin.properties.Delegates
 
 
