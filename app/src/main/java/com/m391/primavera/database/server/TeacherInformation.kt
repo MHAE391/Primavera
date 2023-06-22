@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -71,6 +72,15 @@ class TeacherInformation(
         return@withContext teachersList
     }
 
+    suspend fun updateCurrentUserData(firstName: String, lastName: String) =
+        withContext(Dispatchers.IO) {
+            val user = auth.getCurrentUser()
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("$firstName $lastName")
+                .build()
+            user?.updateProfile(profileUpdates)!!.await()
+        }
+
     suspend fun streamTeachers(): LiveData<List<ServerTeacherModel>> = withContext(Dispatchers.IO) {
         val teachersList = MutableLiveData<List<ServerTeacherModel>>()
         registration = teachers.addSnapshotListener { value, error ->
@@ -134,6 +144,7 @@ class TeacherInformation(
             response = it.message!!
         }.await()
         if (response == SUCCESS) {
+            updateCurrentUserData(teacherFirstName, teacherLastName)
             dataStoreManager.setUserUid(teacherUid)
             dataStoreManager.setUserType(TEACHER)
         }

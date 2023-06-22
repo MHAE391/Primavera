@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.messaging.FirebaseMessaging
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants.CHATS
 import com.m391.primavera.utils.Constants.IMAGE_MESSAGE
-import com.m391.primavera.utils.Constants.IMAGE_PATH
 import com.m391.primavera.utils.Constants.MEDIA_PATH
 import com.m391.primavera.utils.Constants.MESSAGE
 import com.m391.primavera.utils.Constants.MESSAGES
@@ -44,6 +44,8 @@ class MessageInformation(
     private lateinit var timeSent: Date
     private var registration: ListenerRegistration? = null
     private val mediaUploader = MediaUploader()
+    val auth = Authentication()
+    private val fcm = FirebaseMessaging.getInstance()
     suspend fun sendMessage(
         messageType: String,
         senderUID: String,
@@ -155,6 +157,13 @@ class MessageInformation(
         if (registration != null) {
             registration!!.remove()
         }
+    }
+
+    suspend fun subscribeToTopic() = withContext(Dispatchers.IO) {
+        fcm.subscribeToTopic("user${auth.getCurrentUser()!!.uid}").await()
+    }
+    suspend fun sendFcm() = withContext(Dispatchers.IO){
+
     }
 
 }

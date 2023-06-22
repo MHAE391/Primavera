@@ -10,6 +10,8 @@ import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
 import com.m391.primavera.databinding.PrimaveraBinding
 import com.m391.primavera.user.father.FatherActivity
+import com.m391.primavera.user.teacher.TeacherActivity
+import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.Constants.TYPE
 import kotlin.properties.Delegates
 

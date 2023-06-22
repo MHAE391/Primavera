@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
+import com.m391.primavera.notification.Notification
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants.IMAGE_MESSAGE
 import com.m391.primavera.utils.Constants.TEXT_MESSAGE
@@ -50,7 +51,6 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
     val messageText = MutableLiveData<String?>()
 
     suspend fun sendTextMessage(): String = withContext(Dispatchers.IO) {
-        messageText.postValue(null)
         return@withContext messaging.sendMessage(
             messageType = TEXT_MESSAGE,
             messageContent = messageText.value!!,
@@ -86,4 +86,39 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
         )
     }
 
+    suspend fun sendFCM(messageType: String) = withContext(Dispatchers.IO) {
+        when (messageType) {
+            TEXT_MESSAGE -> {
+                Notification().sendMessageFCMToFatherOrTeacher(
+                    "user${_receiverUid.value}",
+                    messageType,
+                    auth.getCurrentUser()!!.displayName!!,
+                    messageText.value!!,
+                    auth.getCurrentUser()!!.uid
+                )
+                messageText.postValue(null)
+            }
+
+            VOICE_MESSAGE -> {
+                Notification().sendMessageFCMToFatherOrTeacher(
+                    "user${_receiverUid.value}",
+                    messageType,
+                    auth.getCurrentUser()!!.displayName!!,
+                    "Send You Voice Message",
+                    auth.getCurrentUser()!!.uid
+                )
+            }
+
+            IMAGE_MESSAGE -> {
+                Notification().sendMessageFCMToFatherOrTeacher(
+                    "user${_receiverUid.value}",
+                    messageType,
+                    auth.getCurrentUser()!!.displayName!!,
+                    "Send You Image",
+                    auth.getCurrentUser()!!.uid
+                )
+            }
+        }
+
+    }
 }

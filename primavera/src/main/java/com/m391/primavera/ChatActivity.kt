@@ -122,6 +122,7 @@ class ChatActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 if (viewModel.sendAudioMessage(output!!) == Constants.SUCCESS) {
                     Toast.makeText(applicationContext, "Audio Sent", Toast.LENGTH_SHORT).show()
+                    viewModel.sendMessageFCMToFather()
                 } else {
                     Toast.makeText(applicationContext, "Audio Failed", Toast.LENGTH_SHORT).show()
                 }

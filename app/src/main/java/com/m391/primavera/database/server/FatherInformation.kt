@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.messaging.FirebaseMessaging
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.notification.Notification
 import com.m391.primavera.utils.Constants.CHILDREN
@@ -87,6 +89,7 @@ class FatherInformation(
             response = it.message!!
         }.await()
         if (response == SUCCESS) {
+            updateCurrentUserData(fatherFirstName, fatherLastName)
             dataStoreManager.setUserUid(fatherUid)
             dataStoreManager.setUserType(FATHER)
             val token = watchInformation.getWatchToken(watchUid)
@@ -100,6 +103,15 @@ class FatherInformation(
         }
         return@withContext response
     }
+
+    private suspend fun updateCurrentUserData(firstName: String, lastName: String) =
+        withContext(Dispatchers.IO) {
+            val user = auth.getCurrentUser()
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("$firstName $lastName")
+                .build()
+            user?.updateProfile(profileUpdates)!!.await()
+        }
 
     suspend fun checkAlreadyFatherOrNot(): Boolean = withContext(Dispatchers.IO) {
         currentUser = auth.getCurrentUser()

@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.storage.FirebaseStorage
+import com.google.gson.Gson
 import com.m391.primavera.DeviceIdGenerator.generateDeviceId
 import com.m391.primavera.base.Constants
 import com.m391.primavera.base.Constants.AUDIOS
@@ -26,10 +27,19 @@ import com.m391.primavera.base.Constants.TIME_SENT
 import com.m391.primavera.base.Constants.VOICE_MESSAGE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.asDeferred
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.Response
 import java.io.File
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -79,6 +89,8 @@ class ChatViewModel : ViewModel() {
     private lateinit var senderUID: String
     private lateinit var receiverUID: String
     private lateinit var messageUID: String
+    private lateinit var senderName: String
+    private lateinit var fatherName: String
     private lateinit var timeSent: Date
 
 
@@ -89,6 +101,8 @@ class ChatViewModel : ViewModel() {
                     if (it.isSuccessful) {
                         receiverUID = it.result["fatherUID"].toString()
                         senderUID = it.result["childUID"].toString()
+                        senderName = it.result["childName"].toString()
+                        fatherName = it.result["fatherName"].toString()
                         senderRoom = (senderUID + receiverUID)
                         receiverRoom = (receiverUID + senderUID)
                     }
@@ -179,4 +193,43 @@ class ChatViewModel : ViewModel() {
     }
 
     private val storageRef = FirebaseStorage.getInstance()
+    fun sendMessageFCMToFather() {
+        val url = "https://fcm.googleapis.com/fcm/send"
+        val apiKey =
+            "AAAAPLfqcsQ:APA91bGkqZ5VzwBVbXQnkUzaFryV339sVFGQxrT_SB0Dl39ha5tmOdeBy5lS0S9Qg9T-IfOHd9xCCx-vGb8YvLSWehRehzi1O_ULwHwHye-kc8wlk0Wk44Oc2kqMf2_Wn8Z4F_s9oOO-"
+        val topic = "/topics/user${receiverUID}"
+
+        val payload = mapOf(
+            "to" to topic,
+            "data" to mapOf(
+                "type" to "Alert",
+                "senderName" to "Child Message",
+                "messageBody" to "$fatherName, Your Child $senderName Sent You Message",
+                "senderId" to senderUID
+            )
+        )
+        runBlocking(Dispatchers.IO) {
+            launch {
+                val json = Gson().toJson(payload)
+                val requestBody =
+                    json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+
+                val request = Request.Builder().url(url).post(requestBody)
+                    .addHeader("Authorization", "key=$apiKey").build()
+
+                val client = OkHttpClient()
+                client.newCall(request).enqueue(object : Callback {
+                    override fun onResponse(call: Call, response: Response) {
+                        // Handle successful response here
+                        println("done")
+                    }
+
+                    override fun onFailure(call: Call, e: IOException) {
+                        // Handle error here
+                        println("failed")
+                    }
+                })
+            }
+        }
+    }
 }

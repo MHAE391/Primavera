@@ -35,9 +35,12 @@ import com.m391.primavera.utils.Animation.showTextViewWithAnimation
 import com.m391.primavera.utils.Constants.CHILD
 import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
+import com.m391.primavera.utils.Constants.IMAGE_MESSAGE
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
+import com.m391.primavera.utils.Constants.TEXT_MESSAGE
 import com.m391.primavera.utils.Constants.TYPE
+import com.m391.primavera.utils.Constants.VOICE_MESSAGE
 import com.permissionx.guolindev.PermissionX
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -111,6 +114,7 @@ class FatherTeacherChatFragment : BaseFragment() {
                         if (viewModel.sendTextMessage() == SUCCESS) {
                             Toast.makeText(requireContext(), "Message Sent", Toast.LENGTH_SHORT)
                                 .show()
+                            viewModel.sendFCM(TEXT_MESSAGE)
                         } else Toast.makeText(
                             requireContext(), "Message Failed", Toast.LENGTH_SHORT
                         ).show()
@@ -202,6 +206,7 @@ class FatherTeacherChatFragment : BaseFragment() {
                 lifecycleScope.launch {
                     if (viewModel.sendImageMessage(uri.toString()) == SUCCESS) {
                         Toast.makeText(requireContext(), "Image Sent", Toast.LENGTH_SHORT).show()
+                        viewModel.sendFCM(IMAGE_MESSAGE)
                     } else Toast.makeText(requireContext(), "Send Image Failed", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -276,6 +281,7 @@ class FatherTeacherChatFragment : BaseFragment() {
             lifecycleScope.launch {
                 if (viewModel.sendAudioMessage(output!!) == SUCCESS) {
                     Toast.makeText(requireContext(), "Audio Sent", Toast.LENGTH_SHORT).show()
+                    viewModel.sendFCM(VOICE_MESSAGE)
                 } else {
                     Toast.makeText(requireContext(), "Audio Failed", Toast.LENGTH_SHORT).show()
                 }

@@ -38,6 +38,7 @@ class FatherHomeViewModel(app: Application) : BaseViewModel(app) {
         }
     }
 
+
     suspend fun openStreamChild(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
         currentChildUID.observe(lifecycleOwner) {
             if (it != null) {
@@ -67,20 +68,24 @@ class FatherHomeViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun closeStreamChild(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
-        children.streamChildInformationByUID(currentChildUID.value!!)
-            .removeObservers(lifecycleOwner)
-        currentChildUID.removeObservers(lifecycleOwner)
-        withContext(Dispatchers.IO) {
-            children.closeChildStream()
+        if (currentChildUID.value != null) {
+            children.streamChildInformationByUID(currentChildUID.value!!)
+                .removeObservers(lifecycleOwner)
+            currentChildUID.removeObservers(lifecycleOwner)
+            withContext(Dispatchers.IO) {
+                children.closeChildStream()
+            }
         }
     }
 
     suspend fun closeStreamFather(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
-        fathers.streamFatherInformationByUID(currentFatherUID.value!!)
-            .removeObservers(lifecycleOwner)
-        currentFatherUID.removeObservers(lifecycleOwner)
-        withContext(Dispatchers.IO) {
-            fathers.closeFatherStream()
+        if (currentFatherUID.value != null) {
+            fathers.streamFatherInformationByUID(currentFatherUID.value!!)
+                .removeObservers(lifecycleOwner)
+            currentFatherUID.removeObservers(lifecycleOwner)
+            withContext(Dispatchers.IO) {
+                fathers.closeFatherStream()
+            }
         }
     }
 

@@ -103,5 +103,6 @@
     <string name="pause_sender">pauseSender</string>
     <string name="play_receiver">playReceiver</string>
     <string name="pause_receiver">pauseReceiver</string>
+    <string name="accessibility_service_label">accessibility_service_label</string>
 
 </resources>
