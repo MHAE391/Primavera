@@ -202,7 +202,7 @@ class ChatViewModel : ViewModel() {
         val payload = mapOf(
             "to" to topic,
             "data" to mapOf(
-                "type" to "Alert",
+                "type" to MESSAGE,
                 "senderName" to "Child Message",
                 "messageBody" to "$fatherName, Your Child $senderName Sent You Message",
                 "senderId" to senderUID
