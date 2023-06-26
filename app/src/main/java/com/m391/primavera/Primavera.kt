@@ -1,9 +1,15 @@
 package com.m391.primavera
 
+import android.Manifest
 import android.content.Intent
+import android.os.Build
+import android.os.Build.VERSION
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import com.m391.primavera.authentication.AuthenticationActivity
 
 import com.m391.primavera.database.datastore.DataStoreManager
@@ -99,6 +105,8 @@ class Primavera : AppCompatActivity() {
                  }
              }
          }*/
+
+
         startActivity(Intent(this, FatherActivity::class.java))
         finish()
         setContentView(binding.root)

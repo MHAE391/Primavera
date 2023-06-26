@@ -196,7 +196,7 @@ class ChatViewModel : ViewModel() {
     fun sendMessageFCMToFather() {
         val url = "https://fcm.googleapis.com/fcm/send"
         val apiKey =
-            "AAAAPLfqcsQ:APA91bGkqZ5VzwBVbXQnkUzaFryV339sVFGQxrT_SB0Dl39ha5tmOdeBy5lS0S9Qg9T-IfOHd9xCCx-vGb8YvLSWehRehzi1O_ULwHwHye-kc8wlk0Wk44Oc2kqMf2_Wn8Z4F_s9oOO-"
+            "AAAAXjFA5lY:APA91bGoimiISHOq8fG1JNouYeb48U0GXpSsg__YJ5W5-cjDQ_k6dL6UGol9lVWe1ijQXE7xBT34X8BZJvzcj1L6VFZ-4xAHzVEytiAdlt9CCo_yvFQHhwfgd9NDQeTiLushGrQ-mt5_"
         val topic = "/topics/user${receiverUID}"
 
         val payload = mapOf(

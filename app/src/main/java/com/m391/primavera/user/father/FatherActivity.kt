@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -23,10 +25,10 @@ class FatherActivity : AppCompatActivity() {
     private lateinit var messaging: MessageInformation
     private lateinit var father: FatherInformation
 
+
     @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
         dataStoreManager = DataStoreManager.getInstance(applicationContext)
         messaging = ServerDatabase(applicationContext, dataStoreManager).messageInformation

@@ -33,6 +33,8 @@ class ChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.cancelButton.visibility = View.INVISIBLE
+        binding.time.visibility = View.INVISIBLE
 
     }
 
@@ -41,8 +43,7 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.cancelButton.visibility = View.INVISIBLE
-        binding.time.visibility = View.INVISIBLE
+
         setupRecyclerView()
         binding.sendButton.setOnClickListener {
             if (it.tag == getString(R.string.voice_message)) {
@@ -130,6 +131,7 @@ class ChatActivity : AppCompatActivity() {
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     private fun cancelRecording() {
@@ -141,6 +143,7 @@ class ChatActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     private fun onCancelClick() {
@@ -169,7 +172,6 @@ class ChatActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.openStreamMessage()
         }
-        if (mediaRecorder != null) onCancelClick()
     }
 
     override fun onPause() {
@@ -177,6 +179,7 @@ class ChatActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.closeStreamMessage()
         }
+        if (mediaRecorder != null) onCancelClick()
     }
 
 }

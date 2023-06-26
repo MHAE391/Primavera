@@ -39,9 +39,8 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH
                 )
                 channel.enableVibration(true)
-                channel.vibrationPattern = vibrationPattern
                 channel.setSound(
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE), null
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), null
                 )
                 channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
                 notificationManager.createNotificationChannel(channel)
@@ -51,10 +50,9 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                 .setContentTitle("${intent.extras!!.getString("senderName")}")
                 .setContentText("${intent.extras!!.getString("messageBody")}")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setVibrate(vibrationPattern) // Enable vibration
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
             notificationManager.notify(
                 getNotificationId("${intent.extras!!.getString("senderId")}"), notification

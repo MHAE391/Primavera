@@ -20,7 +20,7 @@ class Notification {
     ) {
         val url = "https://fcm.googleapis.com/fcm/send"
         val apiKey =
-            "AAAAPLfqcsQ:APA91bGkqZ5VzwBVbXQnkUzaFryV339sVFGQxrT_SB0Dl39ha5tmOdeBy5lS0S9Qg9T-IfOHd9xCCx-vGb8YvLSWehRehzi1O_ULwHwHye-kc8wlk0Wk44Oc2kqMf2_Wn8Z4F_s9oOO-"
+            "AAAAXjFA5lY:APA91bGoimiISHOq8fG1JNouYeb48U0GXpSsg__YJ5W5-cjDQ_k6dL6UGol9lVWe1ijQXE7xBT34X8BZJvzcj1L6VFZ-4xAHzVEytiAdlt9CCo_yvFQHhwfgd9NDQeTiLushGrQ-mt5_"
         //  val deviceToken = "cYWwyCNNS3OiIui0gLyAxh:APA91bEK7qafPBQQMh4-fst6xoduZQI__59ybPVW0PemjqGvTeqz9925u5smv5ZG8_VnH1ZjALu6CVQzplVh8NGcU3K7UsJkl94DwvcNDh-hp9XmFLAq7kyFbHhn46MOivI-79YeYHmP"
         val payload = mapOf(
             "to" to watchToken,
@@ -60,7 +60,7 @@ class Notification {
     fun sendMessageFCMToChildWatch(watchToken: String, childName: String) {
         val url = "https://fcm.googleapis.com/fcm/send"
         val apiKey =
-            "AAAAPLfqcsQ:APA91bGkqZ5VzwBVbXQnkUzaFryV339sVFGQxrT_SB0Dl39ha5tmOdeBy5lS0S9Qg9T-IfOHd9xCCx-vGb8YvLSWehRehzi1O_ULwHwHye-kc8wlk0Wk44Oc2kqMf2_Wn8Z4F_s9oOO-"
+            "AAAAXjFA5lY:APA91bGoimiISHOq8fG1JNouYeb48U0GXpSsg__YJ5W5-cjDQ_k6dL6UGol9lVWe1ijQXE7xBT34X8BZJvzcj1L6VFZ-4xAHzVEytiAdlt9CCo_yvFQHhwfgd9NDQeTiLushGrQ-mt5_"
         //  val deviceToken = "cYWwyCNNS3OiIui0gLyAxh:APA91bEK7qafPBQQMh4-fst6xoduZQI__59ybPVW0PemjqGvTeqz9925u5smv5ZG8_VnH1ZjALu6CVQzplVh8NGcU3K7UsJkl94DwvcNDh-hp9XmFLAq7kyFbHhn46MOivI-79YeYHmP"
         val payload = mapOf(
             "to" to watchToken,
@@ -99,11 +99,11 @@ class Notification {
         messageType: String,
         senderName: String,
         messageBody: String,
-        senderId : String
+        senderId: String
     ) {
         val url = "https://fcm.googleapis.com/fcm/send"
         val apiKey =
-            "AAAAPLfqcsQ:APA91bGkqZ5VzwBVbXQnkUzaFryV339sVFGQxrT_SB0Dl39ha5tmOdeBy5lS0S9Qg9T-IfOHd9xCCx-vGb8YvLSWehRehzi1O_ULwHwHye-kc8wlk0Wk44Oc2kqMf2_Wn8Z4F_s9oOO-"
+            "AAAAXjFA5lY:APA91bGoimiISHOq8fG1JNouYeb48U0GXpSsg__YJ5W5-cjDQ_k6dL6UGol9lVWe1ijQXE7xBT34X8BZJvzcj1L6VFZ-4xAHzVEytiAdlt9CCo_yvFQHhwfgd9NDQeTiLushGrQ-mt5_"
         val topic = "/topics/${receiverTopic}"
 
         val payload = mapOf(

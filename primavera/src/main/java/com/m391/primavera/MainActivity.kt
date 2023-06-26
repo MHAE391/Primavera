@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+       // notificationPermission()
         id = generateDeviceId()
 
         val qrCodeSize = 512 // Set the size of the QR code
@@ -76,10 +77,32 @@ class MainActivity : AppCompatActivity() {
         val qrCodeBitmap = BarcodeEncoder().createBitmap(bitMatrix)
         binding.qrCode.setImageBitmap(qrCodeBitmap)
         binding.qrCode.setOnClickListener {
-            startActivity(Intent(this , ChatActivity::class.java))
+            startActivity(Intent(this, ChatActivity::class.java))
         }
 
 
+    }
+
+    private fun notificationPermission() {
+        val builder = AlertDialog.Builder(this)
+        val notificationManager = NotificationManagerCompat.from(this)
+        if (!notificationManager.areNotificationsEnabled()) {
+            builder.setTitle("Enable Notification")
+                .setMessage("Notification is required for this app. Do you want to enable it?")
+                .setPositiveButton("Yes") { _, _ ->
+                    val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                    startActivity(intent)
+                }.setNegativeButton("No") { dialog, _ ->
+                    Toast.makeText(
+                        this,
+                        "You will not receive any notification",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    dialog.cancel()
+                }.show()
+        }
     }
 
     @SuppressLint("ObsoleteSdkInt")

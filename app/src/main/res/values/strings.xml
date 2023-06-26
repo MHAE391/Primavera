@@ -73,7 +73,7 @@
     <string name="lat_long_snippet">Lat: %1$.5f, Long: %2$.5f</string>
     <string name="dropped_pin">Dropped Pin</string>
     <string name="my_selected_location">My Selected Location</string>
-    <string name="google_maps_key">AIzaSyD7axjvOKNgT8rqVOOGPrH92QsF3vkj22w</string>
+    <string name="google_maps_key">AIzaSyA5LoRYl8SLrSDgyHuDiJvDmLbxPmSdeZo</string>
     <string name="my_location">My Location</string>
     <string name="send_message"><![CDATA[Send Message -->]]></string>
     <string name="profile">Profile</string>
