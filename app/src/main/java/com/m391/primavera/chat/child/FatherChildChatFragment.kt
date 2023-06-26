@@ -93,9 +93,10 @@ class FatherChildChatFragment : BaseFragment() {
     private var mediaRecorder: MediaRecorder? = null
     private var state: Boolean = false
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecordAudio() {
-        mediaRecorder = MediaRecorder(requireContext())
+        mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(requireContext())
+        } else MediaRecorder()
         output =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/tempRecordings-" + Date().time + ".mp3"
         mediaRecorder!!.setOutputFile(output)
@@ -126,6 +127,7 @@ class FatherChildChatFragment : BaseFragment() {
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     private fun cancelRecording() {
@@ -137,6 +139,7 @@ class FatherChildChatFragment : BaseFragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     private fun checkRecordAudioPermission(): Boolean {

@@ -258,7 +258,9 @@ class FatherTeacherChatFragment : BaseFragment() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecordAudio() {
-        mediaRecorder = MediaRecorder()
+        mediaRecorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(requireContext())
+        } else MediaRecorder()
         output =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).absolutePath + "/tempRecordings-" + Date().time + ".mp3"
         mediaRecorder!!.setOutputFile(output)
@@ -289,6 +291,7 @@ class FatherTeacherChatFragment : BaseFragment() {
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     private fun cancelRecording() {
@@ -300,6 +303,7 @@ class FatherTeacherChatFragment : BaseFragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        mediaRecorder = null
     }
 
     override fun onResume() {
