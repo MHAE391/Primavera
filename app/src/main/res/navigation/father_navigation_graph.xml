@@ -17,6 +17,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_fatherHomeFragment_to_fatherProfileFragment"
+            app:destination="@id/fatherProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/fatherConversationsFragment"
@@ -53,5 +60,32 @@
         <argument
             android:name="teacherUid"
             app:argType="string" />
+        <argument
+            android:name="from"
+            app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/fatherProfileFragment"
+        android:name="com.m391.primavera.user.father.profile.FatherProfileFragment"
+        android:label="FatherProfileFragment"
+        tools:layout="@layout/fragment_father_profile">
+        <argument
+            android:name="from"
+            app:argType="string" />
+        <argument
+            android:name="fatherUid"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fatherProfileFragment_to_addNewChildFragment"
+            app:destination="@id/addNewChildFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNewChildFragment"
+        android:name="com.m391.primavera.user.father.child.addition.AddNewChildFragment"
+        android:label="AddNewChildFragment"
+        tools:layout="@layout/fragment_add_new_child" />
 </navigation>

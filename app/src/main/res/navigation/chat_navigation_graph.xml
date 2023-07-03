@@ -14,10 +14,30 @@
         android:id="@+id/fatherTeacherChatFragment"
         android:name="com.m391.primavera.chat.father.FatherTeacherChatFragment"
         android:label="FatherTeacherChatFragment"
-        tools:layout="@layout/fragment_father_teacher_chat" >
+        tools:layout="@layout/fragment_father_teacher_chat">
         <action
             android:id="@+id/action_fatherTeacherChatFragment_to_fatherChildChatFragment"
             app:destination="@id/fatherChildChatFragment"
             app:popUpTo="@id/chat_navigation_graph" />
+        <action
+            android:id="@+id/action_fatherTeacherChatFragment_to_teacherProfileFragment"
+            app:destination="@id/teacherProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
+    <fragment
+        android:id="@+id/teacherProfileFragment"
+        android:name="com.m391.primavera.user.father.teacher.TeacherProfileFragment"
+        android:label="TeacherProfileFragment"
+        tools:layout="@layout/fragment_teacher_profile">
+        <argument
+            android:name="teacherUid"
+            app:argType="string" />
+        <argument
+            android:name="from"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

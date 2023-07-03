@@ -14,6 +14,9 @@ import com.m391.primavera.utils.models.ServerTeacherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
     private val _teacherUid = MutableLiveData<String>()
@@ -41,16 +44,16 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
     val teacherRate: LiveData<Number> = _teacherRate
 
     private val _teacherAge = MutableLiveData<String>()
-    val teacherImageAge: LiveData<String> = _teacherAge
+    val teacherAge: LiveData<String> = _teacherAge
 
     private val _teacherPhone = MutableLiveData<String>()
     val teacherPhone: LiveData<String> = _teacherPhone
 
-    private val _teacherAcademicYears = MutableLiveData<List<String>>()
-    val teacherAcademicYears: LiveData<List<String>> = _teacherAcademicYears
+    private val _teacherAcademicYears = MutableLiveData<String>()
+    val teacherAcademicYears: LiveData<String> = _teacherAcademicYears
 
-    private val _teacherSubjects = MutableLiveData<List<String>>()
-    val teacherSubjects: LiveData<List<String>> = _teacherSubjects
+    private val _teacherSubjects = MutableLiveData<String>()
+    val teacherSubjects: LiveData<String> = _teacherSubjects
 
 
     private val dataStore = DataStoreManager.getInstance(app.applicationContext)
@@ -62,10 +65,9 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
     suspend fun openStream(lifecycleOwner: LifecycleOwner, uid: String) =
         withContext(Dispatchers.Main)
         {
-            teachers.streamTeacherByUid(uid).observe(lifecycleOwner, Observer { serverTecher ->
+            teachers.streamTeacherByUid(uid).observe(lifecycleOwner, Observer { serverTeacher ->
                 /* _teacherFirstName.value = it.firstName
                  _teacherLastName.value = it.lastName
-                 _teacherAge.value = it.age
                  _teacherImage.value = it.image
                  _teacherImageUri.value = it.imageUri
                  _teacherAcademicYears.value = it.academicYears
@@ -73,7 +75,20 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
                  _teacherLongitude.value = it.longitude
                  _teacherLatitude.value = it.latitude
                  _teacherRate.value = it.rate*/
-                _teacherData.value = serverTecher
+                var subjects: String = ""
+                var years: String = ""
+                serverTeacher.academicYears.forEach {
+                    years += "- $it\n"
+                    _teacherAcademicYears.value = years.trim()
+                }
+                serverTeacher.subjects.forEach {
+                    subjects += "- $it\n"
+                    _teacherSubjects.value = subjects.trim()
+                }
+                _teacherLongitude.value = serverTeacher.longitude
+                _teacherLatitude.value = serverTeacher.latitude
+                _teacherAge.value = calculateAge(serverTeacher.dateOfBarth).toString()
+                _teacherData.value = serverTeacher
             })
         }
 
@@ -90,5 +105,26 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
 
     suspend fun createConversation() = withContext(Dispatchers.IO) {
         conversations.createConversation(_teacherData.value!!.teacherId)
+    }
+
+    private fun calculateAge(selectedDate: String): Int {
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val currentDate = Calendar.getInstance()
+
+        val birthDate = dateFormat.parse(selectedDate)
+        val birthCalendar = Calendar.getInstance()
+        birthCalendar.time = birthDate!!
+
+        var age = currentDate.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)
+
+        if (currentDate.get(Calendar.DAY_OF_YEAR) < birthCalendar.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+        return age
+    }
+
+    suspend fun rateTeacher(rate: Double) = viewModelScope.launch {
+        teachers.rateTeacher(teacherUid = teacherData.value!!.teacherId, rate)
+        showToast.value = "Rate Saved"
     }
 }

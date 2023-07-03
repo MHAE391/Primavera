@@ -59,5 +59,9 @@ object Constants {
     const val MEDIA_PATH = "mediaPath"
     const val AUDIOS = "Audios"
     const val FATHER_NAME = "fatherName"
+    const val DATE_OF_BARTH = "dateOfBarth"
+    const val NO_LOGGED_IN_USER = "noLoggedInUser"
+    const val SEARCH = "Search"
+    const val NO_IMAGE = "noImage"
 
 }

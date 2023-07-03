@@ -3,11 +3,9 @@ package com.m391.primavera.authentication.information.father
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
-import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.capitalize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,12 +14,12 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
     val childWatch = MutableLiveData<String>()
     val fatherImage = MutableLiveData<String>()
     val childImage = MutableLiveData<String>()
+    val childDateOfBarth = MutableLiveData<String>()
     val fatherLocation = MutableLiveData<String>()
     private val childWatchAddress = MutableLiveData<String>()
     val fatherFirstName = MutableLiveData<String>()
     val fatherLastName = MutableLiveData<String>()
     val childName = MutableLiveData<String>()
-    val childAge = MutableLiveData<String>()
     private val childAcademicYear = MutableLiveData<String>()
     private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val serverDatabase =
@@ -44,6 +42,7 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
     init {
         childWatch.value = "Select Your Child Watch"
         fatherLocation.value = "Select Your Location"
+        childDateOfBarth.value = "Select Child Date Of Barth"
     }
 
 
@@ -64,7 +63,7 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
                 fatherLastName = capitalize(fatherLastName.value!!.trim()),
                 fatherImage = fatherImage.value!!,
                 childName = capitalize(childName.value!!.trim()),
-                childAge = childAge.value!!,
+                childDateOfBarth = childDateOfBarth.value!!,
                 childImage = childImage.value!!,
                 watchUid = childWatchAddress.value!!,
                 childAcademicYear = childAcademicYear.value!!,
@@ -80,7 +79,7 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
             "Complete Father Information"
         else if (fatherImage.value.isNullOrBlank())
             "Please, Choose Father Image"
-        else if (childAge.value.isNullOrBlank() || childName.value.isNullOrBlank())
+        else if (childName.value.isNullOrBlank())
             "Complete Child Information"
         else if (childWatch.value == "Select Your Child Watch")
             "Please, Select Your Child Watch"
@@ -88,6 +87,8 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
             "Select Your Child Academic Year"
         else if (fatherLocation.value == "Select Your Location")
             "Please, Select Your Location"
+        else if (childDateOfBarth.value == "Select Child Date Of Barth")
+            "Please, Select Child Date Of Barth"
         else "Complete Data"
     }
 }

@@ -26,7 +26,7 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     private val years = HashSet<String>()
     val teacherFirstName = MutableLiveData<String>()
     val teacherLastName = MutableLiveData<String>()
-    val teacherAge = MutableLiveData<String>()
+    val teacherDateOfBarth = MutableLiveData<String>()
     val teacherImage = MutableLiveData<String>()
     private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val teachers =
@@ -38,6 +38,7 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
         selectAcademicYears.value = "Select Your Academic Years"
         selectAcademicSubjects.value = "Select Your Academic Subjects"
         selectTeacherLocation.value = "Select Teacher Location"
+        teacherDateOfBarth.value = "Select Your Date Of Barth"
     }
 
     fun setLocation(longitude: Number, latitude: Number) {
@@ -72,7 +73,7 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
                 teacherFirstName = capitalize(teacherFirstName.value!!.trim()),
                 teacherLastName = capitalize(teacherLastName.value!!.trim()),
                 teacherAcademicYears = selectedAcademicYears.value!!,
-                teacherAge = teacherAge.value!!,
+                teacherDateOfBarth = teacherDateOfBarth.value!!,
                 teacherImage = teacherImage.value!!,
                 latitude = selectedLatitude.value!!,
                 longitude = selectedLongitude.value!!,
@@ -83,7 +84,7 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     }
 
     private suspend fun validateEnteredData(): String = withContext(Dispatchers.IO) {
-        return@withContext if (teacherFirstName.value.isNullOrBlank() || teacherLastName.value.isNullOrBlank() || teacherAge.value.isNullOrBlank())
+        return@withContext if (teacherFirstName.value.isNullOrBlank() || teacherLastName.value.isNullOrBlank())
             "Complete Teacher Information"
         else if (teacherImage.value.isNullOrBlank())
             "Please, Choose Teacher Image"
@@ -93,6 +94,8 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
             "Please, Select Teacher Academic Subjects"
         else if (selectTeacherLocation.value == "Select Teacher Location")
             "Please, Select Your Location"
+        else if (teacherDateOfBarth.value == "Select Your Date Of Barth")
+            "Please, Select  Your Date Of Barth"
         else "Complete Data"
     }
 

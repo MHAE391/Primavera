@@ -14,6 +14,7 @@ import com.m391.primavera.utils.Constants.CHILD_AGE
 import com.m391.primavera.utils.Constants.CHILD_NAME
 import com.m391.primavera.utils.Constants.CHILD_UID
 import com.m391.primavera.utils.Constants.CHILD_WATCH_UID
+import com.m391.primavera.utils.Constants.DATE_OF_BARTH
 import com.m391.primavera.utils.Constants.ERROR
 import com.m391.primavera.utils.Constants.FATHER_NAME
 import com.m391.primavera.utils.Constants.FATHER_PHONE
@@ -44,7 +45,7 @@ class ChildInformation(
 
     suspend fun uploadChild(
         name: String,
-        age: String,
+        dateOfBarth: String,
         watchUid: String,
         image: String,
         academicYear: String,
@@ -63,7 +64,7 @@ class ChildInformation(
             FATHER_PHONE to fatherPhone,
             CHILD_NAME to name,
             CHILD_WATCH_UID to watchUid,
-            CHILD_AGE to age,
+            DATE_OF_BARTH to dateOfBarth,
             CHILD_ACADEMIC_YEAR to academicYear,
             FATHER_NAME to fatherName
         )
@@ -89,7 +90,7 @@ class ChildInformation(
                         childUID = value[CHILD_UID].toString(),
                         childName = value[CHILD_NAME].toString(),
                         academicYear = value[CHILD_ACADEMIC_YEAR].toString(),
-                        age = value[CHILD_AGE].toString(),
+                        dateOfBarth = value[DATE_OF_BARTH].toString(),
                         image = value[IMAGE_PATH].toString(),
                         imageUri = value[IMAGE_URI].toString(),
                         watchUID = value[CHILD_WATCH_UID].toString(),
@@ -116,7 +117,7 @@ class ChildInformation(
                         childUID = child[CHILD_UID].toString(),
                         childName = child[CHILD_NAME].toString(),
                         academicYear = child[CHILD_ACADEMIC_YEAR].toString(),
-                        age = child[CHILD_AGE].toString(),
+                        dateOfBarth = child[DATE_OF_BARTH].toString(),
                         image = child[IMAGE_PATH].toString(),
                         imageUri = child[IMAGE_URI].toString(),
                         watchUID = child[CHILD_WATCH_UID].toString(),
@@ -138,7 +139,7 @@ class ChildInformation(
                 childUID = result[CHILD_UID].toString(),
                 childName = result[CHILD_NAME].toString(),
                 academicYear = result[CHILD_ACADEMIC_YEAR].toString(),
-                age = result[CHILD_AGE].toString(),
+                dateOfBarth = result[DATE_OF_BARTH].toString(),
                 image = result[IMAGE_PATH].toString(),
                 imageUri = result[IMAGE_URI].toString(),
                 watchUID = result[CHILD_WATCH_UID].toString(),

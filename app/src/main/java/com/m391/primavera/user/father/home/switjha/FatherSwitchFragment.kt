@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.m391.primavera.R
+import com.m391.primavera.authentication.AuthenticationActivity
 import com.m391.primavera.chat.ChatActivity
 import com.m391.primavera.databinding.FragmentFatherSwitchBinding
 import com.m391.primavera.user.father.conversations.ConversationsAdapter
@@ -94,6 +95,15 @@ class FatherSwitchFragment : BottomSheetDialogFragment() {
         }
         setupRecyclerView()
 
+        binding.logOut.setOnClickListener {
+            lifecycleScope.launch {
+                fatherSwitchViewModel.showLoading.value = true
+                fatherSwitchViewModel.logout()
+                startActivity(Intent(activity, AuthenticationActivity::class.java))
+                activity?.finish()
+                fatherSwitchViewModel.showLoading.value = false
+            }
+        }
     }
 
 
@@ -126,14 +136,26 @@ class FatherSwitchFragment : BottomSheetDialogFragment() {
 
     private fun setupRecyclerView() {
         val adapter = ChildrenAdapter {
-            if (it.childUID == fatherSwitchViewModel.currentChild.value) {
-                Toast.makeText(requireContext(), "Already Signed", Toast.LENGTH_SHORT).show()
-            } else {
-                lifecycleScope.launch {
-                    fatherSwitchViewModel.changeCurrentChild(it.childUID)
-                    this@FatherSwitchFragment.dismiss()
-                }
-            }
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Child Options")
+                .setMessage("Choose Profile to display child Profile , Switch to switch to this child")
+                .setPositiveButton("Profile") { _, _ ->
+                    Toast.makeText(
+                        requireContext(),
+                        "Profile",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }.setNegativeButton("Switch") { _, _ ->
+                    lifecycleScope.launch {
+                        if (it.childUID == fatherSwitchViewModel.currentChild.value) {
+                            Toast.makeText(requireContext(), "Already Signed", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            fatherSwitchViewModel.changeCurrentChild(it.childUID)
+                            this@FatherSwitchFragment.dismiss()
+                        }
+                    }
+                }.show()
         }
         binding.usersRecyclerView.setupLinearRecycler(adapter)
     }

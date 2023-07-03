@@ -53,6 +53,20 @@
                 android:textStyle="italic|bold"
                 android:visibility="visible"
                 tools:ignore="RelativeOverlap" />
+            <ImageButton
+                android:id="@+id/info_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="start|center"
+                android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:src="@drawable/baseline_info_24"
+                tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView

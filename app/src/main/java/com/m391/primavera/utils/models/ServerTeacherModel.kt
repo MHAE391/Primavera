@@ -9,7 +9,7 @@ data class ServerTeacherModel(
     val imageUri: String,
     val latitude: Number,
     val longitude: Number,
-    val age: String,
+    val dateOfBarth: String,
     val academicYears: ArrayList<String>,
     val subjects: ArrayList<String>,
     val rate: Number

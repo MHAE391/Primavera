@@ -73,6 +73,14 @@ class FatherHomeFragment : BaseFragment() {
             )
             startActivity(intent)
         }
+        binding.fatherProfile.setOnClickListener {
+            findNavController().navigate(
+                FatherHomeFragmentDirections.actionFatherHomeFragmentToFatherProfileFragment(
+                    "Home",
+                    viewModel.fatherInformation.value!!.fatherUID
+                )
+            )
+        }
         return binding.root
     }
 

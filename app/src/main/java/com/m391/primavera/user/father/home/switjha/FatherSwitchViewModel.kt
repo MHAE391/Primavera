@@ -24,6 +24,8 @@ class FatherSwitchViewModel(app: Application) : BaseViewModel(app) {
     private val children = ServerDatabase(app.applicationContext, dataStore).childInformation
     private val teachers = ServerDatabase(app.applicationContext, dataStore).teacherInformation
     val currentChild = MutableLiveData<String>()
+    private val auth = ServerDatabase(app.applicationContext, dataStore).authentication
+
     fun setupUIDS(uids: List<String>, current: String) {
         fatherChildrenUIDS.postValue(uids)
         currentChild.postValue(current)
@@ -58,5 +60,12 @@ class FatherSwitchViewModel(app: Application) : BaseViewModel(app) {
 
     suspend fun setCurrentUserType() = withContext(Dispatchers.IO) {
         dataStore.setUserType(TEACHER)
+    }
+
+    suspend fun logout() = withContext(Dispatchers.IO) {
+        dataStore.setUserType(null)
+        dataStore.setUserUid(null)
+        dataStore.setCurrentChildUid(null)
+        auth.logOut()
     }
 }

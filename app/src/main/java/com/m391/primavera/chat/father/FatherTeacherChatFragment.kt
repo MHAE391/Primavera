@@ -26,12 +26,15 @@ import androidx.navigation.fragment.findNavController
 import com.m391.primavera.R
 import com.m391.primavera.chat.ChatActivityViewModel
 import com.m391.primavera.databinding.FragmentFatherTeacherChatBinding
+import com.m391.primavera.user.father.teacher.TeacherProfileFragment
+import com.m391.primavera.user.father.teacher.TeacherProfileFragmentArgs
 import com.m391.primavera.utils.*
 import com.m391.primavera.utils.Animation.animateImageChange
 import com.m391.primavera.utils.Animation.hideButtonWithAnimation
 import com.m391.primavera.utils.Animation.hideTextViewWithAnimation
 import com.m391.primavera.utils.Animation.showButtonWithAnimation
 import com.m391.primavera.utils.Animation.showTextViewWithAnimation
+import com.m391.primavera.utils.Constants.CHATS
 import com.m391.primavera.utils.Constants.CHILD
 import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
@@ -135,6 +138,24 @@ class FatherTeacherChatFragment : BaseFragment() {
         }
         binding.arrowBtn.setOnClickListener {
             activity?.finish()
+        }
+        binding.infoBtn.setOnClickListener {
+            when (activity?.intent!!.extras!!.getString(TYPE)) {
+                TEACHER -> {
+                    val teacherUid = activity?.intent!!.extras!!.getString(Constants.TEACHER_UID)
+                    findNavController().navigate(
+                        FatherTeacherChatFragmentDirections.actionFatherTeacherChatFragmentToTeacherProfileFragment(
+                            teacherUid!!,
+                            CHATS
+                        )
+                    )
+                }
+
+                FATHER -> {
+                    val fatherUid = activity?.intent!!.extras!!.getString(Constants.FATHER_UID)
+
+                }
+            }
         }
         setSendMessageClick()
     }

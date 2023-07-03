@@ -1,5 +1,6 @@
 package com.m391.primavera
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,6 +8,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -21,10 +23,12 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.health.services.client.HealthServices
 import androidx.health.services.client.MeasureCallback
@@ -63,8 +67,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // notificationPermission()
+        // notificationPermission()
         id = generateDeviceId()
+        requestPermissions()
+        notificationPermission()
 
         val qrCodeSize = 512 // Set the size of the QR code
         val hints = mapOf(
@@ -81,6 +87,40 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private val permissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+        Manifest.permission.BODY_SENSORS,
+    )
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val isPermissionGranted = permissions.all {
+                it.value
+            }
+            if (!isPermissionGranted) {
+                Toast.makeText(this, "You have to accept permissions", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun requestPermissions() {
+        var allPermissionsGranted = true
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                allPermissionsGranted = false
+                break
+            }
+        }
+        if (!allPermissionsGranted) {
+            requestPermissionLauncher.launch(permissions)
+        }
     }
 
     private fun notificationPermission() {

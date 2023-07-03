@@ -104,5 +104,18 @@
     <string name="play_receiver">playReceiver</string>
     <string name="pause_receiver">pauseReceiver</string>
     <string name="accessibility_service_label">accessibility_service_label</string>
+    <string name="subjects">Subjects</string>
+    <string name="academics">Academic Years</string>
+    <string name="phones">Phone</string>
+    <string name="location">Location</string>
+    <string name="rate">Rate</string>
+    <string name="show_on_map">Show On Map</string>
+    <string name="teacher_location">Teacher Location</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="back_to_chat">Back To Chat</string>
+    <string name="children">Children</string>
+    <string name="save">Save\n</string>
+    <string name="father_location">Father Location</string>
 
 </resources>

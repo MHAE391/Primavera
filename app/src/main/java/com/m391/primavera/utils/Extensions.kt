@@ -7,19 +7,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.m391.primavera.R
 import com.m391.primavera.utils.models.LocalTeacherModel
 import com.m391.primavera.utils.models.ServerTeacherModel
-import java.io.ByteArrayOutputStream
-import java.io.IOException
-import java.io.InputStream
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 fun List<ServerTeacherModel>.asLocalModel(): Array<LocalTeacherModel> {
@@ -35,7 +28,7 @@ fun List<ServerTeacherModel>.asLocalModel(): Array<LocalTeacherModel> {
             latitude = it.latitude,
             academicYears = it.academicYears,
             subjects = it.subjects,
-            age = it.age,
+            age = it.dateOfBarth,
             rate = it.rate
         )
     }.toTypedArray()
@@ -54,7 +47,7 @@ fun List<LocalTeacherModel>.asServerModel(): List<ServerTeacherModel> {
             latitude = it.latitude,
             academicYears = it.academicYears,
             subjects = it.subjects,
-            age = it.age,
+            dateOfBarth = it.age,
             rate = it.rate
         )
     }

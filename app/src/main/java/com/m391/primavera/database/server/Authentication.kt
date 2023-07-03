@@ -13,6 +13,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 
 class Authentication {
@@ -32,7 +33,8 @@ class Authentication {
         init()
         appCheck(activity)
         val options =
-            PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phone) // Phone number to verify
+            PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(phone) // Phone number to verify
                 .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
                 .setActivity(activity)
                 .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks

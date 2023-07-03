@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import com.m391.primavera.utils.Constants
+import com.m391.primavera.utils.Constants.NO_LOGGED_IN_USER
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -28,15 +30,15 @@ class DataStoreManager(context: Context) {
     }
 
 
-    suspend fun setUserUid(uid: String) {
+    suspend fun setUserUid(uid: String?) {
         dataStore.edit { preferences ->
-            preferences[currentUserUid] = uid
+            preferences[currentUserUid] = uid ?: NO_LOGGED_IN_USER
         }
     }
 
-    suspend fun setUserType(type: String) {
+    suspend fun setUserType(type: String?) {
         dataStore.edit { preferences ->
-            preferences[currentUserType] = type
+            preferences[currentUserType] = type ?: NO_LOGGED_IN_USER
         }
     }
 
@@ -57,9 +59,9 @@ class DataStoreManager(context: Context) {
     }
 
 
-    suspend fun setCurrentChildUid(uid: String) {
+    suspend fun setCurrentChildUid(uid: String?) {
         dataStore.edit { preferences ->
-            preferences[currentChildUid] = uid
+            preferences[currentChildUid] = uid ?: NO_LOGGED_IN_USER
         }
     }
 

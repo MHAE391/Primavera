@@ -1,6 +1,7 @@
 package com.m391.primavera.chat
 
 import android.annotation.SuppressLint
+import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -11,6 +12,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.WindowManager
@@ -32,31 +34,58 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.extras!!.getString("type") == MESSAGE) {
             val notificationManager = NotificationManagerCompat.from(context.applicationContext)
-            val vibrationPattern = longArrayOf(0, 1000, 500, 1000)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = context.getString(R.string.app_name)
-                val channel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH
+            if (!isPhoneClosed(context)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val name = context.getString(R.string.app_name)
+                    val channel = NotificationChannel(
+                        NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH
+                    )
+                    channel.enableVibration(true)
+                    channel.setSound(
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), null
+                    )
+                    channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                    notificationManager.createNotificationChannel(channel)
+                }
+                val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.logo)
+                    .setContentTitle("${intent.extras!!.getString("senderName")}")
+                    .setContentText("${intent.extras!!.getString("messageBody")}")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
+                notificationManager.notify(
+                    getNotificationId("${intent.extras!!.getString("senderId")}"), notification
                 )
-                channel.enableVibration(true)
-                channel.setSound(
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), null
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val name = context.getString(R.string.app_name)
+                    val channel = NotificationChannel(
+                        NOTIFICATION_CHANNEL_ID, name, NotificationManager.IMPORTANCE_HIGH
+                    )
+                    channel.enableVibration(true)
+                    channel.vibrationPattern = longArrayOf(1000)
+                    channel.setSound(
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), null
+                    )
+                    channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                    notificationManager.createNotificationChannel(channel)
+                }
+                val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
+                    .setSmallIcon(R.mipmap.logo)
+                    .setContentTitle("${intent.extras!!.getString("senderName")}")
+                    .setContentText("${intent.extras!!.getString("messageBody")}")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
+                notificationManager.notify(
+                    getNotificationId("${intent.extras!!.getString("senderId")}"), notification
                 )
-                channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                notificationManager.createNotificationChannel(channel)
             }
-            val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
-                .setSmallIcon(R.mipmap.logo)
-                .setContentTitle("${intent.extras!!.getString("senderName")}")
-                .setContentText("${intent.extras!!.getString("messageBody")}")
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
-            notificationManager.notify(
-                getNotificationId("${intent.extras!!.getString("senderId")}"), notification
-            )
         } else {
             val alarmIntent = Intent(context, AlarmActivity::class.java)
             alarmIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -70,5 +99,22 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
             code += it.code
         }
         return code
+    }
+
+    private fun isPhoneClosed(context: Context): Boolean {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        // Check if the screen is off (phone closed)
+        val isScreenOff = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            !powerManager.isInteractive
+        } else {
+            !powerManager.isScreenOn
+        }
+
+        // Check if the device is locked (keyguard active)
+        val isKeyguardLocked = keyguardManager.isKeyguardLocked
+
+        return isScreenOff && isKeyguardLocked
     }
 }

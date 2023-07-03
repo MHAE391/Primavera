@@ -1,6 +1,7 @@
 package com.m391.primavera
 
 import android.Manifest
+import android.app.AuthenticationRequiredException
 import android.content.Intent
 import android.os.Build
 import android.os.Build.VERSION

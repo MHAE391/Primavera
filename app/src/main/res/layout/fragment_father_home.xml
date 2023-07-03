@@ -52,18 +52,20 @@
                 android:textSize="@dimen/font_size_25"
                 android:textStyle="bold|italic" />
 
-            <TextView
-                android:id="@+id/text"
+            <ImageButton
+                android:id="@+id/father_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:text="@string/app_name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/font_size_16"
-                android:textStyle="italic|bold"
-                android:visibility="visible"
-                tools:ignore="RelativeOverlap" />
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="start|center"
+                android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:src="@drawable/baseline_person_24"
+                tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
         </RelativeLayout>
 
         <TextView

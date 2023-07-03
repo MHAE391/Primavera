@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants.CHILD_AGE
+import com.m391.primavera.utils.Constants.DATE_OF_BARTH
 import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
@@ -62,7 +63,7 @@ class TeacherInformation(
                     phone = teacher.data[FATHER_PHONE].toString(),
                     image = mediaUploader.imageDownloader(teacher.data[IMAGE_PATH].toString()),
                     imageUri = teacher.data[IMAGE_URI].toString(),
-                    age = teacher.data[CHILD_AGE].toString(),
+                    dateOfBarth = teacher.data[DATE_OF_BARTH].toString(),
                     subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
                     academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
                     rate = teacher.data[RATE] as Number
@@ -100,7 +101,7 @@ class TeacherInformation(
                         phone = teacher.data[FATHER_PHONE].toString(),
                         image = teacher.data[IMAGE_PATH].toString(),
                         imageUri = teacher.data[IMAGE_URI].toString(),
-                        age = teacher.data[CHILD_AGE].toString(),
+                        dateOfBarth = teacher.data[DATE_OF_BARTH].toString(),
                         subjects = teacher.data[TEACHERS_SUBJECTS]!! as ArrayList<String>,
                         academicYears = teacher.data[TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
                         rate = teacher.data[RATE] as Number
@@ -115,7 +116,7 @@ class TeacherInformation(
     suspend fun uploadTeacher(
         teacherFirstName: String,
         teacherLastName: String,
-        teacherAge: String,
+        teacherDateOfBarth: String,
         teacherImage: String,
         teacherAcademicYears: List<String>,
         subjects: List<String>,
@@ -131,7 +132,7 @@ class TeacherInformation(
             FATHER_LAST_NAME to teacherLastName,
             IMAGE_PATH to image.imagePath,
             IMAGE_URI to image.imageUri,
-            CHILD_AGE to teacherAge,
+            DATE_OF_BARTH to teacherDateOfBarth,
             TEACHER_ACADEMIC_YEARS to teacherAcademicYears,
             TEACHERS_SUBJECTS to subjects,
             LONGITUDE to longitude,
@@ -185,7 +186,7 @@ class TeacherInformation(
                         phone = value.data!![FATHER_PHONE].toString(),
                         image = value.data!![IMAGE_PATH].toString(),
                         imageUri = value.data!![IMAGE_URI].toString(),
-                        age = value.data!![CHILD_AGE].toString(),
+                        dateOfBarth = value.data!![DATE_OF_BARTH].toString(),
                         subjects = value.data!![TEACHERS_SUBJECTS]!! as ArrayList<String>,
                         academicYears = value.data!![TEACHER_ACADEMIC_YEARS]!! as ArrayList<String>,
                         rate = value.data!![RATE] as Number
@@ -195,4 +196,11 @@ class TeacherInformation(
             }
             return@withContext teacher
         }
+
+    suspend fun rateTeacher(teacherUid: String, rate: Double) = withContext(Dispatchers.IO) {
+        val teacher = teachers.document(teacherUid).get().await()
+        val oldRate = teacher.data!![RATE] as Number
+        val newRate = (oldRate.toDouble() + rate) / 2
+        teachers.document(teacherUid).update(RATE, newRate).await()
+    }
 }

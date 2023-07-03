@@ -8,7 +8,6 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.messaging.FirebaseMessaging
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.notification.Notification
 import com.m391.primavera.utils.Constants.CHILDREN
@@ -24,9 +23,11 @@ import com.m391.primavera.utils.Constants.IMAGE_URI
 import com.m391.primavera.utils.Constants.LATITUDE
 import com.m391.primavera.utils.Constants.LONGITUDE
 import com.m391.primavera.utils.Constants.NO
+import com.m391.primavera.utils.Constants.NO_IMAGE
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.models.ServerFatherModel
+import com.m391.primavera.utils.models.ServerImageModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -53,7 +54,7 @@ class FatherInformation(
         fatherFirstName: String,
         fatherLastName: String,
         childName: String,
-        childAge: String,
+        childDateOfBarth: String,
         watchUid: String,
         fatherImage: String,
         childAcademicYear: String,
@@ -65,7 +66,7 @@ class FatherInformation(
         val fatherUid = currentUser?.uid
         val childUid = childInformation.uploadChild(
             name = childName,
-            age = childAge,
+            dateOfBarth = childDateOfBarth,
             watchUid = watchUid,
             image = childImage,
             academicYear = childAcademicYear,
@@ -164,5 +165,64 @@ class FatherInformation(
         val response = fathers.document(fatherUid).get().await()
         val childUID = response[CHILDREN]!! as ArrayList<String>
         return@withContext childUID.random()
+    }
+
+    suspend fun updateFatherInformation(
+        longitude: Number,
+        latitude: Number,
+        fatherImage: String
+    ): String = withContext(Dispatchers.IO) {
+        var response: String = SUCCESS
+        val fatherUid = currentUser?.uid
+        if (fatherImage != NO_IMAGE) {
+            val image = mediaUploader.uploadImage(fatherImage)
+            val father = hashMapOf(
+                IMAGE_PATH to image.imagePath,
+                IMAGE_URI to image.imageUri,
+                LONGITUDE to longitude,
+                LATITUDE to latitude
+            )
+            fathers.document(fatherUid!!).update(father).addOnFailureListener {
+                response = it.message!!
+            }.await()
+        } else {
+            val father = hashMapOf(
+                LONGITUDE to longitude,
+                LATITUDE to latitude
+            )
+            fathers.document(fatherUid!!).update(father as Map<String, Any>)
+                .addOnFailureListener {
+                    response = it.message!!
+                }.await()
+        }
+        return@withContext response
+    }
+
+    suspend fun addNewChild(
+        childName: String,
+        childDateOfBarth: String,
+        watchUid: String,
+        childImage: String,
+        childAcademicYear: String,
+    ): String = withContext(Dispatchers.IO) {
+        var response: String = SUCCESS
+        val fatherUid = currentUser?.uid
+        val currentFatherInfo = fathers.document(fatherUid!!).get().await()
+        val childrenList = currentFatherInfo[CHILDREN]!! as ArrayList<String>
+        val fatherFirstName = currentFatherInfo[FATHER_FIRST_NAME].toString()
+        val childUid = childInformation.uploadChild(
+            name = childName,
+            dateOfBarth = childDateOfBarth,
+            watchUid = watchUid,
+            image = childImage,
+            academicYear = childAcademicYear,
+            fatherName = fatherFirstName
+        )
+        if (childUid == ERROR) return@withContext ERROR
+        childrenList.add(childUid)
+        fathers.document(fatherUid).update(CHILDREN, childrenList.toList()).addOnFailureListener {
+            response = it.message!!
+        }.await()
+        return@withContext response
     }
 }

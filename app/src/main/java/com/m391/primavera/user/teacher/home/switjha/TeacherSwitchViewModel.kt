@@ -24,6 +24,8 @@ class TeacherSwitchViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun logout() = withContext(Dispatchers.IO) {
+        dataStore.setUserType(null)
+        dataStore.setUserUid(null)
         auth.logOut()
     }
 }

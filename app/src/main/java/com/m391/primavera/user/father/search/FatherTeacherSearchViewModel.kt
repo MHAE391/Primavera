@@ -1,14 +1,12 @@
 package com.m391.primavera.user.father.search
 
 import android.app.Application
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.m391.primavera.R
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
@@ -60,7 +58,7 @@ class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
                         val storedTeacher = teacherMap[domainTeacher.teacherId]
                         if (storedTeacher!!.firstName != domainTeacher.firstName ||
                             storedTeacher.lastName != domainTeacher.lastName ||
-                            storedTeacher.age != domainTeacher.age ||
+                            storedTeacher.dateOfBarth != domainTeacher.dateOfBarth ||
                             storedTeacher.academicYears != domainTeacher.academicYears ||
                             storedTeacher.subjects != domainTeacher.subjects ||
                             storedTeacher.longitude != domainTeacher.longitude ||

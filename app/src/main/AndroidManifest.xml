@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="CoarseFineLocation">
 
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -121,6 +121,7 @@
             android:label="@string/title_activity_information"
             android:theme="@style/Theme.Primavera.NoActionBar"
             android:windowSoftInputMode="adjustResize">
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

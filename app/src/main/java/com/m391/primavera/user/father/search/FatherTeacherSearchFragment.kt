@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.m391.primavera.R
 import com.m391.primavera.databinding.FragmentFatherTeacherSearchBinding
 import com.m391.primavera.utils.BaseFragment
+import com.m391.primavera.utils.Constants.SEARCH
 import com.m391.primavera.utils.NavigationCommand
 import com.m391.primavera.utils.setupGridRecycler
 import kotlinx.coroutines.launch
@@ -69,7 +70,8 @@ class FatherTeacherSearchFragment : BaseFragment() {
             viewModel.navigationCommand.postValue(
                 NavigationCommand.To(
                     FatherTeacherSearchFragmentDirections.actionFatherTeacherSearchFragmentToTeacherProfileFragment(
-                        it.teacherId
+                        it.teacherId,
+                        SEARCH
                     )
                 )
             )

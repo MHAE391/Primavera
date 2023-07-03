@@ -3,6 +3,7 @@ package com.m391.primavera.authentication.information.teacher
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,6 +15,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -30,11 +32,13 @@ import com.m391.primavera.utils.Binding
 import com.m391.primavera.utils.Constants
 import com.permissionx.guolindev.PermissionX
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class TeacherInformationFragment : BaseFragment() {
 
     private lateinit var binding: FragmentTeacherInformationBinding
     override val viewModel: TeacherInformationViewModel by activityViewModels()
+    private lateinit var calendar: Calendar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +53,7 @@ class TeacherInformationFragment : BaseFragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        calendar = Calendar.getInstance()
         return binding.root
     }
 
@@ -59,6 +64,24 @@ class TeacherInformationFragment : BaseFragment() {
                 viewModel.teacherImage.value = uri.toString()
             }
         }
+
+    private fun showDatePickerDialog() {
+        val years = calendar.get(Calendar.YEAR)
+        val months = calendar.get(Calendar.MONTH)
+        val days = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, month: Int, day: Int ->
+                viewModel.teacherDateOfBarth.value = "$day/${month + 1}/$year"
+            },
+            years,
+            months,
+            days
+        )
+
+        datePickerDialog.show()
+    }
 
     override fun onStart() {
         super.onStart()
@@ -76,6 +99,9 @@ class TeacherInformationFragment : BaseFragment() {
                     if (it == "Enabled") showSelectLocationFragment()
                 })
             }
+        }
+        binding.teacherBarth.setOnClickListener {
+            showDatePickerDialog()
         }
         binding.teacherImage.setOnClickListener {
             chooseTeacherPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))

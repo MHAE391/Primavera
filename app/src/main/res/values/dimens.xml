@@ -27,4 +27,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="font_size_18">18sp</dimen>
     <dimen name="padding_60">60dp</dimen>
+    <dimen name="margin_25">25dp</dimen>
+    <dimen name="font_size_14">14sp</dimen>
+    <dimen name="margin_3">3dp</dimen>
 </resources>

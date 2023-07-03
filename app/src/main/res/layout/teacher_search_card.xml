@@ -59,7 +59,7 @@
                     android:layout_gravity="center|center"
                     android:layout_marginBottom="@dimen/margin_5"
                     android:numStars="5"
-                    android:rating="@{teacher.rate.intValue()}"
+                    android:rating="@{teacher.rate.floatValue()}"
                     android:stepSize="1" />
             </LinearLayout>
 
