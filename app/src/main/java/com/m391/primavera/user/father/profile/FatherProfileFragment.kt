@@ -19,8 +19,10 @@ import com.m391.primavera.user.father.teacher.TeacherLocationFragment
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Binding
+import com.m391.primavera.utils.NavigationCommand
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 
 class FatherProfileFragment : BaseFragment() {
@@ -64,9 +66,7 @@ class FatherProfileFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        lifecycleScope.launch {
-            viewModel.openStream(viewLifecycleOwner, args.fatherUid)
-        }
+
         binding.editProfileImage.setOnClickListener {
             chooseFatherPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -84,7 +84,15 @@ class FatherProfileFragment : BaseFragment() {
             }
         }
         binding.addChild.setOnClickListener {
-            findNavController().navigate(FatherProfileFragmentDirections.actionFatherProfileFragmentToAddNewChildFragment())
+            viewModel.navigationCommand.value =
+                NavigationCommand.To(FatherProfileFragmentDirections.actionFatherProfileFragmentToAddNewChildFragment())
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            viewModel.openStream(viewLifecycleOwner, args.fatherUid)
         }
     }
 

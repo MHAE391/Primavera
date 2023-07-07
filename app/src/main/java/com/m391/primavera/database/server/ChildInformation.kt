@@ -8,6 +8,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.m391.primavera.database.datastore.DataStoreManager
+import com.m391.primavera.notification.Notification
 import com.m391.primavera.utils.Constants.CHILDREN
 import com.m391.primavera.utils.Constants.CHILD_ACADEMIC_YEAR
 import com.m391.primavera.utils.Constants.CHILD_AGE
@@ -38,6 +39,8 @@ class ChildInformation(
     private val children: CollectionReference = firestore.collection(CHILDREN)
     private val auth = Authentication()
     private var registration: ListenerRegistration? = null
+    private val watchInformation = WatchInformation(context)
+    private val notification = Notification()
 
     init {
         currentUser = auth.getCurrentUser()
@@ -154,5 +157,122 @@ class ChildInformation(
         }
     }
 
+    suspend fun addNewChild(
+        name: String,
+        dateOfBarth: String,
+        watchUid: String,
+        image: String,
+        academicYear: String,
+        fatherName: String
+    ): String = withContext(Dispatchers.IO) {
+        var response: String = SUCCESS
+        val childUid = firestore.collection(CHILDREN).document().id
+        val fatherUid = currentUser?.uid
+        val childImage = mediaUploader.uploadImage(image)
+        val fatherPhone = currentUser?.phoneNumber
+        val child = hashMapOf(
+            CHILD_UID to childUid,
+            FATHER_UID to fatherUid,
+            IMAGE_PATH to childImage.imagePath,
+            IMAGE_URI to childImage.imageUri,
+            FATHER_PHONE to fatherPhone,
+            CHILD_NAME to name,
+            CHILD_WATCH_UID to watchUid,
+            DATE_OF_BARTH to dateOfBarth,
+            CHILD_ACADEMIC_YEAR to academicYear,
+            FATHER_NAME to fatherName
+        )
+        children.document(childUid).set(child).addOnFailureListener {
+            response = ERROR
+        }.await()
+        if (response != SUCCESS) return@withContext response
+        val token = watchInformation.getWatchToken(watchUid)
+        notification.sendAssignFCMToChildWatch(
+            childName = name,
+            childUID = childUid,
+            watchToken = token,
+            fatherName = fatherName,
+            fatherUID = fatherUid!!
+        )
+        return@withContext childUid
+    }
 
+    suspend fun updateChildInformation(
+        watchUid: String,
+        image: String,
+        academicYear: String,
+        childUid: String,
+        fatherName: String,
+        fatherUid: String,
+        childName: String
+    ): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        if (image != "No New Image") response = updateChildImage(childUid, image)
+        if (academicYear != "No New Academic Year") response =
+            updateChildAcademicYear(childUid, academicYear)
+        if (watchUid != "No New Watch") response =
+            updateChildWatch(childUid, watchUid, fatherName, fatherUid, childName)
+        return@withContext response
+    }
+
+    private suspend fun updateChildImage(childUid: String, image: String): String =
+        withContext(Dispatchers.IO) {
+            var response = SUCCESS
+            val childImage = mediaUploader.uploadImage(image)
+            val uploadImage = hashMapOf(
+                IMAGE_PATH to childImage.imagePath,
+                IMAGE_URI to childImage.imageUri
+            )
+            children.document(childUid).update(
+                uploadImage as Map<String, Any>
+            ).addOnFailureListener {
+                response = ERROR
+            }.await()
+            return@withContext response
+        }
+
+    private suspend fun updateChildWatch(
+        childUid: String,
+        watchUid: String,
+        fatherName: String,
+        fatherUid: String,
+        childName: String
+    ): String =
+        withContext(Dispatchers.IO) {
+            var response = SUCCESS
+            children.document(childUid).update(
+                CHILD_WATCH_UID, watchUid
+            ).addOnFailureListener {
+                response = ERROR
+            }.await()
+            if (response != SUCCESS) return@withContext response
+            val token = watchInformation.getWatchToken(watchUid)
+            notification.sendAssignFCMToChildWatch(
+                childName = childName,
+                childUID = childUid,
+                watchToken = token,
+                fatherName = fatherName,
+                fatherUID = fatherUid
+            )
+            return@withContext response
+        }
+
+    private suspend fun updateChildAcademicYear(childUid: String, academicYear: String): String =
+        withContext(Dispatchers.IO) {
+            var response = SUCCESS
+            children.document(childUid).update(
+                CHILD_ACADEMIC_YEAR, academicYear
+            ).addOnFailureListener {
+                response = ERROR
+            }.await()
+            return@withContext response
+        }
+
+    suspend fun deleteChild(childUid: String): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        children.document(childUid).delete().addOnFailureListener {
+            response = it.localizedMessage!!
+        }.await()
+        return@withContext response
+    }
 }

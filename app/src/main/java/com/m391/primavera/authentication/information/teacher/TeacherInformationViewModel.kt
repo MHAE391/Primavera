@@ -88,7 +88,7 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
             "Complete Teacher Information"
         else if (teacherImage.value.isNullOrBlank())
             "Please, Choose Teacher Image"
-        else if (selectedAcademicSubjects.value.isNullOrEmpty())
+        else if (selectedAcademicYears.value.isNullOrEmpty())
             "Please, Select Teacher Academic Years"
         else if (selectedAcademicSubjects.value.isNullOrEmpty())
             "Please, Select Teacher Academic Subjects"

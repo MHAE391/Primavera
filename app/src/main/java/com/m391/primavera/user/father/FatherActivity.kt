@@ -26,7 +26,6 @@ class FatherActivity : AppCompatActivity() {
     private lateinit var father: FatherInformation
 
 
-    @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

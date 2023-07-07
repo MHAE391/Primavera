@@ -30,6 +30,7 @@ import com.m391.primavera.utils.Constants.TEACHER_UID
 import com.m391.primavera.utils.Constants.TYPE
 import com.m391.primavera.utils.NavigationCommand
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import java.io.Serializable
 
 class TeacherProfileFragment : BaseFragment() {
@@ -54,9 +55,7 @@ class TeacherProfileFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        lifecycleScope.launch {
-            viewModel.openStream(viewLifecycleOwner, args.teacherUid)
-        }
+
         if (args.from == CHATS) {
             binding.chat.text = getString(R.string.back_to_chat)
         }
@@ -83,6 +82,12 @@ class TeacherProfileFragment : BaseFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            viewModel.openStream(viewLifecycleOwner, args.teacherUid)
+        }
+    }
 
     override fun onPause() {
         super.onPause()

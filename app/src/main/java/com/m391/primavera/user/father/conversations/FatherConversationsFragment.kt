@@ -18,6 +18,7 @@ import com.m391.primavera.user.father.search.FatherTeacherSearchFragmentDirectio
 import com.m391.primavera.user.father.search.TeacherAdapter
 import com.m391.primavera.utils.*
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FatherConversationsFragment : BaseFragment() {
 

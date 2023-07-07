@@ -12,11 +12,11 @@ import kotlinx.coroutines.withContext
 
 class FatherInformationViewModel(private val app: Application) : BaseViewModel(app) {
     val childWatch = MutableLiveData<String>()
+    val childDateOfBarth = MutableLiveData<String>()
+    private val childWatchAddress = MutableLiveData<String>()
     val fatherImage = MutableLiveData<String>()
     val childImage = MutableLiveData<String>()
-    val childDateOfBarth = MutableLiveData<String>()
     val fatherLocation = MutableLiveData<String>()
-    private val childWatchAddress = MutableLiveData<String>()
     val fatherFirstName = MutableLiveData<String>()
     val fatherLastName = MutableLiveData<String>()
     val childName = MutableLiveData<String>()

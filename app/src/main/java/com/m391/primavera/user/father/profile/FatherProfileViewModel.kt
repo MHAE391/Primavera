@@ -16,12 +16,17 @@ import com.m391.primavera.utils.models.ServerFatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.canParseAsIpAddress
 
-class FatherProfileViewModel(app: Application) : BaseViewModel(app) {
-    private val dateStoreManager = DataStoreManager(app.applicationContext)
-    private val fathers = ServerDatabase(app.applicationContext, dateStoreManager).fatherInformation
-    private val childrens =
-        ServerDatabase(app.applicationContext, dateStoreManager).childInformation
+class FatherProfileViewModel(
+    app: Application
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
+    private val fathers = serverDatabase.fatherInformation
+    private val childrens = serverDatabase.childInformation
     private val _fatherInfo = MutableLiveData<ServerFatherModel>()
     val fatherInfo: LiveData<ServerFatherModel> = _fatherInfo
     private val _children = MutableLiveData<String>()
@@ -41,16 +46,22 @@ class FatherProfileViewModel(app: Application) : BaseViewModel(app) {
         _newImageUri.postValue(uri)
     }
 
+    private val childrenUID = ArrayList<String>()
     suspend fun openStream(lifecycleOwner: LifecycleOwner, uid: String) =
         withContext(Dispatchers.Main) {
+
             fathers.streamFatherInformationByUID(uid)
                 .observe(lifecycleOwner) {
                     _fatherInfo.postValue(it)
-                    var childs = ""
+                    var childs: String = ""
                     it.children.forEach { childUID ->
+                        childrenUID.add(childUID)
                         viewModelScope.launch {
-                            childs += "- ${childrens.getChildInformationByUID(childUID).childName}\n"
-                            _children.postValue(childs.trim())
+                            childrens.streamChildInformationByUID(childUID)
+                                .observe(lifecycleOwner) { child ->
+                                    childs += "- ${child.childName}\n"
+                                    _children.postValue(childs.trim())
+                                }
                         }
                     }
                 }
@@ -63,8 +74,12 @@ class FatherProfileViewModel(app: Application) : BaseViewModel(app) {
     fun closeStream(lifecycleOwner: LifecycleOwner, uid: String) = viewModelScope.launch {
         fathers.streamFatherInformationByUID(uid)
             .removeObservers(lifecycleOwner)
+        childrenUID.forEach {
+            childrens.streamChildInformationByUID(it).removeObservers(lifecycleOwner)
+        }
         withContext(Dispatchers.IO) {
             fathers.closeFatherStream()
+            childrens.closeChildStream()
         }
     }
 

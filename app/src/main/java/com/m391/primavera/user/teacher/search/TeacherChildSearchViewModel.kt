@@ -88,7 +88,7 @@ class TeacherChildSearchViewModel(app: Application) : BaseViewModel(app) {
 
     suspend fun createConversation(uid: String) =
         withContext(Dispatchers.IO) {
-            conversations.createConversation(uid)
+            conversations.createTeacherWithFatherConversation(uid)
         }
 
     private fun validateData() {

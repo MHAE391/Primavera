@@ -1,5 +1,6 @@
 package com.m391.primavera.user.teacher.search
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,9 +12,11 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.m391.primavera.R
 import com.m391.primavera.chat.ChatActivity
 import com.m391.primavera.databinding.FragmentTeacherChildSearchBinding
+import com.m391.primavera.user.father.home.FatherHomeFragmentDirections
 import com.m391.primavera.user.father.home.switjha.ChildrenAdapter
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Constants
@@ -64,14 +67,25 @@ class TeacherChildSearchFragment : BaseFragment() {
 
     private fun setupRecyclerView() {
         val adapter = ChildSearchAdapter {
-            val intent = Intent(activity, ChatActivity::class.java)
-            lifecycleScope.launch {
-                viewModel.createConversation(it.fatherUID)
-            }
-            intent.putExtra(Constants.TYPE, Constants.FATHER)
-            intent.putExtra(Constants.FATHER_UID, it.fatherUID)
-            intent.putExtra(Constants.FATHER_FIRST_NAME, it.fatherName)
-            startActivity(intent)
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setTitle("Child Options")
+                .setMessage("Choose chat to open chat with child father  , profile to display child profile")
+                .setPositiveButton("Profile") { _, _ ->
+                    findNavController().navigate(
+                        TeacherChildSearchFragmentDirections.actionTeacherChildSearchFragmentToChildProfileFragment(
+                            it.childUID
+                        )
+                    )
+                }.setNegativeButton("Chat") { _, _ ->
+                    val intent = Intent(activity, ChatActivity::class.java)
+                    lifecycleScope.launch {
+                        viewModel.createConversation(it.fatherUID)
+                    }
+                    intent.putExtra(Constants.TYPE, Constants.FATHER)
+                    intent.putExtra(Constants.FATHER_UID, it.fatherUID)
+                    intent.putExtra(Constants.FATHER_FIRST_NAME, it.fatherName)
+                    startActivity(intent)
+                }.show()
         }
         binding.usersRecyclerView.setupGridRecycler(adapter)
     }

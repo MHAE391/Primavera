@@ -107,10 +107,7 @@ class QRCodeScannerFragment : BottomSheetDialogFragment() {
         captureManager!!.initializeFromIntent(requireActivity().intent, savedInstanceState)
         captureManager!!.decode()
         barcodeView!!.decodeSingle(barcodeCallback)
-        viewModel.barcodeResult.observe(viewLifecycleOwner)
-        { result ->
-            Toast.makeText(requireContext(), result.toString(), Toast.LENGTH_SHORT).show()
-        }
+
     }
 
     private val barcodeCallback = object : BarcodeCallback {

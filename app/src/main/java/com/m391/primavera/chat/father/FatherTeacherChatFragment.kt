@@ -153,7 +153,12 @@ class FatherTeacherChatFragment : BaseFragment() {
 
                 FATHER -> {
                     val fatherUid = activity?.intent!!.extras!!.getString(Constants.FATHER_UID)
-
+                    findNavController().navigate(
+                        FatherTeacherChatFragmentDirections.actionFatherTeacherChatFragmentToFatherProfileFragment(
+                            CHATS,
+                            fatherUid!!
+                        )
+                    )
                 }
             }
         }

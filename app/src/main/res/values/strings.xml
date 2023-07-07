@@ -115,7 +115,17 @@
     <string name="cancel">Cancel</string>
     <string name="back_to_chat">Back To Chat</string>
     <string name="children">Children</string>
-    <string name="save">Save\n</string>
+    <string name="save">Save</string>
     <string name="father_location">Father Location</string>
+    <string name="child_info">Child Information</string>
+    <string name="child_academic_year">Child Academic Year</string>
+    <string name="watch">Watch</string>
+    <string name="academic_year">Academic Year</string>
+    <string name="child">New Child</string>
+    <string name="father_name">Father Name</string>
+    <string name="father_info">Show Father Information</string>
+    <string name="samsung_watch">Samsung Watch</string>
+    <string name="select_your_academic_subjects">Select Your Academic Subjects</string>
+    <string name="select_your_academic_years">Select Your Academic Years</string>
 
 </resources>

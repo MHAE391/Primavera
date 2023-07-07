@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.ktx.oAuthCredential
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -26,8 +27,8 @@ import com.m391.primavera.utils.Constants.NO
 import com.m391.primavera.utils.Constants.NO_IMAGE
 import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.Constants.TEACHER
+import com.m391.primavera.utils.Constants.YES
 import com.m391.primavera.utils.models.ServerFatherModel
-import com.m391.primavera.utils.models.ServerImageModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -42,6 +43,7 @@ class FatherInformation(
     private val mediaUploader = MediaUploader()
     private val childInformation = ChildInformation(context, dataStoreManager)
     private val watchInformation = WatchInformation(context)
+    private val teachers = TeacherInformation(context, dataStoreManager)
     private val notification = Notification()
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
@@ -160,11 +162,7 @@ class FatherInformation(
     }
 
     suspend fun getRandomChildUID(): String = withContext(Dispatchers.IO) {
-        currentUser = auth.getCurrentUser()
-        val fatherUid = currentUser!!.uid
-        val response = fathers.document(fatherUid).get().await()
-        val childUID = response[CHILDREN]!! as ArrayList<String>
-        return@withContext childUID.random()
+        return@withContext getFatherChildrenArray().random()
     }
 
     suspend fun updateFatherInformation(
@@ -210,7 +208,7 @@ class FatherInformation(
         val currentFatherInfo = fathers.document(fatherUid!!).get().await()
         val childrenList = currentFatherInfo[CHILDREN]!! as ArrayList<String>
         val fatherFirstName = currentFatherInfo[FATHER_FIRST_NAME].toString()
-        val childUid = childInformation.uploadChild(
+        val childUid = childInformation.addNewChild(
             name = childName,
             dateOfBarth = childDateOfBarth,
             watchUid = watchUid,
@@ -223,6 +221,61 @@ class FatherInformation(
         fathers.document(fatherUid).update(CHILDREN, childrenList.toList()).addOnFailureListener {
             response = it.message!!
         }.await()
+        return@withContext response
+    }
+
+    suspend fun getFatherChildrenNumber(): Int = withContext(Dispatchers.IO) {
+        return@withContext getFatherChildrenArray().size
+    }
+
+    private suspend fun getFatherChildrenArray(): ArrayList<String> = withContext(Dispatchers.IO) {
+        currentUser = auth.getCurrentUser()
+        val fatherUid = currentUser!!.uid
+        val response = fathers.document(fatherUid).get().await()
+        return@withContext response[CHILDREN]!! as ArrayList<String>
+    }
+
+    suspend fun deleteChild(childUid: String): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val children = getFatherChildrenArray()
+        currentUser = auth.getCurrentUser()
+        val fatherUid = currentUser!!.uid
+        children.remove(childUid)
+        fathers.document(fatherUid).update(CHILDREN, children.toList()).addOnFailureListener {
+            response = it.localizedMessage!!
+        }.await()
+        return@withContext response
+    }
+
+    suspend fun createTeacherAccount(
+        teacherFirstName: String,
+        teacherLastName: String,
+        teacherDateOfBarth: String,
+        teacherImagePath: String,
+        teacherImageUri: String,
+        teacherAcademicYears: List<String>,
+        subjects: List<String>,
+        latitude: Number,
+        longitude: Number
+    ): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        response = teachers.createTeacherAccount(
+            teacherFirstName,
+            teacherLastName,
+            teacherDateOfBarth,
+            teacherImagePath,
+            teacherImageUri,
+            teacherAcademicYears,
+            subjects,
+            latitude,
+            longitude
+        )
+        if (response == SUCCESS) {
+            val fatherUid = currentUser!!.uid
+            fathers.document(fatherUid).update(TEACHER, YES).addOnFailureListener {
+                response = it.localizedMessage!!
+            }.await()
+        }
         return@withContext response
     }
 }

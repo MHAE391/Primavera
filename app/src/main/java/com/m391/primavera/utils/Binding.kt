@@ -99,7 +99,7 @@ object Binding {
             button.setOnClickListener {
                 if (button.tag == view.context.getString(R.string.play_sender)) {
                     button.tag = view.context.getString(R.string.pause_sender)
-                    startSenderAudio(button, view.context, url , seekBar)
+                    startSenderAudio(button, view.context, url, seekBar)
                 } else {
                     button.tag = view.context.getString(R.string.play_sender)
                     stopSenderAudio(button)
@@ -121,7 +121,7 @@ object Binding {
             button.setOnClickListener {
                 if (button.tag == view.context.getString(R.string.play_receiver)) {
                     button.tag = view.context.getString(R.string.pause_receiver)
-                    startReceiverAudio(button, view.context, url , seekBar)
+                    startReceiverAudio(button, view.context, url, seekBar)
                 } else {
                     button.tag = view.context.getString(R.string.play_receiver)
                     stopReceiverAudio(button)
@@ -160,6 +160,8 @@ object Binding {
     fun clickCardView(imageView: ImageView, childUid: String, storedChildUid: String) {
         if (childUid == storedChildUid) {
             imageView.visibility = View.VISIBLE
-        } else imageView.visibility = View.INVISIBLE
+        } else imageView.visibility = View.GONE
     }
+
+
 }

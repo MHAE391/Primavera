@@ -1,10 +1,8 @@
 package com.m391.primavera.database.server
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.vision.barcode.Barcode.Phone
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,10 +11,12 @@ import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CONVERSATIONS
 import com.m391.primavera.utils.Constants.FATHERS
+import com.m391.primavera.utils.Constants.FATHER_CONVERSATIONS
 import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
 import com.m391.primavera.utils.Constants.FATHER_LAST_NAME
 import com.m391.primavera.utils.Constants.FATHER_PHONE
 import com.m391.primavera.utils.Constants.TEACHERS
+import com.m391.primavera.utils.Constants.TEACHER_CONVERSATIONS
 import com.m391.primavera.utils.models.ServerConversationModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -28,7 +28,7 @@ class ConversationInformation(
     private val dataStoreManager: DataStoreManager
 ) {
     private val firestore = FirebaseFirestore.getInstance()
-    private val conversations: CollectionReference = firestore.collection(CONVERSATIONS)
+    private val  conversations: CollectionReference = firestore.collection(CONVERSATIONS)
     private var registration: ListenerRegistration? = null
     private val auth = Authentication()
     private var currentUser: FirebaseUser? = auth.getCurrentUser()
@@ -37,29 +37,53 @@ class ConversationInformation(
     private lateinit var senderUID: String
 
     init {
-        if(currentUser != null) senderUID = currentUser!!.uid
+        if (currentUser != null) senderUID = currentUser!!.uid
     }
 
-    suspend fun createConversation(receiver: String) = withContext(Dispatchers.IO) {
-        receiverUID = receiver
-        if (!checkIfConversationAlreadyExist()) {
-            conversations.document(senderUID).collection(CONVERSATIONS).document(receiverUID).set(
-                mapOf(
-                    "receiverUid" to receiverUID
-                )
-            ).await()
-            conversations.document(receiverUID).collection(CONVERSATIONS).document(senderUID).set(
-                mapOf(
-                    "receiverUid" to senderUID
-                )
-            ).await()
+    suspend fun createFatherWithTeacherConversation(receiver: String) =
+        withContext(Dispatchers.IO) {
+            receiverUID = receiver
+            if (!checkIfConversationAlreadyExist()) {
+                conversations.document(senderUID).collection(FATHER_CONVERSATIONS)
+                    .document(receiverUID).set(
+                        mapOf(
+                            "receiverUid" to receiverUID
+                        )
+                    ).await()
+                conversations.document(receiverUID).collection(TEACHER_CONVERSATIONS)
+                    .document(senderUID)
+                    .set(
+                        mapOf(
+                            "receiverUid" to senderUID
+                        )
+                    ).await()
+            }
         }
-    }
+
+    suspend fun createTeacherWithFatherConversation(receiver: String) =
+        withContext(Dispatchers.IO) {
+            receiverUID = receiver
+            if (!checkIfConversationAlreadyExist()) {
+                conversations.document(senderUID).collection(TEACHER_CONVERSATIONS)
+                    .document(receiverUID).set(
+                        mapOf(
+                            "receiverUid" to receiverUID
+                        )
+                    ).await()
+                conversations.document(receiverUID).collection(FATHER_CONVERSATIONS)
+                    .document(senderUID)
+                    .set(
+                        mapOf(
+                            "receiverUid" to senderUID
+                        )
+                    ).await()
+            }
+        }
 
     suspend fun streamFatherConversations(): LiveData<List<ServerConversationModel>> =
         withContext(Dispatchers.IO) {
             val conversationsList = MutableLiveData<List<ServerConversationModel>>()
-            registration = conversations.document(senderUID).collection(CONVERSATIONS)
+            registration = conversations.document(senderUID).collection(FATHER_CONVERSATIONS)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         Timber.tag("Conversations Database").e(error, "Listen failed.")
@@ -93,7 +117,7 @@ class ConversationInformation(
     suspend fun streamTeacherConversations(): LiveData<List<ServerConversationModel>> =
         withContext(Dispatchers.IO) {
             val conversationsList = MutableLiveData<List<ServerConversationModel>>()
-            registration = conversations.document(senderUID).collection(CONVERSATIONS)
+            registration = conversations.document(senderUID).collection(TEACHER_CONVERSATIONS)
                 .addSnapshotListener { value, error ->
                     if (error != null) {
                         Timber.tag("Conversations Database").e(error, "Listen failed.")
@@ -127,7 +151,7 @@ class ConversationInformation(
         if (currentUser != null) {
             senderUID = currentUser!!.uid
             val response =
-                conversations.document(senderUID).collection(CONVERSATIONS).document(receiverUID)
+                conversations.document(senderUID).collection(FATHER_CONVERSATIONS).document(receiverUID)
                     .get().await()
             return@withContext response.exists()
         }

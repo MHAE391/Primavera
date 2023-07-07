@@ -14,17 +14,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FatherSwitchViewModel(app: Application) : BaseViewModel(app) {
-
+class FatherSwitchViewModel(
+    app: Application
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
     private val fatherChildrenUIDS = MutableLiveData<List<String>>()
     private val _myChildren = MutableLiveData<List<ServerChildModel>>()
     val myChildren: LiveData<List<ServerChildModel>> = _myChildren
     private val myChildrenArray = ArrayList<ServerChildModel>()
-    private val dataStore = DataStoreManager.getInstance(app.applicationContext)
-    private val children = ServerDatabase(app.applicationContext, dataStore).childInformation
-    private val teachers = ServerDatabase(app.applicationContext, dataStore).teacherInformation
+    private val children = serverDatabase.childInformation
+    private val teachers = serverDatabase.teacherInformation
     val currentChild = MutableLiveData<String>()
-    private val auth = ServerDatabase(app.applicationContext, dataStore).authentication
+    private val auth = serverDatabase.authentication
 
     fun setupUIDS(uids: List<String>, current: String) {
         fatherChildrenUIDS.postValue(uids)
@@ -37,12 +41,12 @@ class FatherSwitchViewModel(app: Application) : BaseViewModel(app) {
                 viewModelScope.launch {
                     val serverChildModel = children.getChildInformationByUID(uid)
                     serverChildModel.currentChild = currentChild.value!!
-                    myChildrenArray.clear()
                     myChildrenArray.add(serverChildModel)
                     myChildrenArray.sortedBy { child -> child.childName }
+                    _myChildren.postValue(myChildrenArray)
                 }
-                _myChildren.postValue(myChildrenArray)
             }
+            myChildrenArray.clear()
         }
     }
 
@@ -50,22 +54,19 @@ class FatherSwitchViewModel(app: Application) : BaseViewModel(app) {
         fatherChildrenUIDS.removeObservers(lifecycleOwner)
     }
 
-    suspend fun changeCurrentChild(childUID: String) = viewModelScope.launch {
-        dataStore.setCurrentChildUid(childUID)
-    }
 
     suspend fun switchFatherTeacher(): Boolean = withContext(Dispatchers.IO) {
         return@withContext teachers.checkAlreadyTeacherOrNot()
     }
 
     suspend fun setCurrentUserType() = withContext(Dispatchers.IO) {
-        dataStore.setUserType(TEACHER)
+        dataStoreManager.setUserType(TEACHER)
     }
 
     suspend fun logout() = withContext(Dispatchers.IO) {
-        dataStore.setUserType(null)
-        dataStore.setUserUid(null)
-        dataStore.setCurrentChildUid(null)
+        dataStoreManager.setUserType(null)
+        dataStoreManager.setUserUid(null)
+        dataStoreManager.setCurrentChildUid(null)
         auth.logOut()
     }
 }

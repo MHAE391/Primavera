@@ -16,11 +16,48 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/teacherChildSearchFragment"
         android:name="com.m391.primavera.user.teacher.search.TeacherChildSearchFragment"
         android:label="TeacherChildSearchFragment"
-        tools:layout="@layout/fragment_teacher_child_search" />
+        tools:layout="@layout/fragment_teacher_child_search">
+        <action
+            android:id="@+id/action_teacherChildSearchFragment_to_childProfileFragment"
+            app:destination="@id/childProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/childProfileFragment"
+        android:name="com.m391.primavera.user.father.child.profile.display.ChildProfileFragment"
+        android:label="ChildProfileFragment"
+        tools:layout="@layout/fragment_child_profile">
+        <argument
+            android:name="childUid"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_childProfileFragment_to_fatherProfileFragment"
+            app:destination="@id/fatherProfileFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/fatherProfileFragment"
+        android:name="com.m391.primavera.user.father.profile.FatherProfileFragment"
+        android:label="FatherProfileFragment"
+        tools:layout="@layout/fragment_father_profile">
+        <argument
+            android:name="from"
+            app:argType="string" />
+        <argument
+            android:name="fatherUid"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

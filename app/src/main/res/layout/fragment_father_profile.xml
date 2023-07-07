@@ -139,7 +139,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -171,7 +172,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -204,7 +206,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -274,7 +277,7 @@
                         android:layout_marginTop="@dimen/margin_10"
                         android:layout_marginBottom="@dimen/margin_5"
                         android:background="@drawable/background_button"
-                        android:gravity="center|bottom"
+                        android:gravity="center"
                         android:text="@string/save"
                         android:textAllCaps="false"
                         android:textColor="@color/white" />

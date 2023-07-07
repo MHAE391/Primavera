@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="com.m391.primavera.authentication.information.teacher.TeacherInformationViewModel" />
+
+        <variable
+            name="createViewModel"
+            type="com.m391.primavera.user.father.home.switjha.teacher.CreateTeacherViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

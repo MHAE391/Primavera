@@ -19,15 +19,20 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
-    private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
+class FatherTeacherSearchViewModel(
+    app: Application
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
     private val serverTeachers =
-        ServerDatabase(app.applicationContext, dataStoreManager).teacherInformation
+        serverDatabase.teacherInformation
+    private val auth = serverDatabase.authentication
     private val _teachersList = MutableLiveData<List<ServerTeacherModel>>()
     val teachersList: LiveData<List<ServerTeacherModel>> = _teachersList
     private val teacherMap = HashMap<String, ServerTeacherModel>()
     private val teachersArray = ArrayList<ServerTeacherModel>()
-
 
     init {
         viewModelScope.launch {
@@ -50,26 +55,28 @@ class FatherTeacherSearchViewModel(app: Application) : BaseViewModel(app) {
         viewModelScope.launch {
             serverTeachers.streamTeachers().observe(lifecycleOwner, Observer { domainTeachers ->
                 domainTeachers.forEach { domainTeacher ->
-                    if (teacherMap[domainTeacher.teacherId] == null) {
+                    if (teacherMap[domainTeacher.teacherId] == null && domainTeacher.teacherId != auth.getCurrentUser()!!.uid) {
                         teachersArray.add(domainTeacher)
                         _teachersList.value = teachersArray
                         teacherMap[domainTeacher.teacherId] = domainTeacher
                     } else {
-                        val storedTeacher = teacherMap[domainTeacher.teacherId]
-                        if (storedTeacher!!.firstName != domainTeacher.firstName ||
-                            storedTeacher.lastName != domainTeacher.lastName ||
-                            storedTeacher.dateOfBarth != domainTeacher.dateOfBarth ||
-                            storedTeacher.academicYears != domainTeacher.academicYears ||
-                            storedTeacher.subjects != domainTeacher.subjects ||
-                            storedTeacher.longitude != domainTeacher.longitude ||
-                            storedTeacher.latitude != domainTeacher.latitude ||
-                            storedTeacher.imageUri != domainTeacher.imageUri ||
-                            storedTeacher.phone != domainTeacher.phone ||
-                            storedTeacher.rate != domainTeacher.rate
-                        ) {
-                            teachersArray.remove(storedTeacher)
-                            teachersArray.add(domainTeacher)
-                            teacherMap[domainTeacher.teacherId] = domainTeacher
+                        if (domainTeacher.teacherId != auth.getCurrentUser()!!.uid) {
+                            val storedTeacher = teacherMap[domainTeacher.teacherId]
+                            if (storedTeacher!!.firstName != domainTeacher.firstName ||
+                                storedTeacher.lastName != domainTeacher.lastName ||
+                                storedTeacher.dateOfBarth != domainTeacher.dateOfBarth ||
+                                storedTeacher.academicYears != domainTeacher.academicYears ||
+                                storedTeacher.subjects != domainTeacher.subjects ||
+                                storedTeacher.longitude != domainTeacher.longitude ||
+                                storedTeacher.latitude != domainTeacher.latitude ||
+                                storedTeacher.imageUri != domainTeacher.imageUri ||
+                                storedTeacher.phone != domainTeacher.phone ||
+                                storedTeacher.rate != domainTeacher.rate
+                            ) {
+                                teachersArray.remove(storedTeacher)
+                                teachersArray.add(domainTeacher)
+                                teacherMap[domainTeacher.teacherId] = domainTeacher
+                            }
                         }
                     }
                     _teachersList.value = teachersArray.sortedBy {

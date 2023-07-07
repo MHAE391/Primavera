@@ -19,10 +19,14 @@ import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.ArrayList
 
-class FatherConversationsViewModel(app: Application) : BaseViewModel(app) {
-    val dataStore = DataStoreManager.getInstance(app.applicationContext)
-    val conversations = ServerDatabase(app.applicationContext, dataStore).conversations
-
+class FatherConversationsViewModel(
+    app: Application
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
+    val conversations = serverDatabase.conversations
     private val _conversationsList = MutableLiveData<List<ServerConversationModel>>()
     val conversationsList: LiveData<List<ServerConversationModel>> = _conversationsList
     val conversationsArrayList = kotlin.collections.ArrayList<ServerConversationModel>()

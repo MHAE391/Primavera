@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.m391.primavera.R
 import com.m391.primavera.authentication.information.father.location.FatherLocationFragment
 import com.m391.primavera.databinding.FragmentFatherShowLocationBinding
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
 
 class FatherShowLocationFragment : BottomSheetDialogFragment(), OnMapReadyCallback {

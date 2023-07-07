@@ -29,6 +29,9 @@ import com.m391.primavera.user.father.home.switjha.FatherSwitchFragment
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Constants
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FatherHomeFragment : BaseFragment() {

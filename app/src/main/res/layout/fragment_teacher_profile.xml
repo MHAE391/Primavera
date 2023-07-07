@@ -102,7 +102,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -134,7 +135,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -166,7 +168,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -198,7 +201,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -230,7 +234,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -275,7 +280,8 @@
                         android:layout_margin="@dimen/padding_5"
                         android:layout_weight="1"
                         android:background="@drawable/row_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
 
                         <TextView
                             android:layout_width="0dp"
@@ -325,6 +331,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/padding_10"
                     android:background="@drawable/background_button"
                     android:gravity="center"
                     android:text="@string/chat"

@@ -18,6 +18,7 @@ import com.m391.primavera.utils.Constants.SEARCH
 import com.m391.primavera.utils.NavigationCommand
 import com.m391.primavera.utils.setupGridRecycler
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FatherTeacherSearchFragment : BaseFragment() {
 

@@ -162,7 +162,12 @@ class MessageInformation(
     suspend fun subscribeToTopic() = withContext(Dispatchers.IO) {
         fcm.subscribeToTopic("user${auth.getCurrentUser()!!.uid}").await()
     }
-    suspend fun sendFcm() = withContext(Dispatchers.IO){
+
+    suspend fun unSubscribeToTopic() = withContext(Dispatchers.IO) {
+        fcm.unsubscribeFromTopic("user${auth.getCurrentUser()!!.uid}").await()
+    }
+
+    suspend fun sendFcm() = withContext(Dispatchers.IO) {
 
     }
 

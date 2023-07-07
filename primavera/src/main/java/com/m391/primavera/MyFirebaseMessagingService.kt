@@ -29,7 +29,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         runBlocking(Dispatchers.IO) {
             if (!checkWatch(id)) {
                 FirebaseFirestore.getInstance().collection("Watches").document(id)
-                    .set(mapOf("token" to token)).await()
+                    .set(mapOf("token" to token, "watchUid" to id)).await()
             } else {
                 FirebaseFirestore.getInstance().collection("Watches").document(id)
                     .update("token", token).await()

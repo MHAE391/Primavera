@@ -27,6 +27,7 @@ import com.m391.primavera.utils.Constants.TEACHERS
 import com.m391.primavera.utils.Constants.TEACHERS_SUBJECTS
 import com.m391.primavera.utils.Constants.TEACHER_ACADEMIC_YEARS
 import com.m391.primavera.utils.Constants.TEACHER_UID
+import com.m391.primavera.utils.Constants.YES
 import com.m391.primavera.utils.models.ServerTeacherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -202,5 +203,39 @@ class TeacherInformation(
         val oldRate = teacher.data!![RATE] as Number
         val newRate = (oldRate.toDouble() + rate) / 2
         teachers.document(teacherUid).update(RATE, newRate).await()
+    }
+
+    suspend fun createTeacherAccount(
+        teacherFirstName: String,
+        teacherLastName: String,
+        teacherDateOfBarth: String,
+        teacherImagePath: String,
+        teacherImageUri: String,
+        teacherAcademicYears: List<String>,
+        subjects: List<String>,
+        latitude: Number,
+        longitude: Number
+    ): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val teacherUid = currentUser?.uid
+        val teacher = hashMapOf(
+            TEACHER_UID to teacherUid,
+            FATHER_FIRST_NAME to teacherFirstName,
+            FATHER_LAST_NAME to teacherLastName,
+            IMAGE_PATH to teacherImagePath,
+            IMAGE_URI to teacherImageUri,
+            DATE_OF_BARTH to teacherDateOfBarth,
+            TEACHER_ACADEMIC_YEARS to teacherAcademicYears,
+            TEACHERS_SUBJECTS to subjects,
+            LONGITUDE to longitude,
+            LATITUDE to latitude,
+            FATHER_PHONE to currentUser?.phoneNumber,
+            FATHER to YES,
+            RATE to 5
+        )
+        teachers.document(teacherUid!!).set(teacher).addOnFailureListener {
+            response = it.message!!
+        }.await()
+        return@withContext response
     }
 }

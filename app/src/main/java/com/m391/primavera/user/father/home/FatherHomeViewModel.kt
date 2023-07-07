@@ -15,11 +15,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FatherHomeViewModel(app: Application) : BaseViewModel(app) {
+class FatherHomeViewModel(
+    app: Application
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
     private val _fatherInformation = MutableLiveData<ServerFatherModel>()
     val fatherInformation: LiveData<ServerFatherModel> = _fatherInformation
-    private val dataStore = DataStoreManager.getInstance(app.applicationContext)
-    private val serverDatabase = ServerDatabase(app.applicationContext, dataStore)
     private val fathers = serverDatabase.fatherInformation
     private val children = serverDatabase.childInformation
     private val conversations = serverDatabase.conversations
@@ -33,7 +37,7 @@ class FatherHomeViewModel(app: Application) : BaseViewModel(app) {
 
     init {
         viewModelScope.launch {
-            currentChildUID.postValue(dataStore.getCurrentChildUid()!!)
+            currentChildUID.postValue(dataStoreManager.getCurrentChildUid()!!)
             currentFatherUID.postValue(auth.getCurrentUser()!!.uid)
         }
     }
@@ -90,6 +94,12 @@ class FatherHomeViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun createConversation() = withContext(Dispatchers.IO) {
-        conversations.createConversation(currentChildUID.value!!)
+        conversations.createFatherWithTeacherConversation(currentChildUID.value!!)
     }
+
+    suspend fun changeCurrentChild(childUID: String) = viewModelScope.launch {
+        dataStoreManager.setCurrentChildUid(childUID)
+        currentChildUID.postValue(childUID)
+    }
+
 }

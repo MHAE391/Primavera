@@ -1,7 +1,9 @@
 package com.m391.primavera.utils
 
 object Constants {
-    const val CONVERSATIONS = "Conversations"
+    const val CONVERSATIONS: String = "Conversations"
+    const val FATHER_CONVERSATIONS = "Father Conversations"
+    const val TEACHER_CONVERSATIONS = "Teacher Conversations"
     const val WATCHES = "Watches"
     const val INVALID_CODE = "Wrong OTP"
     const val IMAGES = "Images"

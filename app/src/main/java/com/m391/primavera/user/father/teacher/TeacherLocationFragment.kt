@@ -25,6 +25,7 @@ import com.m391.primavera.R
 import com.m391.primavera.authentication.information.father.location.FatherLocationFragment
 import com.m391.primavera.databinding.FragmentFatherLocationBinding
 import com.m391.primavera.databinding.FragmentTeacherLocationBinding
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
 
 class TeacherLocationFragment : BottomSheetDialogFragment(), OnMapReadyCallback {

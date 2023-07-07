@@ -18,7 +18,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
+class TeacherProfileViewModel(
+    app: Application,
+) : BaseViewModel(app) {
+    private val dataStoreManager: DataStoreManager =
+        DataStoreManager.getInstance(app.applicationContext)
+    private val serverDatabase: ServerDatabase =
+        ServerDatabase(app.applicationContext, dataStoreManager)
     private val _teacherUid = MutableLiveData<String>()
     val teacherUid: LiveData<String> = _teacherUid
 
@@ -56,9 +62,8 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
     val teacherSubjects: LiveData<String> = _teacherSubjects
 
 
-    private val dataStore = DataStoreManager.getInstance(app.applicationContext)
-    private val teachers = ServerDatabase(app.applicationContext, dataStore).teacherInformation
-    private val conversations = ServerDatabase(app.applicationContext, dataStore).conversations
+    private val teachers = serverDatabase.teacherInformation
+    private val conversations = serverDatabase.conversations
     private val _teacherData = MutableLiveData<ServerTeacherModel>()
     val teacherData: LiveData<ServerTeacherModel> = _teacherData
 
@@ -104,7 +109,7 @@ class TeacherProfileViewModel(app: Application) : BaseViewModel(app) {
     }
 
     suspend fun createConversation() = withContext(Dispatchers.IO) {
-        conversations.createConversation(_teacherData.value!!.teacherId)
+        conversations.createTeacherWithFatherConversation(_teacherData.value!!.teacherId)
     }
 
     private fun calculateAge(selectedDate: String): Int {
