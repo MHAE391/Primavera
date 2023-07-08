@@ -127,5 +127,6 @@
     <string name="samsung_watch">Samsung Watch</string>
     <string name="select_your_academic_subjects">Select Your Academic Subjects</string>
     <string name="select_your_academic_years">Select Your Academic Years</string>
+    <string name="show_amp_update"><![CDATA[Show & Update]]></string>
 
 </resources>

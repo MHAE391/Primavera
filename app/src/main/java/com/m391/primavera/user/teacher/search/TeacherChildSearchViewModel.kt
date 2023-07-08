@@ -26,6 +26,7 @@ class TeacherChildSearchViewModel(app: Application) : BaseViewModel(app) {
     private val conversations = ServerDatabase(app.applicationContext, dataStore).conversations
     val childrenList: LiveData<List<ServerChildModel>> = _childrenList
     private val childrenArray = ArrayList<ServerChildModel>()
+    private val auth = ServerDatabase(app.applicationContext, dataStore).authentication
     fun backToConversations() {
         navigationCommand.value = NavigationCommand.Back
     }
@@ -84,6 +85,10 @@ class TeacherChildSearchViewModel(app: Application) : BaseViewModel(app) {
             validateData()
             return true
         }
+    }
+
+    fun checkChildFather(fatherUid: String): Boolean {
+        return auth.getCurrentUser()!!.uid == fatherUid
     }
 
     suspend fun createConversation(uid: String) =

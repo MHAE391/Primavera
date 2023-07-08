@@ -12,6 +12,10 @@
             name="createViewModel"
             type="com.m391.primavera.user.father.home.switjha.teacher.CreateTeacherViewModel" />
 
+        <variable
+            name="teacherViewModel"
+            type="com.m391.primavera.user.teacher.home.switjha.profile.TeacherEditProfileViewModel" />
+
     </data>
 
     <LinearLayout

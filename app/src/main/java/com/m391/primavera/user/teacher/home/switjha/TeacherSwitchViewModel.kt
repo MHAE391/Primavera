@@ -21,6 +21,8 @@ class TeacherSwitchViewModel(app: Application) : BaseViewModel(app) {
 
     suspend fun setCurrentUserType() = withContext(Dispatchers.IO) {
         dataStore.setUserType(FATHER)
+        if (dataStore.getCurrentChildUid() == null)
+            dataStore.setCurrentChildUid(fathers.getRandomChildUID())
     }
 
     suspend fun logout() = withContext(Dispatchers.IO) {

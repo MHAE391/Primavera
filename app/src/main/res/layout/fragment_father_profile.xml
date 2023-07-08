@@ -10,11 +10,10 @@
             type="com.m391.primavera.user.father.profile.FatherProfileViewModel" />
     </data>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        android:orientation="vertical"
         tools:context=".user.father.profile.FatherProfileFragment">
 
         <RelativeLayout
@@ -74,24 +73,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/padding_50"
+            android:layout_marginTop="@dimen/padding_60"
             android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_20"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/margin_10"
-                    android:gravity="center"
-                    android:text='@{viewModel.fatherInfo.firstName + " " +   viewModel.fatherInfo.lastName}'
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/font_size_20"
-                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -115,6 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start|bottom"
+                        android:layout_marginTop="@dimen/padding_20"
                         android:layout_marginBottom="@dimen/margin_10"
                         android:background="@color/white"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -128,10 +118,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_25"
-                    android:layout_marginTop="@dimen/padding_10"
+                    android:layout_marginTop="@dimen/padding_50"
                     android:layout_marginEnd="@dimen/margin_25"
                     android:background="@drawable/table_border"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/padding_10"
+                            android:text='@{viewModel.fatherInfo.firstName + " " +   viewModel.fatherInfo.lastName}'
+                            android:textSize="@dimen/font_size_14"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -263,43 +286,40 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+
+                <Button
+                    android:id="@+id/update"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/margin_5"
+                    android:background="@drawable/background_button"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
 
-                    <Button
-                        android:id="@+id/update"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:layout_marginBottom="@dimen/margin_5"
-                        android:background="@drawable/background_button"
-                        android:gravity="center"
-                        android:text="@string/save"
-                        android:textAllCaps="false"
-                        android:textColor="@color/white" />
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/font_size_14"
-                        android:layout_marginTop="@dimen/margin_5"
-                        android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
-                        android:gravity="center"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/font_size_14"
+            android:layout_marginTop="@dimen/margin_5"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
 
 </layout>

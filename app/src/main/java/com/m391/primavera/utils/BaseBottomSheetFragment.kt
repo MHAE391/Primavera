@@ -1,13 +1,14 @@
 package com.m391.primavera.utils
 
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 
-abstract class BaseFragment : Fragment() {
+
+abstract class BaseBottomSheetFragment : BottomSheetDialogFragment() {
 
     abstract val viewModel: BaseViewModel
 
@@ -34,6 +35,7 @@ abstract class BaseFragment : Fragment() {
                     command.destinationId,
                     false
                 )
+
                 else -> {
                 }
             }

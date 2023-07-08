@@ -77,14 +77,16 @@ class TeacherChildSearchFragment : BaseFragment() {
                         )
                     )
                 }.setNegativeButton("Chat") { _, _ ->
-                    val intent = Intent(activity, ChatActivity::class.java)
-                    lifecycleScope.launch {
-                        viewModel.createConversation(it.fatherUID)
-                    }
-                    intent.putExtra(Constants.TYPE, Constants.FATHER)
-                    intent.putExtra(Constants.FATHER_UID, it.fatherUID)
-                    intent.putExtra(Constants.FATHER_FIRST_NAME, it.fatherName)
-                    startActivity(intent)
+                    if (!viewModel.checkChildFather(it.fatherUID)) {
+                        val intent = Intent(activity, ChatActivity::class.java)
+                        lifecycleScope.launch {
+                            viewModel.createConversation(it.fatherUID)
+                        }
+                        intent.putExtra(Constants.TYPE, Constants.FATHER)
+                        intent.putExtra(Constants.FATHER_UID, it.fatherUID)
+                        intent.putExtra(Constants.FATHER_FIRST_NAME, it.fatherName)
+                        startActivity(intent)
+                    } else viewModel.showToast.value = "Your Child"
                 }.show()
         }
         binding.usersRecyclerView.setupGridRecycler(adapter)

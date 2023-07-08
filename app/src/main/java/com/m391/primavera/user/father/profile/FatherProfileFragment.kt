@@ -1,5 +1,6 @@
 package com.m391.primavera.user.father.profile
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,11 +15,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.m391.primavera.R
+import com.m391.primavera.chat.ChatActivity
 import com.m391.primavera.databinding.FragmentFatherProfileBinding
 import com.m391.primavera.user.father.teacher.TeacherLocationFragment
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Binding
+import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.NavigationCommand
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -60,7 +63,8 @@ class FatherProfileFragment : BaseFragment() {
             binding.editProfileImage.visibility = View.GONE
             binding.editProfileLocation.visibility = View.GONE
             binding.addChild.visibility = View.GONE
-            binding.update.visibility = View.GONE
+            binding.update.text = getString(R.string.chat)
+            binding.update.tag = getString(R.string.chat)
         }
     }
 
@@ -78,9 +82,26 @@ class FatherProfileFragment : BaseFragment() {
             val fragment = FatherEditLocationFragment()
             fragment.show(parentFragmentManager, "FatherEditLocation")
         }
-        binding.update.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.updateFatherInfo()
+        binding.update.setOnClickListener { button ->
+            if (button.tag != getString(R.string.chat)) {
+                lifecycleScope.launch {
+                    viewModel.updateFatherInfo()
+                }
+            } else {
+                if (!viewModel.checkChildFather(viewModel.fatherInfo.value!!.fatherUID)) {
+                    val intent = Intent(activity, ChatActivity::class.java)
+                    lifecycleScope.launch {
+                        viewModel.createConversation(viewModel.fatherInfo.value!!.fatherUID)
+                    }
+                    intent.putExtra(Constants.TYPE, Constants.FATHER)
+                    intent.putExtra(Constants.FATHER_UID, viewModel.fatherInfo.value!!.fatherUID)
+                    intent.putExtra(
+                        Constants.FATHER_FIRST_NAME,
+                        viewModel.fatherInfo.value!!.firstName
+                    )
+                    startActivity(intent)
+                } else viewModel.showToast.value = "Can't Chat With Yourself"
+
             }
         }
         binding.addChild.setOnClickListener {

@@ -76,7 +76,7 @@ class MessageInformation(
             MESSAGE_UID to messageUID,
             SENDER_UID to senderUID,
             TIME_SENT to timeSent,
-            MESSAGE to messageContent,
+            MESSAGE to messageContent.trim(),
             SEEN to NO,
             MESSAGE_TYPE to TEXT_MESSAGE
         )

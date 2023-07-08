@@ -17,6 +17,13 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_teacherHomeFragment_to_teacherEditProfileFragment"
+            app:destination="@id/teacherEditProfileFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
         android:id="@+id/teacherChildSearchFragment"
@@ -59,5 +66,10 @@
             android:name="fatherUid"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/teacherEditProfileFragment"
+        android:name="com.m391.primavera.user.teacher.home.switjha.profile.TeacherEditProfileFragment"
+        android:label="TeacherEditProfileFragment"
+        tools:layout="@layout/fragment_teacher_edit_profile" />
 
 </navigation>

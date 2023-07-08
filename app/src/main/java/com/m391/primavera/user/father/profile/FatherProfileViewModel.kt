@@ -27,6 +27,8 @@ class FatherProfileViewModel(
         ServerDatabase(app.applicationContext, dataStoreManager)
     private val fathers = serverDatabase.fatherInformation
     private val childrens = serverDatabase.childInformation
+    private val auth = serverDatabase.authentication
+    private val conversations = serverDatabase.conversations
     private val _fatherInfo = MutableLiveData<ServerFatherModel>()
     val fatherInfo: LiveData<ServerFatherModel> = _fatherInfo
     private val _children = MutableLiveData<String>()
@@ -65,6 +67,15 @@ class FatherProfileViewModel(
                         }
                     }
                 }
+        }
+
+    fun checkChildFather(fatherUid: String): Boolean {
+        return auth.getCurrentUser()!!.uid == fatherUid
+    }
+
+    suspend fun createConversation(uid: String) =
+        withContext(Dispatchers.IO) {
+            conversations.createTeacherWithFatherConversation(uid)
         }
 
     fun backToHome() {

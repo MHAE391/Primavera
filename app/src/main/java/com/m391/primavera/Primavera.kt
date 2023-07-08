@@ -108,7 +108,7 @@ class Primavera : AppCompatActivity() {
          }*/
 
 
-        startActivity(Intent(this, FatherActivity::class.java))
+        startActivity(Intent(this, TeacherActivity::class.java))
         finish()
         setContentView(binding.root)
     }

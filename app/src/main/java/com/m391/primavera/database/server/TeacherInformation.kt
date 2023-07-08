@@ -9,6 +9,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import com.m391.primavera.database.datastore.DataStoreManager
+import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.CHILD_AGE
 import com.m391.primavera.utils.Constants.DATE_OF_BARTH
 import com.m391.primavera.utils.Constants.FATHER
@@ -41,6 +42,7 @@ class TeacherInformation(
     private val firestore = FirebaseFirestore.getInstance()
     private val teachers: CollectionReference = firestore.collection(TEACHERS)
     private val mediaUploader = MediaUploader()
+    private val fathers = FatherInformation(context, dataStoreManager)
     private var registration: ListenerRegistration? = null
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
@@ -235,6 +237,58 @@ class TeacherInformation(
         )
         teachers.document(teacherUid!!).set(teacher).addOnFailureListener {
             response = it.message!!
+        }.await()
+        return@withContext response
+    }
+
+    suspend fun updateTeacherInformation(
+        image: String,
+        subjects: List<String>,
+        academicYears: List<String>,
+        longitude: Number,
+        latitude: Number
+    ): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val teacherUid = auth.getCurrentUser()!!.uid
+        if (image != "No New Image") {
+            updateTeacherImage(teacherUid, image)
+        }
+        val teacher = hashMapOf(
+            TEACHER_ACADEMIC_YEARS to academicYears,
+            TEACHERS_SUBJECTS to subjects,
+            LONGITUDE to longitude,
+            LATITUDE to latitude,
+        )
+        teachers.document(teacherUid).update(teacher).addOnFailureListener {
+            response = it.localizedMessage!!
+        }.await()
+        return@withContext response
+    }
+
+    private suspend fun updateTeacherImage(teacherUid: String, image: String): String =
+        withContext(Dispatchers.IO) {
+            var response = SUCCESS
+            val childImage = mediaUploader.uploadImage(image)
+            val uploadImage = hashMapOf(
+                IMAGE_PATH to childImage.imagePath,
+                IMAGE_URI to childImage.imageUri
+            )
+            teachers.document(teacherUid).update(
+                uploadImage as Map<String, Any>
+            ).addOnFailureListener {
+                response = Constants.ERROR
+            }.await()
+            return@withContext response
+        }
+
+    suspend fun deleteTeacherAccount(): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val teacherUid = auth.getCurrentUser()!!.uid
+        if (fathers.checkAlreadyFatherOrNot()) {
+            fathers.deleteMyTeacherAccount()
+        }
+        teachers.document(teacherUid).delete().addOnFailureListener {
+            response = it.localizedMessage!!
         }.await()
         return@withContext response
     }

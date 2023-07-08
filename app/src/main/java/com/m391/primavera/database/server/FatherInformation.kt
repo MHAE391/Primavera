@@ -278,4 +278,13 @@ class FatherInformation(
         }
         return@withContext response
     }
+
+    suspend fun deleteMyTeacherAccount(): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val fatherUid = currentUser!!.uid
+        fathers.document(fatherUid).update(TEACHER, NO).addOnFailureListener {
+            response = it.localizedMessage!!
+        }.await()
+        return@withContext response
+    }
 }

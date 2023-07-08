@@ -31,6 +31,8 @@ class ChildProfileViewModel(
     private val _childAge = MutableLiveData<String>()
     val childAge: LiveData<String> = _childAge
 
+    private val auth = serverDatabase.authentication
+    private val conversations = serverDatabase.conversations
     fun backToTeacherSearch() {
         navigationCommand.value = NavigationCommand.Back
     }
@@ -67,4 +69,12 @@ class ChildProfileViewModel(
         return age
     }
 
+    suspend fun createConversation(uid: String) =
+        withContext(Dispatchers.IO) {
+            conversations.createTeacherWithFatherConversation(uid)
+        }
+
+    fun checkChildFather(fatherUid: String): Boolean {
+        return auth.getCurrentUser()!!.uid == fatherUid
+    }
 }

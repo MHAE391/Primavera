@@ -21,13 +21,17 @@ import com.m391.primavera.authentication.AuthenticationActivity
 import com.m391.primavera.databinding.FragmentTeacherSwitchBinding
 import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.user.teacher.TeacherActivity
+import com.m391.primavera.user.teacher.home.TeacherHomeFragmentDirections
+import com.m391.primavera.utils.BaseBottomSheetFragment
+import com.m391.primavera.utils.BaseFragment
+import com.m391.primavera.utils.NavigationCommand
 import kotlinx.coroutines.launch
 
 
-class TeacherSwitchFragment : BottomSheetDialogFragment() {
+class TeacherSwitchFragment : BaseBottomSheetFragment() {
     private lateinit var dialog: BottomSheetDialog
     private lateinit var behavior: BottomSheetBehavior<View>
-    val viewModel: TeacherSwitchViewModel by viewModels()
+    override val viewModel: TeacherSwitchViewModel by viewModels()
     private lateinit var binding: FragmentTeacherSwitchBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +93,11 @@ class TeacherSwitchFragment : BottomSheetDialogFragment() {
                 }
                 viewModel.showLoading.value = false
             }
+        }
+        binding.teacherProfile.setOnClickListener {
+            this@TeacherSwitchFragment.dismiss()
+            viewModel.navigationCommand.value =
+                NavigationCommand.To(TeacherHomeFragmentDirections.actionTeacherHomeFragmentToTeacherEditProfileFragment())
         }
         binding.logOut.setOnClickListener {
             lifecycleScope.launch {
