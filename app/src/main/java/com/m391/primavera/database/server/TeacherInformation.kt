@@ -42,7 +42,7 @@ class TeacherInformation(
     private val firestore = FirebaseFirestore.getInstance()
     private val teachers: CollectionReference = firestore.collection(TEACHERS)
     private val mediaUploader = MediaUploader()
-    private val fathers = FatherInformation(context, dataStoreManager)
+
     private var registration: ListenerRegistration? = null
     private var currentUser: FirebaseUser?
     private val auth = Authentication()
@@ -281,13 +281,21 @@ class TeacherInformation(
             return@withContext response
         }
 
+
     suspend fun deleteTeacherAccount(): String = withContext(Dispatchers.IO) {
         var response = SUCCESS
         val teacherUid = auth.getCurrentUser()!!.uid
-        if (fathers.checkAlreadyFatherOrNot()) {
-            fathers.deleteMyTeacherAccount()
-        }
         teachers.document(teacherUid).delete().addOnFailureListener {
+            response = it.localizedMessage!!
+        }.await()
+        auth.logOut()
+        return@withContext response
+    }
+
+    suspend fun createFatherAccount(): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val teacherUid = auth.getCurrentUser()!!.uid
+        teachers.document(teacherUid).update(FATHER, YES).addOnFailureListener {
             response = it.localizedMessage!!
         }.await()
         return@withContext response

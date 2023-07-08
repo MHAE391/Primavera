@@ -15,8 +15,7 @@ import kotlinx.coroutines.withContext
 class AddNewChildViewModel(
     app: Application,
 ) : BaseViewModel(app) {
-    val childWatch = MutableLiveData<String>()
-    val childDateOfBarth = MutableLiveData<String>()
+
     private val childWatchAddress = MutableLiveData<String>()
     val childName = MutableLiveData<String>()
     private val childAcademicYear = MutableLiveData<String>()
@@ -26,7 +25,8 @@ class AddNewChildViewModel(
     private val serverDatabase: ServerDatabase =
         ServerDatabase(app.applicationContext, dataStoreManager)
     private val father = serverDatabase.fatherInformation
-
+    val childWatch = MutableLiveData<String>()
+    val childDateOfBarth = MutableLiveData<String>()
     init {
         childWatch.value = "Scan QR Code"
         childDateOfBarth.value = "Date Of Barth"

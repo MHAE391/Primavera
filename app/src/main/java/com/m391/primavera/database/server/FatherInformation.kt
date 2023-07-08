@@ -282,9 +282,66 @@ class FatherInformation(
     suspend fun deleteMyTeacherAccount(): String = withContext(Dispatchers.IO) {
         var response = SUCCESS
         val fatherUid = currentUser!!.uid
-        fathers.document(fatherUid).update(TEACHER, NO).addOnFailureListener {
-            response = it.localizedMessage!!
+        if (checkAlreadyFatherOrNot()) {
+            fathers.document(fatherUid).update(TEACHER, NO).addOnFailureListener {
+                response = it.localizedMessage!!
+            }.await()
+        }
+        response = teachers.deleteTeacherAccount()
+        return@withContext response
+    }
+
+    suspend fun createFatherAccount(
+        fatherFirstName: String,
+        fatherLastName: String,
+        childName: String,
+        childDateOfBarth: String,
+        watchUid: String,
+        fatherImagePath: String,
+        fatherImageUri: String,
+        childAcademicYear: String,
+        childImage: String,
+        latitude: Number,
+        longitude: Number,
+        fatherPhone: String
+    ): String = withContext(Dispatchers.IO) {
+        var response = SUCCESS
+        val fatherUid = currentUser!!.uid
+        val childUid = childInformation.uploadChild(
+            name = childName,
+            dateOfBarth = childDateOfBarth,
+            watchUid = watchUid,
+            image = childImage,
+            academicYear = childAcademicYear,
+            fatherName = fatherFirstName
+        )
+        if (childUid == ERROR) return@withContext ERROR
+        val father = hashMapOf(
+            FATHER_UID to fatherUid,
+            FATHER_FIRST_NAME to fatherFirstName,
+            FATHER_LAST_NAME to fatherLastName,
+            IMAGE_PATH to fatherImagePath,
+            IMAGE_URI to fatherImageUri,
+            CHILDREN to listOf(childUid),
+            TEACHER to YES,
+            LONGITUDE to longitude,
+            LATITUDE to latitude,
+            FATHER_PHONE to fatherPhone
+        )
+        fathers.document(fatherUid).set(father).addOnFailureListener {
+            response = it.message!!
         }.await()
+        if (response == SUCCESS) {
+            val token = watchInformation.getWatchToken(watchUid)
+            notification.sendAssignFCMToChildWatch(
+                childName = childName,
+                childUID = childUid,
+                watchToken = token,
+                fatherName = fatherFirstName,
+                fatherUID = fatherUid
+            )
+            teachers.createFatherAccount()
+        }
         return@withContext response
     }
 }

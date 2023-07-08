@@ -82,11 +82,9 @@ class TeacherSwitchFragment : BaseBottomSheetFragment() {
                     builder.setTitle("Father Account")
                         .setMessage("You don't have father account press Yes if you want to create one and No if don't")
                         .setPositiveButton("Yes") { _, _ ->
-                            Toast.makeText(
-                                requireContext(),
-                                "Create Father Account",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            this@TeacherSwitchFragment.dismiss()
+                            viewModel.navigationCommand.value =
+                                NavigationCommand.To(TeacherHomeFragmentDirections.actionTeacherHomeFragmentToCreateFatherFragment())
                         }.setNegativeButton("No") { dialog, _ ->
                             dialog.cancel() // check again in case user changes their mind
                         }.show()

@@ -33,7 +33,7 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
     private val teachers = serverDatabase.teacherInformation
     private val _selectedLongitude = MutableLiveData<Number>()
     val selectedLongitude: LiveData<Number> = _selectedLongitude
-
+    private val fathers = serverDatabase.fatherInformation
     private val _selectedLatitude = MutableLiveData<Number>()
     val selectedLatitude: LiveData<Number> = _selectedLatitude
 
@@ -142,7 +142,7 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
 
     suspend fun deleteTeacherAccount(): String = withContext(Dispatchers.Main) {
         showLoading.value = true
-        val response = teachers.deleteTeacherAccount()
+        val response = fathers.deleteMyTeacherAccount()
         dataStoreManager.setUserUid(null)
         dataStoreManager.setUserType(null)
         showLoading.value = false

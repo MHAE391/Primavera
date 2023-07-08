@@ -12,6 +12,10 @@
         <variable
             name="locationViewModel"
             type="com.m391.primavera.authentication.information.father.location.FatherLocationViewModel" />
+
+        <variable
+            name="createViewModel"
+            type="com.m391.primavera.user.teacher.home.switjha.father.CreateFatherViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,12 +31,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:layout_marginEnd="10dp"
+            android:alpha="0.8"
             android:scaleType="center"
             android:src="@drawable/ic_save"
             android:visibility="visible"
             app:backgroundTint="@color/colorPrimary"
             app:fabCustomSize="40dp"
-            android:alpha="0.8"
             app:fabSize="normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.m391.primavera.user.teacher.home.switjha.father.CreateFatherViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".user.teacher.home.switjha.father.CreateFatherFragment">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/padding_5"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_5">
+
+            <ImageButton
+                android:id="@+id/arrow_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="start|center"
+                android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:onClick="@{()-> viewModel.backToTeacherHome()}"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/father"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_25"
+                android:textStyle="italic|bold"
+                android:visibility="visible"
+                tools:ignore="RelativeOverlap" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/padding_60"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:text="@string/father_information"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/font_size_20"
+                    android:textStyle="italic|bold" />
+
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_10"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/profile"
+                    app:imageByteArray="@{viewModel.teacherInfo.image}"
+                    app:imageUrl="@{viewModel.teacherInfo.imageUri}" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_25"
+                    android:layout_marginEnd="@dimen/margin_25"
+                    android:background="@drawable/table_border"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/first_name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/padding_10"
+                            android:text="@{viewModel.teacherInfo.firstName}"
+                            android:textSize="@dimen/font_size_14"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/last_name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/padding_10"
+                            android:text="@{viewModel.teacherInfo.lastName}"
+                            android:textSize="@dimen/font_size_14"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/phones"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/padding_10"
+                            android:text="@{viewModel.teacherInfo.phone}"
+                            android:textSize="@dimen/font_size_14"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/location"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/father_location"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/padding_50"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="10dp"
+                            app:cardUseCompatPadding="true"
+                            tools:cardCornerRAdius="5dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.fatherLocation}"
+                                android:textAlignment="center"
+                                android:textColor="#0F228C"
+                                android:textSize="@dimen/font_size_14"
+                                android:textStyle="bold|normal" />
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_20"
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:text="@string/child_info"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/font_size_20"
+                    android:textStyle="italic|bold" />
+
+                <ImageView
+                    android:id="@+id/child_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/margin_10"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/profile" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_25"
+                    android:layout_marginTop="@dimen/padding_20"
+                    android:layout_marginEnd="@dimen/margin_25"
+                    android:background="@drawable/table_border"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/name"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <EditText
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/padding_50"
+                            android:layout_weight="1"
+                            android:autofillHints="name"
+                            android:background="@drawable/edit_text_view"
+                            android:gravity="start|center"
+                            android:hint="@string/name"
+                            android:inputType="text"
+                            android:padding="@dimen/padding_10"
+                            android:text="@={viewModel.childName}"
+                            android:textSize="@dimen/font_size_14"
+                            android:textStyle="normal"
+                            tools:ignore="TouchTargetSizeCheck" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="start|center"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/academic_year"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/child_academic"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="10dp"
+                            app:cardUseCompatPadding="true"
+                            tools:cardCornerRAdius="5dp">
+
+                            <Spinner
+                                android:id="@+id/academic_year"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:layout_marginEnd="@dimen/margin_12"
+                                android:autofillHints="name"
+                                android:gravity="center"
+                                android:hint="@string/academic"
+                                android:inputType=""
+                                android:minHeight="48dp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:textColor="@color/black"
+                                android:textColorHint="#546E7A"
+                                android:textSize="14sp" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/age"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/child_date_of_barth"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/padding_50"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="10dp"
+                            app:cardUseCompatPadding="true"
+                            tools:cardCornerRAdius="5dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.childDateOfBarth}"
+                                android:textAlignment="center"
+                                android:textColor="#0F228C"
+                                android:textSize="@dimen/font_size_14"
+                                android:textStyle="bold|normal" />
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_5"
+                        android:layout_weight="1"
+                        android:background="@drawable/row_border"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_10">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|start"
+                            android:padding="@dimen/padding_5"
+                            android:text="@string/watch"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/font_size_18"
+                            android:textStyle="bold|italic"
+                            tools:ignore="NestedWeights" />
+
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/child_watch"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/padding_50"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            app:cardCornerRadius="10dp"
+                            app:cardUseCompatPadding="true"
+                            tools:cardCornerRAdius="5dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.childWatch}"
+                                android:textAlignment="center"
+                                android:textColor="#0F228C"
+                                android:textSize="@dimen/font_size_14"
+                                android:textStyle="bold|normal" />
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/create_father"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:layout_marginBottom="@dimen/padding_10"
+                    android:background="@drawable/background_button"
+                    android:gravity="center"
+                    android:text="@string/set_data"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </RelativeLayout>
+</layout>

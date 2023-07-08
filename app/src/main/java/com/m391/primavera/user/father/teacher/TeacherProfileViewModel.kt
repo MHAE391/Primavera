@@ -109,7 +109,7 @@ class TeacherProfileViewModel(
     }
 
     suspend fun createConversation() = withContext(Dispatchers.IO) {
-        conversations.createTeacherWithFatherConversation(_teacherData.value!!.teacherId)
+        conversations.createFatherWithTeacherConversation(_teacherData.value!!.teacherId)
     }
 
     private fun calculateAge(selectedDate: String): Int {
