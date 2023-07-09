@@ -35,10 +35,10 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     val response: LiveData<String?> = _response
 
     init {
-        selectAcademicYears.value = "Select Your Academic Years"
-        selectAcademicSubjects.value = "Select Your Academic Subjects"
-        selectTeacherLocation.value = "Select Teacher Location"
-        teacherDateOfBarth.value = "Select Your Date Of Barth"
+        selectAcademicYears.value = "Select Years"
+        selectAcademicSubjects.value = "Select Subjects"
+        selectTeacherLocation.value = "Select Location"
+        teacherDateOfBarth.value = "Date Of Barth"
     }
 
     fun setLocation(longitude: Number, latitude: Number) {
@@ -92,9 +92,9 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
             "Please, Select Teacher Academic Years"
         else if (selectedAcademicSubjects.value.isNullOrEmpty())
             "Please, Select Teacher Academic Subjects"
-        else if (selectTeacherLocation.value == "Select Teacher Location")
+        else if (selectTeacherLocation.value == "Select Location")
             "Please, Select Your Location"
-        else if (teacherDateOfBarth.value == "Select Your Date Of Barth")
+        else if (teacherDateOfBarth.value == "Date Of Barth")
             "Please, Select  Your Date Of Barth"
         else "Complete Data"
     }

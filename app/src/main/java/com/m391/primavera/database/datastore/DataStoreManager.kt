@@ -18,6 +18,7 @@ class DataStoreManager(context: Context) {
         val currentUserUid = stringPreferencesKey("CURRENT_USER_DATA_KEY")
         val currentUserType = stringPreferencesKey("CURRENT_USER_TYPE_KEY")
         val currentChildUid = stringPreferencesKey("CURRENT_CHILD_UID")
+        val currentChatReceiver = stringPreferencesKey("CURRENT_CHAT_RECEIVER")
 
         @Volatile
         private var instance: DataStoreManager? = null
@@ -69,4 +70,16 @@ class DataStoreManager(context: Context) {
         val preferences = dataStore.data.first()
         return preferences[currentChildUid]
     }
+
+    suspend fun setCurrentChatReceiver(uid: String?) {
+        dataStore.edit { preferences ->
+            preferences[currentChatReceiver] = uid ?: NO_LOGGED_IN_USER
+        }
+    }
+
+    suspend fun getCurrentChatReceiver(): String? {
+        val preferences = dataStore.data.first()
+        return preferences[currentChatReceiver]
+    }
+
 }

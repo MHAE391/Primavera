@@ -73,19 +73,15 @@
         </RelativeLayout>
 
 
-        <TextView
+        <ImageView
             android:id="@+id/noDataTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:drawableTop="@drawable/ic_no_data"
             android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
             android:gravity="center"
-            android:text="@string/no_data"
-            android:textColor="@color/black"
-            android:textSize="@dimen/margin_20"
-            android:textStyle="bold" />
+            android:src="@drawable/no_data_amico" />
 
         <ProgressBar
             android:id="@+id/progressBar"

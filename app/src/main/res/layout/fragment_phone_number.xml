@@ -10,126 +10,124 @@
             type="com.m391.primavera.authentication.phone.PhoneNumberViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"
+        android:background="@color/white"
         tools:context=".authentication.phone.PhoneNumberFragment">
+
+        <View
+            android:id="@+id/dummyView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true" />
+
+        <!-- Your ImageView -->
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/dummyView"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            android:src="@drawable/authentication" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="213dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_marginTop="80dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/sent" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:text="@string/otp"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="50dp"
-                android:gravity="center"
-                android:text="@string/message_verification"
-                android:textColor="#616161"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="30dp"
-                android:gravity="center"
-                android:text="@string/phone"
-                android:textColor="#616161"
-                android:textSize="14sp" />
+            android:layout_below="@+id/image"
+            android:layout_marginTop="@dimen/padding_50"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="60dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/padding_5"
+                android:layout_marginEnd="@dimen/margin_20"
+                android:background="@drawable/table_border"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_5">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_30"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="@dimen/margin_30"
                     android:gravity="center"
-                    android:text="@string/code"
-                    android:textColor="@color/colorTextPrimary"
+                    android:text="@string/message_verification"
+                    android:textColor="#616161"
+                    android:textSize="@dimen/font_size_16"
+                    android:textStyle="bold|italic" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_25"
+                    android:layout_marginTop="@dimen/margin_20"
+                    android:layout_marginEnd="@dimen/margin_25"
+                    android:background="@drawable/table_border"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="15dp">
+
+                    <ImageView
+                        android:layout_width="@dimen/padding_50"
+                        android:layout_height="@dimen/padding_50"
+                        android:layout_gravity="start"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/eygpt" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/margin_12"
+                        android:background="@drawable/edit_text_view"
+                        android:gravity="start|center"
+                        android:hint="@string/phone_hint"
+                        android:imeOptions="actionDone"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:paddingStart="@dimen/padding_20"
+                        android:text="@={viewModel.phoneNumber}"
+                        android:textColor="@color/colorTextPrimary"
+                        android:textColorHint="#78909C"
+                        android:textSize="16sp"
+                        android:textStyle="normal"
+                        tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
+
+
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/get_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_80"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="@dimen/margin_80"
+                    android:layout_marginBottom="@dimen/margin_30"
+                    android:background="@drawable/background_button"
+                    android:text="@string/otp_get"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="2dp"
-                    android:background="@null"
-                    android:hint="@string/phone_hint"
-                    android:imeOptions="actionDone"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:text="@={viewModel.phoneNumber}"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textColorHint="#78909C"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:ignore="TouchTargetSizeCheck" />
-
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginStart="70dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="70dp"
-                android:background="@color/colorDivider" />
-
-            <Button
-                android:id="@+id/get_code"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:background="@drawable/background_button"
-                android:text="@string/otp_get"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
             android:gravity="center"
             android:indeterminateTint="@color/colorPrimaryDark"
@@ -137,5 +135,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

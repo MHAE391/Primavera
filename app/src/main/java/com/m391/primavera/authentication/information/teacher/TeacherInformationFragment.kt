@@ -85,13 +85,13 @@ class TeacherInformationFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.selectYears.setOnClickListener {
+        binding.teacherAcademicYears.setOnClickListener {
             showSelectYearsFragment()
         }
-        binding.selectSubjects.setOnClickListener {
+        binding.teacherSubjects.setOnClickListener {
             showSelectSubjectsFragment()
         }
-        binding.selectLocation.setOnClickListener {
+        binding.teacherLocation.setOnClickListener {
             if (!checkLocationPermission()) requestLocationPermission()
             else {
                 checkGpsEnabled()
@@ -100,7 +100,7 @@ class TeacherInformationFragment : BaseFragment() {
                 })
             }
         }
-        binding.teacherBarth.setOnClickListener {
+        binding.teacherDateOfBarth.setOnClickListener {
             showDatePickerDialog()
         }
         binding.teacherImage.setOnClickListener {

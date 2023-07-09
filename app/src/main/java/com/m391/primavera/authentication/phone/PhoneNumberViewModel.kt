@@ -29,7 +29,7 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
                     "+2${phoneNumber.value}", activity!!
                 )
                 serverDatabase.authentication.response.observeForever {
-                    if (it == Constants.SUCCESS) {
+                    if (it == Constants.SUCCESS && serverDatabase.authentication.storedVerificationId != null && serverDatabase.authentication.resendToken != null) {
                         showLoading.value = false
                         showToast.value = Constants.CODE_SENT
                         navigationCommand.value = NavigationCommand.To(

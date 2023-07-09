@@ -40,9 +40,9 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
     }
 
     init {
-        childWatch.value = "Select Your Child Watch"
-        fatherLocation.value = "Select Your Location"
-        childDateOfBarth.value = "Select Child Date Of Barth"
+        childWatch.value = "Scan QR Code"
+        fatherLocation.value = "Select Location"
+        childDateOfBarth.value = "Date Of Barth"
     }
 
 
@@ -81,13 +81,13 @@ class FatherInformationViewModel(private val app: Application) : BaseViewModel(a
             "Please, Choose Father Image"
         else if (childName.value.isNullOrBlank())
             "Complete Child Information"
-        else if (childWatch.value == "Select Your Child Watch")
+        else if (childWatch.value == "Scan QR Code")
             "Please, Select Your Child Watch"
         else if (childAcademicYear.value == "None")
             "Select Your Child Academic Year"
-        else if (fatherLocation.value == "Select Your Location")
+        else if (fatherLocation.value == "Select Location")
             "Please, Select Your Location"
-        else if (childDateOfBarth.value == "Select Child Date Of Barth")
+        else if (childDateOfBarth.value == "Date Of Barth")
             "Please, Select Child Date Of Barth"
         else "Complete Data"
     }

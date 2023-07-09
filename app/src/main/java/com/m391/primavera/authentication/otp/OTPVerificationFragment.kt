@@ -1,5 +1,6 @@
 package com.m391.primavera.authentication.otp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +28,7 @@ import com.m391.primavera.utils.Constants
 import com.m391.primavera.utils.Constants.BOTH
 import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.TEACHER
+import com.m391.primavera.utils.NavigationCommand
 import kotlinx.coroutines.launch
 
 class OTPVerificationFragment : BaseFragment() {
@@ -93,7 +94,7 @@ class OTPVerificationFragment : BaseFragment() {
                         when (viewModel.alreadySigned.value) {
                             FATHER -> showFatherActivity()
                             TEACHER -> showTeacherActivity()
-                            BOTH -> showPrimaveraActivity()
+                            BOTH -> showChoiceAlert()
                             else -> showInformationActivity()
                         }
                     } else if (it != null) {
@@ -109,9 +110,21 @@ class OTPVerificationFragment : BaseFragment() {
 
     private val userStatus = MutableLiveData<String?>()
 
-    private fun showPrimaveraActivity() {
-        startActivity(Intent(activity, Primavera::class.java))
-        activity?.finish()
+    private fun showChoiceAlert() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Multiple Account")
+            .setMessage("Choose Father to open Father Mode\nTeacher to open Teacher Mode")
+            .setPositiveButton("Father") { _, _ ->
+                lifecycleScope.launch {
+                    viewModel.setUserType(FATHER)
+                    showFatherActivity()
+                }
+            }.setNegativeButton("Teacher") { _, _ ->
+                lifecycleScope.launch {
+                    viewModel.setUserType(TEACHER)
+                    showTeacherActivity()
+                }
+            }.show()
     }
 
     override fun onPause() {
@@ -133,6 +146,10 @@ class OTPVerificationFragment : BaseFragment() {
                 resendOTPCodeVisibility()
             }
         }
+        binding.verify.setOnClickListener {
+            viewModel.signInWithPhone()
+        }
+
     }
 
     private fun showFatherActivity() {

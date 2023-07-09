@@ -161,7 +161,7 @@ class FatherInformationFragment : BaseFragment() {
                 })
             }
         }
-        binding.childBarth.setOnClickListener {
+        binding.childDateOfBarth.setOnClickListener {
             showDatePickerDialog()
         }
         binding.childWatch.setOnClickListener {

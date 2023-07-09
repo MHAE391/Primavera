@@ -34,5 +34,8 @@ class InformationActivity : AppCompatActivity() {
                 else -> tab.text = getString(R.string.fragment)
             }
         }.attach()
+        binding.arrowBtn.setOnClickListener {
+            finish()
+        }
     }
 }

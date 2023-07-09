@@ -3,6 +3,7 @@ package com.m391.primavera.chat.child.alarm
 import android.os.Bundle
 import com.m391.primavera.R
 import android.app.KeyguardManager
+import android.media.RingtoneManager
 import android.os.Build
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -26,6 +27,10 @@ class AlarmActivity : AppCompatActivity() {
                 addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
     }
 
 }

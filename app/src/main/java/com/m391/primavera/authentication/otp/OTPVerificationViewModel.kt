@@ -126,4 +126,16 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
         fifthCode.value = null
         sixthCode.value = null
     }
+
+    suspend fun setUserType(user: String) {
+        dataStoreManager.setUserType(user)
+        if (user == FATHER) {
+            dataStoreManager.setCurrentChildUid(
+                ServerDatabase(
+                    app.applicationContext,
+                    dataStoreManager
+                ).fatherInformation.getRandomChildUID()
+            )
+        }
+    }
 }

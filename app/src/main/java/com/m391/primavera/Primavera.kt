@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import com.m391.primavera.authentication.AuthenticationActivity
+import com.m391.primavera.authentication.information.InformationActivity
 
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
@@ -108,7 +109,7 @@ class Primavera : AppCompatActivity() {
          }*/
 
 
-        startActivity(Intent(this, TeacherActivity::class.java))
+        startActivity(Intent(this, FatherActivity::class.java))
         finish()
         setContentView(binding.root)
     }
