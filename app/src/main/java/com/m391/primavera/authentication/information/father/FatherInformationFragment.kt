@@ -139,13 +139,8 @@ class FatherInformationFragment : BaseFragment() {
                     Constants.PERMISSION_OK,
                     Constants.PERMISSION_CANCEL
                 )
-            }.request { allGranted, _, _ ->
-                if (!allGranted) {
-                    checkGpsEnabled()
-                    gpsStatus.observe(viewLifecycleOwner, Observer {
-                        if (it == "Enabled") showSelectLocation()
-                    })
-                }
+            }.request {_, _, _ ->
+
             }
     }
 
@@ -199,6 +194,10 @@ class FatherInformationFragment : BaseFragment() {
         })
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (gpsStatus.hasActiveObservers()) gpsStatus.removeObservers(viewLifecycleOwner)
+    }
 
     private fun showQRScanner() {
         val fragment = QRCodeScannerFragment()

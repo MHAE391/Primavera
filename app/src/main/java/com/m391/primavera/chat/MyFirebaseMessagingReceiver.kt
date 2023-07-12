@@ -3,10 +3,12 @@ package com.m391.primavera.chat
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
+import android.app.ActivityOptions
 import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
@@ -19,6 +21,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.m391.primavera.BuildConfig
@@ -138,8 +141,16 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                 )
             }
         } else {
+            val running = if (isAppRunning(context)) "Yes" else "No"
             val alarmIntent = Intent(context, AlarmActivity::class.java)
-            alarmIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            alarmIntent.flags =
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+            alarmIntent.putExtra("childName", intent.extras!!.getString("childName"))
+            alarmIntent.putExtra("longitude", intent.extras!!.getString("longitude"))
+            alarmIntent.putExtra("latitude", intent.extras!!.getString("latitude"))
+            alarmIntent.putExtra("childUid", intent.extras!!.getString("childUid"))
+            alarmIntent.putExtra("running", running)
             context.startActivity(alarmIntent)
         }
     }

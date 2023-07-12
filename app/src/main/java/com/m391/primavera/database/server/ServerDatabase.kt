@@ -12,4 +12,5 @@ class ServerDatabase(context: Context, dataStoreManager: DataStoreManager) {
     val messageInformation = MessageInformation(context, dataStoreManager)
     val conversations = ConversationInformation(context, dataStoreManager)
     val watches = WatchInformation(context)
+    val healthHistoryInformation = HealthHistoryInformation(context, dataStoreManager)
 }

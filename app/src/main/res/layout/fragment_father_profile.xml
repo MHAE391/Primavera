@@ -95,6 +95,15 @@
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/margin_10"
                         android:importantForAccessibility="no"
+                        android:src="@drawable/profile" />
+
+                    <ImageView
+                        android:id="@+id/loaded_profile_image"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/margin_10"
+                        android:importantForAccessibility="no"
                         android:src="@drawable/profile"
                         app:imageByteArray="@{viewModel.fatherInfo.image}"
                         app:imageUrl="@{viewModel.fatherInfo.imageUri}" />

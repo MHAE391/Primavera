@@ -56,6 +56,7 @@ class EditChildProfileFragment : BaseFragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.profileImage.visibility = View.GONE
 
         return binding.root
     }
@@ -71,7 +72,6 @@ class EditChildProfileFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        binding.profileImage.visibility = View.GONE
         ArrayAdapter.createFromResource(
             requireContext(), R.array.academic_years_array, R.layout.spinner_item
         ).also { adapter ->
@@ -84,11 +84,12 @@ class EditChildProfileFragment : BaseFragment() {
         binding.editProfileImage.setOnClickListener {
             binding.loadedProfileImage.visibility = View.GONE
             binding.profileImage.visibility = View.VISIBLE
-            Binding.loadImage(
-                binding.profileImage,
-                viewModel.childInfo.value!!.image,
-                viewModel.childInfo.value!!.imageUri
-            )
+            if (viewModel.childNewImage.value.isNullOrEmpty())
+                Binding.loadImage(
+                    binding.profileImage,
+                    viewModel.childInfo.value!!.image,
+                    viewModel.childInfo.value!!.imageUri
+                )
             chooseChildPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         binding.changeChildAcademicYear.setOnClickListener {

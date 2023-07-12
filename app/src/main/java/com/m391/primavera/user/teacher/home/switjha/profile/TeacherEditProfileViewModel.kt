@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
+import com.m391.primavera.utils.Constants.FATHER
 import com.m391.primavera.utils.Constants.SUCCESS
+import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.NavigationCommand
 import com.m391.primavera.utils.models.ServerTeacherModel
 import kotlinx.coroutines.Dispatchers
@@ -61,9 +63,11 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
 
 
     fun closeStream(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
-        teachers.streamTeacherByUid(auth.getCurrentUser()!!.uid).removeObservers(lifecycleOwner)
-        withContext(Dispatchers.IO) {
-            teachers.closeUsersStream()
+        if (auth.getCurrentUser() != null) {
+            teachers.streamTeacherByUid(auth.getCurrentUser()!!.uid).removeObservers(lifecycleOwner)
+            withContext(Dispatchers.IO) {
+                teachers.closeUsersStream()
+            }
         }
     }
 
@@ -140,12 +144,38 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
         else "Update"
     }
 
-    suspend fun deleteTeacherAccount(): String = withContext(Dispatchers.Main) {
-        showLoading.value = true
-        val response = fathers.deleteMyTeacherAccount()
-        dataStoreManager.setUserUid(null)
-        dataStoreManager.setUserType(null)
-        showLoading.value = false
+    suspend fun deleteTeacherAccount(lifecycleOwner: LifecycleOwner): String =
+        withContext(Dispatchers.Main) {
+            showLoading.value = true
+            withContext(Dispatchers.IO) {
+                teachers.closeUsersStream()
+            }
+            val fatherCheck = fathers.checkAlreadyFatherOrNot()
+            if (fatherCheck) {
+                dataStoreManager.setUserType(FATHER)
+                dataStoreManager.setCurrentChildUid(fathers.getRandomChildUID())
+                return@withContext FATHER
+            } else {
+                dataStoreManager.setUserType(null)
+                dataStoreManager.setCurrentChildUid(null)
+                dataStoreManager.setUserUid(null)
+            }
+            return@withContext TEACHER
+        }
+
+    suspend fun deleteAccount(): String = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
+            teachers.closeUsersStream()
+        }
+        return@withContext fathers.deleteMyTeacherAccount()
+    }
+
+    suspend fun logOut(): String = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
+            teachers.closeUsersStream()
+        }
+        val response = teachers.deleteTeacherAccount()
+        auth.logOut()
         return@withContext response
     }
 }

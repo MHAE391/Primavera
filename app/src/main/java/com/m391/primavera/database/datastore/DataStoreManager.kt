@@ -20,6 +20,7 @@ class DataStoreManager(context: Context) {
         val currentChildUid = stringPreferencesKey("CURRENT_CHILD_UID")
         val currentChatReceiver = stringPreferencesKey("CURRENT_CHAT_RECEIVER")
 
+
         @Volatile
         private var instance: DataStoreManager? = null
 
@@ -81,5 +82,7 @@ class DataStoreManager(context: Context) {
         val preferences = dataStore.data.first()
         return preferences[currentChatReceiver]
     }
+
+
 
 }

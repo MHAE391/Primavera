@@ -133,5 +133,13 @@
     <string name="otp_otp">OTP</string>
     <string name="info">Information</string>
     <string name="teacher_information">Teacher Information</string>
+    <string name="ali">Ali</string>
+    <string name="close">Close</string>
+    <string name="open_app">Open App</string>
+    <string name="danger">Danger</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="oxygen_level">Oxygen Level</string>
+    <string name="today_steps">Today Steps</string>
+    <string name="steps">Steps</string>
 
 </resources>

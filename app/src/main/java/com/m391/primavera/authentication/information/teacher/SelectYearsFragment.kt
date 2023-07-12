@@ -83,6 +83,9 @@ class SelectYearsFragment : BottomSheetDialogFragment() {
         checkBoxWatcher(binding.firstSecondary)
         checkBoxWatcher(binding.secondSecondary)
         checkBoxWatcher(binding.thirdSecondary)
+        binding.arrowBtn.setOnClickListener {
+            this@SelectYearsFragment.dismiss()
+        }
     }
 
     private fun checkBoxWatcher(checkBox: CheckBox) {

@@ -3,6 +3,7 @@ package com.m391.primavera.user.father.home
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -25,6 +27,10 @@ import com.m391.primavera.R
 import com.m391.primavera.chat.ChatActivity
 import com.m391.primavera.database.server.Authentication
 import com.m391.primavera.databinding.FragmentFatherHomeBinding
+import com.m391.primavera.user.father.home.child.HeartRateFragment
+import com.m391.primavera.user.father.home.child.OxygenRateFragment
+import com.m391.primavera.user.father.home.child.ShowChildLocation
+import com.m391.primavera.user.father.home.child.StepsHistoryFragment
 import com.m391.primavera.user.father.home.switjha.FatherSwitchFragment
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.Constants
@@ -90,9 +96,45 @@ class FatherHomeFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
+            viewModel.setupCurrentChildAndFather()
             viewModel.openStreamFather(viewLifecycleOwner)
             viewModel.openStreamChild(viewLifecycleOwner)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.childLocation.setOnClickListener {
+            val fragment = ShowChildLocation()
+            fragment.show(parentFragmentManager, "Child Location")
+        }
+
+        binding.heartRate.setOnClickListener {
+            val fragment = HeartRateFragment()
+            fragment.show(parentFragmentManager, "Child Heart Rate")
+        }
+        binding.oxygenLevel.setOnClickListener {
+            val fragment = OxygenRateFragment()
+            fragment.show(parentFragmentManager, "Child Oxygen Level")
+        }
+        binding.heartRateHistory.setOnClickListener {
+            val fragment = HeartRateFragment()
+            fragment.show(parentFragmentManager, "Child Heart Rate")
+        }
+        binding.oxygenLevelHistory.setOnClickListener {
+            val fragment = OxygenRateFragment()
+            fragment.show(parentFragmentManager, "Child Oxygen Level")
+        }
+        binding.steps.setOnClickListener {
+            val fragment = StepsHistoryFragment()
+            fragment.show(parentFragmentManager , "Child Steps")
+        }
+
+        binding.stepsHistory.setOnClickListener {
+            val fragment = StepsHistoryFragment()
+            fragment.show(parentFragmentManager , "Child Steps")
+        }
+
     }
 
     override fun onPause() {

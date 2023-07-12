@@ -65,5 +65,8 @@ object Constants {
     const val NO_LOGGED_IN_USER = "noLoggedInUser"
     const val SEARCH = "Search"
     const val NO_IMAGE = "noImage"
-
+    const val HEALTH_HISTORY = "HealthHistory"
+    const val HEART_RATE = "HeartRate"
+    const val OXYGEN_LEVEL = "OxygenLevel"
+    const val STEPS = "Steps"
 }

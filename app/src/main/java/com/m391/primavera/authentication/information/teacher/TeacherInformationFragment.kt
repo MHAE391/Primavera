@@ -153,6 +153,11 @@ class TeacherInformationFragment : BaseFragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (gpsStatus.hasActiveObservers()) gpsStatus.removeObservers(viewLifecycleOwner)
+    }
+
     @SuppressLint("MissingPermission")
     private fun checkGpsEnabled() {
         locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -196,13 +201,8 @@ class TeacherInformationFragment : BaseFragment() {
                     Constants.PERMISSION_OK,
                     Constants.PERMISSION_CANCEL
                 )
-            }.request { allGranted, _, _ ->
-                if (!allGranted) {
-                    checkGpsEnabled()
-                    gpsStatus.observe(viewLifecycleOwner, Observer {
-                        if (it == "Enabled") showSelectLocationFragment()
-                    })
-                }
+            }.request { _, _, _ ->
+
             }
     }
 

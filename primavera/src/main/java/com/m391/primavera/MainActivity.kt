@@ -82,10 +82,6 @@ class MainActivity : AppCompatActivity() {
             MultiFormatWriter().encode(id, BarcodeFormat.QR_CODE, qrCodeSize, qrCodeSize, hints)
         val qrCodeBitmap = BarcodeEncoder().createBitmap(bitMatrix)
         binding.qrCode.setImageBitmap(qrCodeBitmap)
-        binding.qrCode.setOnClickListener {
-            startActivity(Intent(this, ChatActivity::class.java))
-        }
-
 
     }
 
@@ -94,6 +90,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.BODY_SENSORS,
+        Manifest.permission.ACTIVITY_RECOGNITION
     )
 
     private val requestPermissionLauncher =

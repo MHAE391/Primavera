@@ -288,7 +288,6 @@ class TeacherInformation(
         teachers.document(teacherUid).delete().addOnFailureListener {
             response = it.localizedMessage!!
         }.await()
-        auth.logOut()
         return@withContext response
     }
 

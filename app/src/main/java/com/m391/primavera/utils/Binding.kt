@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.m391.primavera.R
 import com.m391.primavera.utils.Animation.animateImageChange
+import com.m391.primavera.utils.Constants.HEART_RATE
+import com.m391.primavera.utils.Constants.OXYGEN_LEVEL
+import com.m391.primavera.utils.Constants.STEPS
 import com.m391.primavera.utils.MediaPlayerManager.setupView
 import com.m391.primavera.utils.MediaPlayerManager.startReceiverAudio
 import com.m391.primavera.utils.MediaPlayerManager.startSenderAudio
@@ -163,5 +166,25 @@ object Binding {
         } else imageView.visibility = View.GONE
     }
 
+
+    @JvmStatic
+    @BindingAdapter(value = ["value", "type"], requireAll = true)
+    @SuppressLint("SetTextI18n")
+    fun setHeathText(textView: TextView, value: Number, type: String) {
+        when (type) {
+            HEART_RATE -> textView.text = "$value bpm"
+            STEPS -> textView.text = "$value Step"
+            OXYGEN_LEVEL -> textView.text = "$value %"
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @BindingAdapter("android:date")
+    @JvmStatic
+    fun setDate(textView: TextView, date: Date) {
+        val sdf = SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
+        val time = sdf.format(date)
+        textView.text = time
+    }
 
 }

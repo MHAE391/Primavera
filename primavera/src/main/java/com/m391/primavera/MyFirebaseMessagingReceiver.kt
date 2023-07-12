@@ -64,6 +64,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     System.currentTimeMillis().toInt(), notificationBuilder.build()
                 )
                 val id = generateDeviceId()
+                val dataStoreManager = DataStoreManager.getInstance(context)
                 runBlocking(Dispatchers.IO) {
                     FirebaseFirestore.getInstance().collection("Watches").document(id)
                         .update(
@@ -74,6 +75,10 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                                 "fatherName" to fatherName
                             )
                         ).await()
+                    dataStoreManager.setCurrentChildName(childName)
+                    dataStoreManager.setCurrentChildUid(childUID)
+                    dataStoreManager.setFatherName(fatherName)
+                    dataStoreManager.setFatherUid(fatherUID)
                 }
             } else {
                 val intentActivity = Intent(context, ChatActivity::class.java)

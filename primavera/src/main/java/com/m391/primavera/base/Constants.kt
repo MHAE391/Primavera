@@ -1,6 +1,7 @@
 package com.m391.primavera.base
 
 object Constants {
+    const val DANGER: String = "Danger"
     const val CONVERSATIONS = "Conversations"
     const val WATCHES = "Watches"
     const val INVALID_CODE = "Wrong OTP"

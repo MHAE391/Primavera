@@ -76,6 +76,7 @@
         <activity
             android:name=".chat.child.alarm.AlarmActivity"
             android:directBootAware="true"
+            android:excludeFromRecents="true"
             android:exported="true"
             android:launchMode="singleInstance"
             android:showForAllUsers="true"
@@ -155,6 +156,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="android.intent.action.USER_PRESENT" />
+
                 <category android:name="com.m391.primavera" />
             </intent-filter>
         </receiver>

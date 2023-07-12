@@ -9,11 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
+import com.m391.primavera.utils.models.LocationModel
 import com.m391.primavera.utils.models.ServerChildModel
 import com.m391.primavera.utils.models.ServerFatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
+import kotlin.math.*
 
 class FatherHomeViewModel(
     app: Application
@@ -29,20 +32,33 @@ class FatherHomeViewModel(
     private val conversations = serverDatabase.conversations
     private val auth = serverDatabase.authentication
 
+    private val watches = serverDatabase.watches
     private val _currentChildInformation = MutableLiveData<ServerChildModel>()
     val currentChildInformation: LiveData<ServerChildModel> = _currentChildInformation
 
     val currentChildUID = MutableLiveData<String>()
     private val currentFatherUID = MutableLiveData<String>()
 
+    val heartRate = MutableLiveData<String>()
+    val oxygenLevel = MutableLiveData<String>()
+    val steps = MutableLiveData<String>()
+
     init {
+        viewModelScope.launch {
+            setupCurrentChildAndFather()
+        }
+    }
+
+
+    suspend fun setupCurrentChildAndFather() {
         viewModelScope.launch {
             currentChildUID.postValue(dataStoreManager.getCurrentChildUid()!!)
             currentFatherUID.postValue(auth.getCurrentUser()!!.uid)
         }
     }
 
-
+    val watchLocationString = MutableLiveData<String>()
+    val watchLocation = MutableLiveData<LocationModel>()
     suspend fun openStreamChild(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
         currentChildUID.observe(lifecycleOwner) {
             if (it != null) {
@@ -50,6 +66,43 @@ class FatherHomeViewModel(
                     children.streamChildInformationByUID(it)
                         .observe(lifecycleOwner, Observer { serverChild ->
                             _currentChildInformation.postValue(serverChild)
+                            if (serverChild != null) {
+                                viewModelScope.launch {
+                                    watches.getWatchLocation(serverChild.watchUID)
+                                        .observe(lifecycleOwner) { location ->
+                                            if (location != null && fatherInformation.value != null) {
+                                                val distance = calculateDistance(
+                                                    fatherInformation.value!!.latitude.toDouble(),
+                                                    fatherInformation.value!!.longitude.toDouble(),
+                                                    location.latitude,
+                                                    location.longitude
+                                                )
+                                                if (distance.toDouble() < 1.0) {
+                                                    watchLocationString.postValue(
+                                                        "${distance.toDouble() * 1000} M From Home"
+                                                    )
+                                                } else {
+                                                    watchLocationString.postValue(
+                                                        "$distance KM From Home"
+                                                    )
+                                                }
+                                                watchLocation.value = location
+                                            }
+                                        }
+                                    watches.getHeartRate(currentChildInformation.value!!.watchUID)
+                                        .observe(lifecycleOwner) { rate ->
+                                            heartRate.postValue(rate)
+                                        }
+                                    watches.getOxygenLevel(currentChildInformation.value!!.watchUID)
+                                        .observe(lifecycleOwner) { level ->
+                                            oxygenLevel.postValue(level)
+                                        }
+                                    watches.getStepsCount(currentChildInformation.value!!.watchUID)
+                                        .observe(lifecycleOwner) { num ->
+                                            steps.postValue(num)
+                                        }
+                                }
+                            }
                         })
                 }
             }
@@ -102,4 +155,28 @@ class FatherHomeViewModel(
         currentChildUID.postValue(childUID)
     }
 
+    private fun calculateDistance(
+        lat1: Double,
+        lon1: Double,
+        lat2: Double,
+        lon2: Double
+    ): String {
+        val earthRadius = 6371.0 // Earth's radius in kilometers
+
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return formatDouble(earthRadius * c)
+    }
+
+    private fun formatDouble(number: Double): String {
+        val decimalFormat = DecimalFormat("0.00")
+        return decimalFormat.format(number)
+    }
 }

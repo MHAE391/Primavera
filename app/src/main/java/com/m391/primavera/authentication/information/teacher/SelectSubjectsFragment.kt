@@ -83,6 +83,9 @@ class SelectSubjectsFragment : BottomSheetDialogFragment() {
         checkBoxWatcher(binding.history)
         checkBoxWatcher(binding.physics)
         checkBoxWatcher(binding.philosophy)
+        binding.arrowBtn.setOnClickListener {
+            this@SelectSubjectsFragment.dismiss()
+        }
     }
 
     private fun checkBoxWatcher(checkBox: CheckBox) {

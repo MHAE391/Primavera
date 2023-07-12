@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.m391.primavera.user.father.home.child.HealthHistoryViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".user.father.home.child.StepsHistoryFragment">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/margin_20"
+            android:layout_marginTop="@dimen/padding_5"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_5">
+
+            <ImageButton
+                android:id="@+id/arrow_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="start|center"
+                android:background="@color/white"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                tools:ignore="ContentDescription,UnusedAttribute,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:text="@string/steps"
+                android:textColor="@color/black"
+                android:textSize="@dimen/font_size_25"
+                android:textStyle="italic|bold"
+                android:visibility="visible"
+                tools:ignore="HardcodedText,RelativeOverlap" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/noDataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
+            android:gravity="center"
+            android:src="@drawable/no_data_amico"
+            tools:ignore="ContentDescription" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/header"
+            android:layout_marginStart="@dimen/padding_5"
+            android:layout_marginTop="@dimen/padding_50"
+            android:layout_marginEnd="@dimen/padding_5"
+            android:liveData="@{viewModel.stepsHistory}"
+            android:padding="@dimen/padding_5"
+            android:scrollbars="none" />
+    </RelativeLayout>
+</layout>

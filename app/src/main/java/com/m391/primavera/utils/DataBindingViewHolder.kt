@@ -17,7 +17,7 @@ class DataBindingViewHolder<T>(private val binding: ViewDataBinding) :
             is ServerMessageModel -> binding.setVariable(BR.message, item)
             is ServerConversationModel -> binding.setVariable(BR.conversation, item)
             is ServerChildModel -> binding.setVariable(BR.serverChild, item)
-
+            is HealthHistoryModel -> binding.setVariable(BR.health, item)
         }
         binding.executePendingBindings()
     }
