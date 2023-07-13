@@ -117,7 +117,19 @@ class FatherTeacherChatFragment : BaseFragment() {
                         if (viewModel.sendTextMessage() == SUCCESS) {
                             Toast.makeText(requireContext(), "Message Sent", Toast.LENGTH_SHORT)
                                 .show()
-                            viewModel.sendFCM(TEXT_MESSAGE)
+                            when (activity?.intent!!.extras!!.getString(TYPE)) {
+                                TEACHER -> viewModel.sendFCM(
+                                    TEXT_MESSAGE,
+                                    FATHER,
+                                    activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                                )
+
+                                FATHER -> viewModel.sendFCM(
+                                    TEXT_MESSAGE,
+                                    TEACHER,
+                                    activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                                )
+                            }
                         } else Toast.makeText(
                             requireContext(), "Message Failed", Toast.LENGTH_SHORT
                         ).show()
@@ -232,7 +244,19 @@ class FatherTeacherChatFragment : BaseFragment() {
                 lifecycleScope.launch {
                     if (viewModel.sendImageMessage(uri.toString()) == SUCCESS) {
                         Toast.makeText(requireContext(), "Image Sent", Toast.LENGTH_SHORT).show()
-                        viewModel.sendFCM(IMAGE_MESSAGE)
+                        when (activity?.intent!!.extras!!.getString(TYPE)) {
+                            TEACHER -> viewModel.sendFCM(
+                                IMAGE_MESSAGE,
+                                FATHER,
+                                activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                            )
+
+                            FATHER -> viewModel.sendFCM(
+                                IMAGE_MESSAGE,
+                                TEACHER,
+                                activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                            )
+                        }
                     } else Toast.makeText(requireContext(), "Send Image Failed", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -310,7 +334,19 @@ class FatherTeacherChatFragment : BaseFragment() {
             lifecycleScope.launch {
                 if (viewModel.sendAudioMessage(output!!) == SUCCESS) {
                     Toast.makeText(requireContext(), "Audio Sent", Toast.LENGTH_SHORT).show()
-                    viewModel.sendFCM(VOICE_MESSAGE)
+                    when (activity?.intent!!.extras!!.getString(TYPE)) {
+                        TEACHER -> viewModel.sendFCM(
+                            VOICE_MESSAGE,
+                            FATHER,
+                            activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                        )
+
+                        FATHER -> viewModel.sendFCM(
+                            VOICE_MESSAGE,
+                            TEACHER,
+                            activity?.intent!!.extras!!.getString(FATHER_FIRST_NAME)!!
+                        )
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Audio Failed", Toast.LENGTH_SHORT).show()
                 }

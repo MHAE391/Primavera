@@ -99,7 +99,10 @@ class Notification {
         messageType: String,
         senderName: String,
         messageBody: String,
-        senderId: String
+        senderId: String,
+        senderType: String,
+        receiverFirstName: String,
+        receiverId: String
     ) {
         val url = "https://fcm.googleapis.com/fcm/send"
         val apiKey =
@@ -112,7 +115,10 @@ class Notification {
                 "type" to MESSAGE,
                 "senderName" to senderName,
                 "messageBody" to messageBody,
-                "senderId" to senderId
+                "senderId" to senderId,
+                "receiverType" to senderType,
+                "receiverFirstName" to receiverFirstName,
+                "receiverId" to receiverId
             )
         )
         runBlocking(Dispatchers.IO) {

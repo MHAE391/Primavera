@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -20,6 +21,7 @@ import com.m391.primavera.databinding.FragmentPhoneNumberBinding
 import com.m391.primavera.utils.BaseFragment
 import com.m391.primavera.utils.BaseViewModel
 import com.m391.primavera.utils.Constants
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class PhoneNumberFragment : BaseFragment() {
@@ -43,12 +45,13 @@ class PhoneNumberFragment : BaseFragment() {
         super.onStart()
 
         binding.getCode.setOnClickListener {
-           it.isEnabled = false
-            if (viewModel.sendOTPCode(requireActivity()) == Constants.DONE) {
+            it.isEnabled = false
+            if (viewModel.sendOTPCode(requireActivity(), viewLifecycleOwner) == Constants.DONE) {
                 it.isEnabled = true
             }
 
         }
-
     }
+
+
 }

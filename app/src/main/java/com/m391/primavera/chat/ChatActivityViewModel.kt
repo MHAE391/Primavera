@@ -32,6 +32,7 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
     val serverMessages: LiveData<List<ServerMessageModel>> = _serverMessages
     private val _receiverFirstName = MutableLiveData<String>()
     val receiverFirstName: LiveData<String> = _receiverFirstName
+    private val textMessage = MutableLiveData<String>()
     fun setChatSenderAndReceiver(uid: String, firstName: String) {
         viewModelScope.launch {
             _receiverUid.value = uid
@@ -58,6 +59,8 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
     val messageText = MutableLiveData<String?>()
 
     suspend fun sendTextMessage(): String = withContext(Dispatchers.IO) {
+        textMessage.postValue(messageText.value)
+        messageText.postValue(null)
         return@withContext messaging.sendMessage(
             messageType = TEXT_MESSAGE,
             messageContent = messageText.value!!,
@@ -93,39 +96,48 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
         )
     }
 
-    suspend fun sendFCM(messageType: String) = withContext(Dispatchers.IO) {
-        when (messageType) {
-            TEXT_MESSAGE -> {
-                Notification().sendMessageFCMToFatherOrTeacher(
-                    "user${_receiverUid.value}",
-                    messageType,
-                    auth.getCurrentUser()!!.displayName!!,
-                    messageText.value!!,
-                    auth.getCurrentUser()!!.uid
-                )
-                messageText.postValue(null)
+    suspend fun sendFCM(messageType: String, receiverType: String, receiverFirstName: String) =
+        withContext(Dispatchers.IO) {
+            when (messageType) {
+                TEXT_MESSAGE -> {
+                    Notification().sendMessageFCMToFatherOrTeacher(
+                        "user${_receiverUid.value}",
+                        messageType,
+                        auth.getCurrentUser()!!.displayName!!,
+                        textMessage.value!!,
+                        auth.getCurrentUser()!!.uid,
+                        receiverType,
+                        auth.getCurrentUser()!!.displayName!!.split(" ")[0],
+                        _receiverUid.value!!
+                    )
+                }
+
+                VOICE_MESSAGE -> {
+                    Notification().sendMessageFCMToFatherOrTeacher(
+                        "user${_receiverUid.value}",
+                        messageType,
+                        auth.getCurrentUser()!!.displayName!!,
+                        "Send You Voice Message",
+                        auth.getCurrentUser()!!.uid,
+                        receiverType,
+                        auth.getCurrentUser()!!.displayName!!.split(" ")[0],
+                        _receiverUid.value!!
+                    )
+                }
+
+                IMAGE_MESSAGE -> {
+                    Notification().sendMessageFCMToFatherOrTeacher(
+                        "user${_receiverUid.value}",
+                        messageType,
+                        auth.getCurrentUser()!!.displayName!!,
+                        "Send You Image",
+                        auth.getCurrentUser()!!.uid,
+                        receiverType,
+                        auth.getCurrentUser()!!.displayName!!.split(" ")[0],
+                        _receiverUid.value!!
+                    )
+                }
             }
 
-            VOICE_MESSAGE -> {
-                Notification().sendMessageFCMToFatherOrTeacher(
-                    "user${_receiverUid.value}",
-                    messageType,
-                    auth.getCurrentUser()!!.displayName!!,
-                    "Send You Voice Message",
-                    auth.getCurrentUser()!!.uid
-                )
-            }
-
-            IMAGE_MESSAGE -> {
-                Notification().sendMessageFCMToFatherOrTeacher(
-                    "user${_receiverUid.value}",
-                    messageType,
-                    auth.getCurrentUser()!!.displayName!!,
-                    "Send You Image",
-                    auth.getCurrentUser()!!.uid
-                )
-            }
         }
-
-    }
 }

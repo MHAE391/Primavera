@@ -139,7 +139,7 @@ class FatherInformationFragment : BaseFragment() {
                     Constants.PERMISSION_OK,
                     Constants.PERMISSION_CANCEL
                 )
-            }.request {_, _, _ ->
+            }.request { _, _, _ ->
 
             }
     }
@@ -180,18 +180,16 @@ class FatherInformationFragment : BaseFragment() {
         binding.setData.setOnClickListener {
             it.isEnabled = false
             lifecycleScope.launch {
-                viewModel.setData()
+                val response = viewModel.setData()
+                if (response == SUCCESS) {
+                    startActivity(Intent(activity, FatherActivity::class.java))
+                    activity?.finish()
+                } else {
+                    viewModel.showSnackBar.value = response
+                }
             }
             it.isEnabled = true
         }
-        viewModel.response.observe(viewLifecycleOwner, Observer {
-            if (it == SUCCESS) {
-                startActivity(Intent(activity, FatherActivity::class.java))
-                activity?.finish()
-            } else {
-                viewModel.showSnackBar.value = it.toString()
-            }
-        })
     }
 
     override fun onPause() {

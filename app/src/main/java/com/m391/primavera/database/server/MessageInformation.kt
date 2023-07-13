@@ -148,7 +148,7 @@ class MessageInformation(
                             )
                         )
                     }
-                    messages.postValue(messagesList)
+                    messages.postValue(messagesList.sortedBy { it.timeSent })
                 }
             return@withContext messages
         }

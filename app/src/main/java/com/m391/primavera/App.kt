@@ -3,7 +3,10 @@ package com.m391.primavera
 import android.app.Application
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.ktx.appCheck
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
 import com.m391.primavera.database.server.ServerDatabase
@@ -28,47 +31,51 @@ import org.koin.dsl.module
 import kotlin.properties.Delegates
 
 class App : Application() {
-/*
-    private val appModule = module {
-        single {
-            DataStoreManager.getInstance(androidContext())
-        }
+    /*
+        private val appModule = module {
+            single {
+                DataStoreManager.getInstance(androidContext())
+            }
 
-        single {
-            ServerDatabase(androidContext(), get())
-        }
-        viewModel {
-            EditChildProfileViewModel(get(), get(), get())
+            single {
+                ServerDatabase(androidContext(), get())
+            }
+            viewModel {
+                EditChildProfileViewModel(get(), get(), get())
 
-        }
-        viewModel {
-            AddNewChildViewModel(get(), get(), get())
-        }
-        viewModel {
-            FatherSwitchViewModel(get(), get(), get())
-        }
-        viewModel {
-            ChildProfileViewModel(get(), get(), get())
-        }
-        viewModel {
-            FatherHomeViewModel(get(), get(), get())
-        }
-        viewModel {
-            FatherProfileViewModel(get(), get(), get())
-        }
-        viewModel {
-            FatherTeacherSearchViewModel(get(), get(), get())
-        }
-        viewModel {
-            TeacherProfileViewModel(get(), get(), get())
-        }
-        viewModel {
-            FatherConversationsViewModel(get(), get(), get())
-        }
-    }*/
+            }
+            viewModel {
+                AddNewChildViewModel(get(), get(), get())
+            }
+            viewModel {
+                FatherSwitchViewModel(get(), get(), get())
+            }
+            viewModel {
+                ChildProfileViewModel(get(), get(), get())
+            }
+            viewModel {
+                FatherHomeViewModel(get(), get(), get())
+            }
+            viewModel {
+                FatherProfileViewModel(get(), get(), get())
+            }
+            viewModel {
+                FatherTeacherSearchViewModel(get(), get(), get())
+            }
+            viewModel {
+                TeacherProfileViewModel(get(), get(), get())
+            }
+            viewModel {
+                FatherConversationsViewModel(get(), get(), get())
+            }
+        }*/
 
     override fun onCreate() {
         super.onCreate()
+        Firebase.initialize(context = this)
+        Firebase.appCheck.installAppCheckProviderFactory(
+            PlayIntegrityAppCheckProviderFactory.getInstance(),
+        )
 
     }
 

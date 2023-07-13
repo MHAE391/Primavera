@@ -7,6 +7,7 @@ import android.app.ActivityOptions
 import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -29,7 +30,16 @@ import com.m391.primavera.R
 import com.m391.primavera.chat.child.alarm.AlarmActivity
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.utils.Constants
+import com.m391.primavera.utils.Constants.CHILD
+import com.m391.primavera.utils.Constants.CHILD_NAME
+import com.m391.primavera.utils.Constants.CHILD_UID
+import com.m391.primavera.utils.Constants.FATHER
+import com.m391.primavera.utils.Constants.FATHER_FIRST_NAME
+import com.m391.primavera.utils.Constants.FATHER_UID
 import com.m391.primavera.utils.Constants.MESSAGE
+import com.m391.primavera.utils.Constants.TEACHER
+import com.m391.primavera.utils.Constants.TEACHER_UID
+import com.m391.primavera.utils.Constants.TYPE
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -63,12 +73,46 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                         channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
                         notificationManager.createNotificationChannel(channel)
                     }
+                    val pendingIntent = Intent(context, ChatActivity::class.java)
+                    pendingIntent.apply {
+                        when ("${intent.extras!!.getString("receiverType")}") {
+                            TEACHER -> {
+                                putExtra(TYPE, TEACHER)
+                                putExtra(TEACHER_UID, "${intent.extras!!.getString("senderId")}")
+                                putExtra(
+                                    FATHER_FIRST_NAME,
+                                    "${intent.extras!!.getString("receiverFirstName")}"
+                                )
+                            }
+
+                            FATHER -> {
+                                putExtra(TYPE, FATHER)
+                                putExtra(FATHER_UID, "${intent.extras!!.getString("senderId")}")
+                                putExtra(
+                                    FATHER_FIRST_NAME,
+                                    "${intent.extras!!.getString("receiverFirstName")}"
+                                )
+                            }
+
+                            CHILD -> {
+                                putExtra(TYPE, CHILD)
+                                putExtra(CHILD_UID, "${intent.extras!!.getString("senderId")}")
+                                putExtra(
+                                    CHILD_NAME,
+                                    "${intent.extras!!.getString("receiverFirstName")}"
+                                )
+                            }
+                        }
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
                     val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                         .setSmallIcon(R.mipmap.logo)
                         .setContentTitle("${intent.extras!!.getString("senderName")}")
                         .setContentText("${intent.extras!!.getString("messageBody")}")
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                        .setContentIntent(pending)
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
@@ -95,6 +139,49 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                             channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
                             notificationManager.createNotificationChannel(channel)
                         }
+                        val pendingIntent = Intent(context, ChatActivity::class.java)
+                        pendingIntent.apply {
+                            when ("${intent.extras!!.getString("receiverType")}") {
+                                TEACHER -> {
+                                    putExtra(TYPE, TEACHER)
+                                    putExtra(
+                                        TEACHER_UID,
+                                        "${intent.extras!!.getString("senderId")}"
+                                    )
+                                    putExtra(
+                                        FATHER_FIRST_NAME,
+                                        "${intent.extras!!.getString("receiverFirstName")}"
+                                    )
+                                }
+
+                                FATHER -> {
+                                    putExtra(TYPE, FATHER)
+                                    putExtra(
+                                        FATHER_UID,
+                                        "${intent.extras!!.getString("senderId")}"
+                                    )
+                                    putExtra(
+                                        FATHER_FIRST_NAME,
+                                        "${intent.extras!!.getString("receiverFirstName")}"
+                                    )
+                                }
+
+                                CHILD -> {
+                                    putExtra(TYPE, CHILD)
+                                    putExtra(
+                                        CHILD_UID,
+                                        "${intent.extras!!.getString("senderId")}"
+                                    )
+                                    putExtra(
+                                        CHILD_NAME,
+                                        "${intent.extras!!.getString("receiverFirstName")}"
+                                    )
+                                }
+                            }
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+
                         val notification =
                             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                                 .setSmallIcon(R.mipmap.logo)
@@ -102,6 +189,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                                 .setContentText("${intent.extras!!.getString("messageBody")}")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setVibrate(longArrayOf(0))
+                                .setContentIntent(pending)
                                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -126,6 +214,40 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
                     notificationManager.createNotificationChannel(channel)
                 }
+                val pendingIntent = Intent(context, ChatActivity::class.java)
+                pendingIntent.apply {
+                    when ("${intent.extras!!.getString("receiverType")}") {
+                        TEACHER -> {
+                            putExtra(TYPE, TEACHER)
+                            putExtra(TEACHER_UID, "${intent.extras!!.getString("senderId")}")
+                            putExtra(
+                                FATHER_FIRST_NAME,
+                                "${intent.extras!!.getString("receiverFirstName")}"
+                            )
+                        }
+
+                        FATHER -> {
+                            putExtra(TYPE, FATHER)
+                            putExtra(FATHER_UID, "${intent.extras!!.getString("senderId")}")
+                            putExtra(
+                                FATHER_FIRST_NAME,
+                                "${intent.extras!!.getString("receiverFirstName")}"
+                            )
+                        }
+
+                        CHILD -> {
+                            putExtra(TYPE, CHILD)
+                            putExtra(CHILD_UID, "${intent.extras!!.getString("senderId")}")
+                            putExtra(
+                                CHILD_NAME,
+                                "${intent.extras!!.getString("receiverFirstName")}"
+                            )
+                        }
+                    }
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+
                 val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.mipmap.logo)
                     .setContentTitle("${intent.extras!!.getString("senderName")}")
@@ -133,6 +255,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setContentIntent(pending)
                     .setVibrate(longArrayOf(1000))
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
@@ -140,6 +263,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     getNotificationId("${intent.extras!!.getString("senderId")}"), notification
                 )
             }
+
         } else {
             val running = if (isAppRunning(context)) "Yes" else "No"
             val alarmIntent = Intent(context, AlarmActivity::class.java)

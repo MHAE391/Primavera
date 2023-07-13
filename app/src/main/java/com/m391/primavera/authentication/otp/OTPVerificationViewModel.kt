@@ -88,7 +88,7 @@ class OTPVerificationViewModel(val app: Application) : BaseViewModel(app) {
                         dataStoreManager.setUserUid(auth.getCurrentUser()!!.uid)
                         dataStoreManager.setUserType(TEACHER)
                     } else _alreadySigned.postValue("Not")
-                }
+                } else resetData()
                 _response.postValue(login)
                 showLoading.value = false
             }

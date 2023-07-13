@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.ServerDatabase
 import com.m391.primavera.utils.BaseViewModel
+import com.m391.primavera.utils.Constants.SUCCESS
 import com.m391.primavera.utils.capitalize
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,8 +32,6 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
     private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val teachers =
         ServerDatabase(context = app.applicationContext, dataStoreManager).teacherInformation
-    private val _response = MutableLiveData<String?>()
-    val response: LiveData<String?> = _response
 
     init {
         selectAcademicYears.value = "Select Years"
@@ -66,10 +65,11 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
         _selectedAcademicYears.value = years.toList()
     }
 
-    suspend fun setData() = withContext(Dispatchers.Main) {
+    suspend fun setData(): String = withContext(Dispatchers.Main) {
         showLoading.value = true
-        if (validateEnteredData() == "Complete Data") {
-            _response.value = teachers.uploadTeacher(
+        var response = SUCCESS
+        response = if (validateEnteredData() == "Complete Data") {
+            teachers.uploadTeacher(
                 teacherFirstName = capitalize(teacherFirstName.value!!.trim()),
                 teacherLastName = capitalize(teacherLastName.value!!.trim()),
                 teacherAcademicYears = selectedAcademicYears.value!!,
@@ -79,8 +79,9 @@ class TeacherInformationViewModel(private val app: Application) : BaseViewModel(
                 longitude = selectedLongitude.value!!,
                 subjects = selectedAcademicSubjects.value!!
             )
-        } else showToast.value = validateEnteredData()
+        } else validateEnteredData()
         showLoading.value = false
+        return@withContext response
     }
 
     private suspend fun validateEnteredData(): String = withContext(Dispatchers.IO) {

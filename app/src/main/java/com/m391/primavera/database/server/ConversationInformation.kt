@@ -28,7 +28,7 @@ class ConversationInformation(
     private val dataStoreManager: DataStoreManager
 ) {
     private val firestore = FirebaseFirestore.getInstance()
-    private val  conversations: CollectionReference = firestore.collection(CONVERSATIONS)
+    private val conversations: CollectionReference = firestore.collection(CONVERSATIONS)
     private var registration: ListenerRegistration? = null
     private val auth = Authentication()
     private var currentUser: FirebaseUser? = auth.getCurrentUser()
@@ -94,7 +94,7 @@ class ConversationInformation(
                         val receiver = conversation["receiverUid"].toString()
                         firestore.collection(TEACHERS).document(receiver).get()
                             .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
+                                if (task.isSuccessful && task.result.exists()) {
                                     conversationsArray.add(
                                         ServerConversationModel(
                                             receiverUID = receiver,
@@ -151,7 +151,8 @@ class ConversationInformation(
         if (currentUser != null) {
             senderUID = currentUser!!.uid
             val response =
-                conversations.document(senderUID).collection(FATHER_CONVERSATIONS).document(receiverUID)
+                conversations.document(senderUID).collection(FATHER_CONVERSATIONS)
+                    .document(receiverUID)
                     .get().await()
             return@withContext response.exists()
         }

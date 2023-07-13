@@ -34,14 +34,6 @@ class Primavera : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        lifecycleScope.launch {
-            Toast.makeText(
-                this@Primavera,
-                "${dataStoreManager.getCurrentOxygenLevel()}",
-                Toast.LENGTH_SHORT
-            )
-                .show()
-        }
         binding.chat.setOnClickListener {
             if (dangerViewModel.fatherUid.value != null) {
                 startActivity(Intent(this, ChatActivity::class.java))

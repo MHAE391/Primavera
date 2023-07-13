@@ -2,6 +2,7 @@ package com.m391.primavera.authentication.phone
 
 import android.app.Activity
 import android.app.Application
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.m391.primavera.database.datastore.DataStoreManager
@@ -17,7 +18,7 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
     val phoneNumber = MutableLiveData<String>()
     private val dataStoreManager = DataStoreManager.getInstance(app.applicationContext)
     private val serverDatabase = ServerDatabase(app.applicationContext, dataStoreManager)
-    fun sendOTPCode(activity: Activity?): String {
+    fun sendOTPCode(activity: Activity?, lifecycleOwner: LifecycleOwner): String {
         if (phoneNumber.value.isNullOrBlank()) {
             showSnackBar.value = "Please Enter Yor Phone"
         } else if (!isValidPhone(phoneNumber.value!!.trim())) {
@@ -28,7 +29,10 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
                 serverDatabase.authentication.sendVerificationCodeAsync(
                     "+2${phoneNumber.value}", activity!!
                 )
-                serverDatabase.authentication.response.observeForever {
+                if (serverDatabase.authentication.response.hasActiveObservers()) serverDatabase.authentication.response.removeObservers(
+                    lifecycleOwner
+                )
+                serverDatabase.authentication.response.observe(lifecycleOwner) {
                     if (it == Constants.SUCCESS && serverDatabase.authentication.storedVerificationId != null && serverDatabase.authentication.resendToken != null) {
                         showLoading.value = false
                         showToast.value = Constants.CODE_SENT
@@ -41,7 +45,6 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
                         )
                     } else if (it != null) {
                         showLoading.value = false
-                        println(it)
                         showSnackBar.value = it
                     }
                 }
@@ -49,6 +52,14 @@ class PhoneNumberViewModel(val app: Application) : BaseViewModel(app) {
             }
         }
         return Constants.DONE
+    }
+
+    suspend fun closeObserver(lifecycleOwner: LifecycleOwner) {
+        viewModelScope.launch {
+            if (serverDatabase.authentication.response.hasActiveObservers()) serverDatabase.authentication.response.removeObservers(
+                lifecycleOwner
+            )
+        }
     }
 
     private fun isValidPhone(phone: String): Boolean {

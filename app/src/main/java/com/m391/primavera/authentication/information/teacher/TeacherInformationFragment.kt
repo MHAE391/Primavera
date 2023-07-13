@@ -106,18 +106,19 @@ class TeacherInformationFragment : BaseFragment() {
         binding.teacherImage.setOnClickListener {
             chooseTeacherPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        viewModel.response.observe(viewLifecycleOwner, Observer {
-            if (it == Constants.SUCCESS) {
-                startActivity(Intent(activity, TeacherActivity::class.java))
-                activity?.finish()
-            } else {
-                viewModel.showSnackBar.value = it.toString()
-            }
-        })
+
         binding.setData.setOnClickListener {
+            it.isEnabled = false
             lifecycleScope.launch {
-                viewModel.setData()
+                val response = viewModel.setData()
+                if (response == Constants.SUCCESS) {
+                    startActivity(Intent(activity, TeacherActivity::class.java))
+                    activity?.finish()
+                } else {
+                    viewModel.showSnackBar.value = response
+                }
             }
+            it.isEnabled = true
         }
     }
 
@@ -156,6 +157,7 @@ class TeacherInformationFragment : BaseFragment() {
     override fun onPause() {
         super.onPause()
         if (gpsStatus.hasActiveObservers()) gpsStatus.removeObservers(viewLifecycleOwner)
+
     }
 
     @SuppressLint("MissingPermission")

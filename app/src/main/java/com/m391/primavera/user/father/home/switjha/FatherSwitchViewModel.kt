@@ -29,6 +29,7 @@ class FatherSwitchViewModel(
     private val teachers = serverDatabase.teacherInformation
     val currentChild = MutableLiveData<String>()
     private val auth = serverDatabase.authentication
+    private val messageInformation = serverDatabase.messageInformation
 
     fun setupUIDS(uids: List<String>, current: String) {
         fatherChildrenUIDS.postValue(uids)
@@ -67,6 +68,7 @@ class FatherSwitchViewModel(
         dataStoreManager.setUserType(null)
         dataStoreManager.setUserUid(null)
         dataStoreManager.setCurrentChildUid(null)
+        messageInformation.unSubscribeToTopic()
         auth.logOut()
     }
 }

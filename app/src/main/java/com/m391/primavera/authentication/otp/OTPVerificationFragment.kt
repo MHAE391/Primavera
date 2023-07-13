@@ -89,6 +89,9 @@ class OTPVerificationFragment : BaseFragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {
                 viewModel.signInWithPhone()
+                if (viewModel.response.hasActiveObservers()) viewModel.response.removeObservers(
+                    viewLifecycleOwner
+                )
                 viewModel.response.observe(viewLifecycleOwner, Observer {
                     if (it == Constants.SUCCESSFUL_LOGIN) {
                         when (viewModel.alreadySigned.value) {
@@ -99,7 +102,6 @@ class OTPVerificationFragment : BaseFragment() {
                         }
                     } else if (it != null) {
                         viewModel.showSnackBar.value = it
-                        viewModel.resetData()
                         binding.firstCode.requestFocus()
                     }
                 })
@@ -108,7 +110,6 @@ class OTPVerificationFragment : BaseFragment() {
         view.addTextChangedListener(textWatcher)
     }
 
-    private val userStatus = MutableLiveData<String?>()
 
     private fun showChoiceAlert() {
         val builder = AlertDialog.Builder(requireContext())
@@ -129,7 +130,7 @@ class OTPVerificationFragment : BaseFragment() {
 
     override fun onPause() {
         super.onPause()
-        userStatus.removeObservers(viewLifecycleOwner)
+        viewModel.response.removeObservers(viewLifecycleOwner)
     }
 
     override fun onStart() {
@@ -148,6 +149,22 @@ class OTPVerificationFragment : BaseFragment() {
         }
         binding.verify.setOnClickListener {
             viewModel.signInWithPhone()
+            if (viewModel.response.hasActiveObservers()) viewModel.response.removeObservers(
+                viewLifecycleOwner
+            )
+            viewModel.response.observe(viewLifecycleOwner, Observer {
+                if (it == Constants.SUCCESSFUL_LOGIN) {
+                    when (viewModel.alreadySigned.value) {
+                        FATHER -> showFatherActivity()
+                        TEACHER -> showTeacherActivity()
+                        BOTH -> showChoiceAlert()
+                        else -> showInformationActivity()
+                    }
+                } else if (it != null) {
+                    viewModel.showSnackBar.value = it
+                    binding.firstCode.requestFocus()
+                }
+            })
         }
 
     }

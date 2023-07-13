@@ -18,6 +18,8 @@ import kotlin.random.Random
 
 class Authentication {
     private val auth = FirebaseAuth.getInstance()
+    
+
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser
     }

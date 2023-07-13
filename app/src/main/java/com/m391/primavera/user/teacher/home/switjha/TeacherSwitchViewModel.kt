@@ -13,7 +13,8 @@ class TeacherSwitchViewModel(app: Application) : BaseViewModel(app) {
     private val dataStore = DataStoreManager.getInstance(app.applicationContext)
     private val fathers = ServerDatabase(app.applicationContext, dataStore).fatherInformation
     private val auth = ServerDatabase(app.applicationContext, dataStore).authentication
-
+    private val messageInformation =
+        ServerDatabase(app.applicationContext, dataStore).messageInformation
 
     suspend fun switchTeacherFather(): Boolean = withContext(Dispatchers.IO) {
         return@withContext fathers.checkAlreadyFatherOrNot()
@@ -28,6 +29,7 @@ class TeacherSwitchViewModel(app: Application) : BaseViewModel(app) {
     suspend fun logout() = withContext(Dispatchers.IO) {
         dataStore.setUserType(null)
         dataStore.setUserUid(null)
+        messageInformation.unSubscribeToTopic()
         auth.logOut()
     }
 }

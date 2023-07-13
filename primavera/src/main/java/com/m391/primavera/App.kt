@@ -15,6 +15,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 class App : Application() {
@@ -49,10 +50,21 @@ class App : Application() {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val currentTime = Calendar.getInstance().timeInMillis
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+        }
+        val timeDiff = calendar.timeInMillis - currentTime
+        val initialDelay = if (timeDiff > 0) timeDiff else (24 * 60 * 60 * 1000) + timeDiff
+
+
         val repeatingRequest = PeriodicWorkRequestBuilder<WorkManger>(
             1, TimeUnit.DAYS
         )
             .setConstraints(constraints)
+            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .build()
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(

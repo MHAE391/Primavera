@@ -44,6 +44,8 @@ class TeacherSwitchFragment : BaseBottomSheetFragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_teacher_switch, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
         return binding.root
     }
 

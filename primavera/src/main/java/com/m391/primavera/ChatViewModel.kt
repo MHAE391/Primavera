@@ -1,7 +1,9 @@
 package com.m391.primavera
 
+import android.app.Application
 import android.net.Uri
 import android.widget.TextView
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,6 +16,8 @@ import com.m391.primavera.DeviceIdGenerator.generateDeviceId
 import com.m391.primavera.base.Constants
 import com.m391.primavera.base.Constants.AUDIOS
 import com.m391.primavera.base.Constants.CHATS
+import com.m391.primavera.base.Constants.CHILD
+import com.m391.primavera.base.Constants.FATHER
 import com.m391.primavera.base.Constants.MEDIA_PATH
 import com.m391.primavera.base.Constants.MESSAGE
 import com.m391.primavera.base.Constants.MESSAGES
@@ -43,7 +47,7 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _messages = MutableLiveData<List<ServerMessageModel>>()
     val message: LiveData<List<ServerMessageModel>> = _messages
@@ -184,6 +188,7 @@ class ChatViewModel : ViewModel() {
         return@withContext response
     }
 
+    private val dataStoreManager = DataStoreManager(app.applicationContext)
     private suspend fun uploadAudio(uri: String): ServerAudioModel = withContext(Dispatchers.IO) {
         val path = "${System.currentTimeMillis()}${UUID.randomUUID()}"
         val process = storageRef.getReference(AUDIOS).child(path).putFile(Uri.fromFile(File(uri)))
@@ -205,7 +210,10 @@ class ChatViewModel : ViewModel() {
                 "type" to MESSAGE,
                 "senderName" to "Child Message",
                 "messageBody" to "$fatherName, Your Child $senderName Sent You Message",
-                "senderId" to senderUID
+                "senderId" to senderUID,
+                "receiverType" to CHILD,
+                "receiverFirstName" to senderName,
+                "receiverId" to senderUID
             )
         )
         runBlocking(Dispatchers.IO) {
