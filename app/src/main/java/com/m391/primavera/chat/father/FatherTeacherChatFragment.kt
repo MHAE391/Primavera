@@ -25,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.m391.primavera.R
 import com.m391.primavera.chat.ChatActivityViewModel
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.databinding.FragmentFatherTeacherChatBinding
 import com.m391.primavera.user.father.teacher.TeacherProfileFragment
 import com.m391.primavera.user.father.teacher.TeacherProfileFragmentArgs
@@ -267,7 +268,6 @@ class FatherTeacherChatFragment : BaseFragment() {
         super.onPause()
         lifecycleScope.launch {
             viewModel.closeMessagesStream(viewLifecycleOwner)
-            viewModel.removeChatFromDatastore()
         }
         MediaPlayerManager.stopAudio()
         if (mediaRecorder != null) onCancelClick()

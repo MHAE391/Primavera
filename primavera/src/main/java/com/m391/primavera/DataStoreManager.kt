@@ -18,6 +18,7 @@ class DataStoreManager(context: Context) {
         val currentChildFatherUid = stringPreferencesKey("CURRENT_CHILD_FATHER_UID")
         val currentChildFatherName = stringPreferencesKey("CURRENT_CHILD_FATHER_NAME")
         val currentOxygenLevel = stringPreferencesKey("CURRENT_OXYGEN_LEVEL")
+        val storedSteps = floatPreferencesKey("STORED_STEPS")
 
         @Volatile
         private var instance: DataStoreManager? = null
@@ -29,6 +30,15 @@ class DataStoreManager(context: Context) {
         }
     }
 
+    suspend fun setAllSteps(type: Float) {
+        dataStore.edit { preferences ->
+            preferences[storedSteps] = type ?: 0f
+        }
+    }
+
+    val stepsTodayFlow: Flow<Float> = context.dataStore.data.map { preferences ->
+        preferences[storedSteps] ?: 0F
+    }
 
     suspend fun setFatherUid(uid: String?) {
         dataStore.edit { preferences ->

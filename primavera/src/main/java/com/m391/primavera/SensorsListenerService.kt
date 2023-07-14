@@ -8,11 +8,10 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.asLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.m391.primavera.DeviceIdGenerator.generateDeviceId
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
@@ -24,8 +23,10 @@ class SensorsListenerService : Service(), SensorEventListener {
     private val firestoreHeartRateHistory =
         FirebaseFirestore.getInstance().collection("HealthHistory").document(watchUId)
             .collection("HeartRate")
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        dataStoreManager = DataStoreManager.getInstance(applicationContext)
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
         for (sensor in sensors) {
@@ -67,7 +68,21 @@ class SensorsListenerService : Service(), SensorEventListener {
                 }
 
                 Sensor.TYPE_STEP_COUNTER -> {
-                    firestore.update(hashMapOf("Steps" to event.values[0]) as Map<String, Any>)
+                    dataStoreManager.stepsTodayFlow.asLiveData().observeForever {
+                        if (it != null && it != 0f) {
+                            firestore.update(
+                                hashMapOf(
+                                    "Steps" to event.values[0] - (it)
+                                ) as Map<String, Any>
+                            )
+                        } else if (it == 0f) {
+                            firestore.update(
+                                hashMapOf(
+                                    "Steps" to event.values[0]
+                                ) as Map<String, Any>
+                            )
+                        }
+                    }
                 }
 
                 Sensor.TYPE_STEP_DETECTOR -> {

@@ -79,7 +79,6 @@ class FatherChildChatFragment : BaseFragment() {
         super.onPause()
         lifecycleScope.launch {
             viewModel.closeMessagesStream(viewLifecycleOwner)
-            viewModel.removeChatFromDatastore()
         }
         stopAudio()
         if (mediaRecorder != null) onCancelClick()

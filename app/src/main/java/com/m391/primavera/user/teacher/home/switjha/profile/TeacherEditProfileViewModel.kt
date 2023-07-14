@@ -39,6 +39,7 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
     private val _selectedLatitude = MutableLiveData<Number>()
     val selectedLatitude: LiveData<Number> = _selectedLatitude
 
+    private val messageInformation = serverDatabase.messageInformation
     private val _teacherRate = MutableLiveData<Number>()
     val teacherRate: LiveData<Number> = _teacherRate
 
@@ -153,7 +154,9 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
             val fatherCheck = fathers.checkAlreadyFatherOrNot()
             if (fatherCheck) {
                 dataStoreManager.setUserType(FATHER)
-                dataStoreManager.setCurrentChildUid(fathers.getRandomChildUID())
+                if (dataStoreManager.getCurrentChildUid() == null) dataStoreManager.setCurrentChildUid(
+                    fathers.getRandomChildUID()
+                )
                 return@withContext FATHER
             } else {
                 dataStoreManager.setUserType(null)
@@ -173,6 +176,7 @@ class TeacherEditProfileViewModel(app: Application) : BaseViewModel(app) {
     suspend fun logOut(): String = withContext(Dispatchers.IO) {
         withContext(Dispatchers.IO) {
             teachers.closeUsersStream()
+            messageInformation.unSubscribeToTopic()
         }
         val response = teachers.deleteTeacherAccount()
         auth.logOut()

@@ -51,7 +51,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
         const val NOTIFICATION_CHANNEL_ID = BuildConfig.APPLICATION_ID + ".channel"
     }
 
-    @SuppressLint("MissingPermission", "NewApi")
+    @SuppressLint("MissingPermission", "NewApi", "UnsafeProtectedBroadcastReceiver")
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.extras!!.getString("type") == MESSAGE) {
             val receiverUid = "${intent.extras!!.getString("senderId")}"
@@ -105,7 +105,12 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                         }
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     }
-                    val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+                    val pending = PendingIntent.getActivity(
+                        context,
+                        0,
+                        pendingIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+                    )
                     val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                         .setSmallIcon(R.mipmap.logo)
                         .setContentTitle("${intent.extras!!.getString("senderName")}")
@@ -113,6 +118,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                         .setContentIntent(pending)
+                        .setAutoCancel(true)
                         .setDefaults(NotificationCompat.DEFAULT_ALL)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()
@@ -180,7 +186,12 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                             }
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }
-                        val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+                        val pending = PendingIntent.getActivity(
+                            context,
+                            0,
+                            pendingIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+                        )
 
                         val notification =
                             NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
@@ -190,6 +201,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setVibrate(longArrayOf(0))
                                 .setContentIntent(pending)
+                                .setAutoCancel(true)
                                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -246,7 +258,12 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     }
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-                val pending = PendingIntent.getActivity(context, 0, pendingIntent,  PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0)
+                val pending = PendingIntent.getActivity(
+                    context,
+                    0,
+                    pendingIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0
+                )
 
                 val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.mipmap.logo)
@@ -256,6 +273,7 @@ class MyFirebaseMessagingReceiver : BroadcastReceiver() {
                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setContentIntent(pending)
+                    .setAutoCancel(true)
                     .setVibrate(longArrayOf(1000))
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).build()

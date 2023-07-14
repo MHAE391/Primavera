@@ -38,13 +38,6 @@ class ChatActivityViewModel(app: Application) : BaseViewModel(app) {
             _receiverUid.value = uid
             _receiverFirstName.value = firstName
             _senderUid.value = auth.getCurrentUser()!!.uid
-            dataStore.setCurrentChatReceiver(uid)
-        }
-    }
-
-    suspend fun removeChatFromDatastore() {
-        withContext(Dispatchers.IO) {
-            dataStore.setCurrentChatReceiver(null)
         }
     }
 
