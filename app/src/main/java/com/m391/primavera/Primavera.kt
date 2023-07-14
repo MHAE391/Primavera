@@ -23,6 +23,7 @@ import com.m391.primavera.databinding.PrimaveraBinding
 import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.user.teacher.TeacherActivity
 import com.m391.primavera.utils.Constants.FATHER
+import com.m391.primavera.utils.Constants.NO_LOGGED_IN_USER
 import com.m391.primavera.utils.Constants.TEACHER
 import com.m391.primavera.utils.Constants.TYPE
 import kotlinx.coroutines.launch
@@ -31,118 +32,60 @@ import kotlin.properties.Delegates
 
 class Primavera : AppCompatActivity() {
     private lateinit var binding: PrimaveraBinding
-    private lateinit var auth: Authentication
-    private var fathers by Delegates.notNull<Boolean>()
-    private var teachers by Delegates.notNull<Boolean>()
     private var dataStoreManager: DataStoreManager? = null
-
+    var type: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // appCheck()
         binding = PrimaveraBinding.inflate(layoutInflater)
-        dataStoreManager = DataStoreManager.getInstance(applicationContext)
-        auth = ServerDatabase(applicationContext, dataStoreManager!!).authentication
-        lifecycleScope.launch {
-            val userType = dataStoreManager?.getUserType()
-            if (userType != null) {
-                when (userType) {
-                    TEACHER -> {
-                        startActivity(
-                            Intent(
-                                this@Primavera,
-                                TeacherActivity::class.java
-                            )
-                        )
-                        finish()
-                    }
-
-                    FATHER -> {
-                        startActivity(Intent(this@Primavera, FatherActivity::class.java))
-                        finish()
-                    }
-                }
-            } else {
-                if (auth.getCurrentUser() == null) {
-                    startActivity(
-                        Intent(
-                            this@Primavera,
-                            AuthenticationActivity::class.java
-                        )
-                    )
-                    finish()
-                } else {
-                    fathers = ServerDatabase(
-                        applicationContext,
-                        dataStoreManager!!
-                    ).fatherInformation.checkAlreadyFatherOrNot()
-                    teachers = ServerDatabase(
-                        applicationContext,
-                        dataStoreManager!!
-                    ).teacherInformation.checkAlreadyTeacherOrNot()
-                    when {
-                        !fathers && !teachers -> {
-                            startActivity(Intent(this@Primavera, InformationActivity::class.java))
-                            finish()
-                        }
-
-                        fathers && teachers -> {
-                            showChoiceAlert()
-                        }
-
-                        fathers -> {
-                            startActivity(Intent(this@Primavera, FatherActivity::class.java))
-                            dataStoreManager!!.setUserType(FATHER)
-                            finish()
-                        }
-
-                        teachers -> {
-                            startActivity(Intent(this@Primavera, TeacherActivity::class.java))
-                            dataStoreManager!!.setUserType(TEACHER)
-                            finish()
-                        }
-
-                        else -> {
-                            startActivity(
-                                Intent(
-                                    this@Primavera,
-                                    AuthenticationActivity::class.java
-                                )
-                            )
-                            finish()
-                        }
-                    }
-                }
-            }
-        }
-
-        /*
-                startActivity(Intent(this, TeacherActivity::class.java))
-                finish()*/
         setContentView(binding.root)
+        dataStoreManager = DataStoreManager.getInstance(applicationContext)/*
+        when (intent.extras?.getString(TYPE)) {
+            TEACHER -> {
+                type = TEACHER
+                startActivity(Intent(this@Primavera, TeacherActivity::class.java))
+                finish()
+            }
+
+            FATHER -> {
+                type = FATHER
+                startActivity(Intent(this@Primavera, FatherActivity::class.java))
+                finish()
+            }
+
+            NO_LOGGED_IN_USER -> {
+                type = NO_LOGGED_IN_USER
+                startActivity(Intent(this@Primavera, AuthenticationActivity::class.java))
+                finish()
+            }
+        }*/
     }
 
     override fun onPause() {
         super.onPause()
-        dataStoreManager = null
+
     }
 
-    private fun showChoiceAlert() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Multiple Account")
-            .setMessage("Choose Father to open Father Mode\nTeacher to open Teacher Mode")
-            .setPositiveButton("Father") { _, _ ->
-                lifecycleScope.launch {
-                    dataStoreManager!!.setUserType(FATHER)
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            when (dataStoreManager!!.getUserType()) {
+                FATHER -> {
                     startActivity(Intent(this@Primavera, FatherActivity::class.java))
                     finish()
                 }
-            }.setNegativeButton("Teacher") { _, _ ->
-                lifecycleScope.launch {
-                    dataStoreManager!!.setUserType(TEACHER)
+
+                TEACHER -> {
                     startActivity(Intent(this@Primavera, TeacherActivity::class.java))
                     finish()
                 }
-            }.show()
-    }
 
+                else -> {
+                    startActivity(Intent(this@Primavera, AuthenticationActivity::class.java))
+                    finish()
+                }
+            }
+        }
+
+    }
 }
+

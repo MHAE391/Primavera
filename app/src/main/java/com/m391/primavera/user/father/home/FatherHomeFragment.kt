@@ -142,6 +142,7 @@ class FatherHomeFragment : BaseFragment() {
         lifecycleScope.launch {
             viewModel.closeStreamChild(viewLifecycleOwner)
             viewModel.closeStreamFather(viewLifecycleOwner)
+            viewModel.closeWatchSteam(viewLifecycleOwner)
         }
     }
 

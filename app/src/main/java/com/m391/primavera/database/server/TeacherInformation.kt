@@ -76,7 +76,7 @@ class TeacherInformation(
         return@withContext teachersList
     }
 
-    suspend fun updateCurrentUserData(firstName: String, lastName: String) =
+    private suspend fun updateCurrentUserData(firstName: String, lastName: String): Unit =
         withContext(Dispatchers.IO) {
             val user = auth.getCurrentUser()
             val profileUpdates = UserProfileChangeRequest.Builder()
@@ -200,7 +200,7 @@ class TeacherInformation(
             return@withContext teacher
         }
 
-    suspend fun rateTeacher(teacherUid: String, rate: Double) = withContext(Dispatchers.IO) {
+    suspend fun rateTeacher(teacherUid: String, rate: Double): Unit = withContext(Dispatchers.IO) {
         val teacher = teachers.document(teacherUid).get().await()
         val oldRate = teacher.data!![RATE] as Number
         val newRate = (oldRate.toDouble() + rate) / 2

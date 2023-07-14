@@ -64,18 +64,18 @@ class FatherHomeViewModel(
             if (it != null) {
                 viewModelScope.launch {
                     children.streamChildInformationByUID(it)
-                        .observe(lifecycleOwner, Observer { serverChild ->
+                        .observe(lifecycleOwner) { serverChild ->
                             _currentChildInformation.postValue(serverChild)
                             if (serverChild != null) {
                                 viewModelScope.launch {
-                                    watches.getWatchLocation(serverChild.watchUID)
-                                        .observe(lifecycleOwner) { location ->
-                                            if (location != null && fatherInformation.value != null) {
+                                    watches.openWatchStream(serverChild.watchUID)
+                                        .observe(lifecycleOwner) { status ->
+                                            if (status != null && fatherInformation.value != null) {
                                                 val distance = calculateDistance(
                                                     fatherInformation.value!!.latitude.toDouble(),
                                                     fatherInformation.value!!.longitude.toDouble(),
-                                                    location.latitude,
-                                                    location.longitude
+                                                    status.latitude,
+                                                    status.longitude
                                                 )
                                                 if (distance.toDouble() < 1.0) {
                                                     watchLocationString.postValue(
@@ -86,28 +86,27 @@ class FatherHomeViewModel(
                                                         "$distance KM From Home"
                                                     )
                                                 }
-                                                watchLocation.value = location
+                                                watchLocation.value = LocationModel(
+                                                    longitude = status.longitude,
+                                                    latitude = status.latitude
+                                                )
+                                                steps.postValue(
+                                                    status.dailySteps.toInt().toString()
+                                                )
+                                                heartRate.postValue(
+                                                    status.heartRate.toInt().toString()
+                                                )
+                                                oxygenLevel.postValue(
+                                                    status.oxygenLevel.toInt().toString()
+                                                )
                                             }
-                                        }
-                                    watches.getHeartRate(currentChildInformation.value!!.watchUID)
-                                        .observe(lifecycleOwner) { rate ->
-                                            heartRate.postValue(rate)
-                                        }
-                                    watches.getOxygenLevel(currentChildInformation.value!!.watchUID)
-                                        .observe(lifecycleOwner) { level ->
-                                            oxygenLevel.postValue(level)
-                                        }
-                                    watches.getStepsCount(currentChildInformation.value!!.watchUID)
-                                        .observe(lifecycleOwner) { num ->
-                                            steps.postValue(num)
                                         }
                                 }
                             }
-                        })
+                        }
                 }
             }
         }
-
     }
 
     suspend fun openStreamFather(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
@@ -122,6 +121,16 @@ class FatherHomeViewModel(
             }
         }
 
+    }
+
+    suspend fun closeWatchSteam(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
+        if (currentChildInformation.value != null) {
+            watches.openWatchStream(currentChildInformation.value!!.watchUID)
+                .removeObservers(lifecycleOwner)
+            withContext(Dispatchers.IO) {
+                watches.closeWatchStream()
+            }
+        }
     }
 
     suspend fun closeStreamChild(lifecycleOwner: LifecycleOwner) = viewModelScope.launch {
