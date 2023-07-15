@@ -172,9 +172,9 @@ object Binding {
     @SuppressLint("SetTextI18n")
     fun setHeathText(textView: TextView, value: Number, type: String) {
         when (type) {
-            HEART_RATE -> textView.text = "$value bpm"
-            STEPS -> textView.text = "$value Step"
-            OXYGEN_LEVEL -> textView.text = "$value %"
+            HEART_RATE -> textView.text = "${value.toInt()} bpm"
+            STEPS -> textView.text = "${value.toInt()} Step"
+            OXYGEN_LEVEL -> textView.text = "${value.toInt()} %"
         }
     }
 

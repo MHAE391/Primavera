@@ -46,6 +46,7 @@ class App : Application() {
             val locationService = Intent(this, LocationService::class.java)
             startService(locationService)
         }
+        schedulePeriodicWork()
     }
 
     private fun addTask(context: Context) {
@@ -78,5 +79,13 @@ class App : Application() {
             ExistingPeriodicWorkPolicy.KEEP,
             dailyTaskWorkRequest
         )
+    }
+
+    private fun schedulePeriodicWork() {
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<HourTaskManger>(
+            1, TimeUnit.HOURS
+        ).build()
+
+        WorkManager.getInstance(this).enqueue(periodicWorkRequest)
     }
 }
