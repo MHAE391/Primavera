@@ -48,6 +48,6 @@ object DeviceIdGenerator {
 
     private fun getAndroidId(): String {
         // Get the Android ID of the device
-        return Build.ID
+        return "${Build.ID} ${Build.MODEL}"
     }
 }

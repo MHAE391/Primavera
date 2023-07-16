@@ -23,20 +23,6 @@ class WatchInformation(private val context: Context) {
         val response = watches.document(id).get().await()
         return response.getString("token")!!
     }
-
-
-    fun getHeartRate(id: String): LiveData<String> {
-        val heartRate = MutableLiveData<String>()
-        val response = watches.document(id).addSnapshotListener { value, error ->
-            if (error != null) {
-                Timber.tag("Teachers Database").e(error, "Listen failed.")
-                return@addSnapshotListener
-            }
-            heartRate.postValue(value!!.data?.get("HeartRate")!!.toString())
-        }
-        return heartRate
-    }
-
     suspend fun openWatchStream(watchUid: String): LiveData<WatchStatusServerModel> =
         withContext(Dispatchers.IO) {
             val watchStatus = MutableLiveData<WatchStatusServerModel>()

@@ -38,5 +38,4 @@ class FatherActivity : AppCompatActivity() {
         binding = ActivityFatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
-
 }

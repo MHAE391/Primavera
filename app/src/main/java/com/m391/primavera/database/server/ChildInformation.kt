@@ -76,6 +76,7 @@ class ChildInformation(
         }.await()
         if (response != SUCCESS) return@withContext response
         dataStoreManager.setCurrentChildUid(childUid)
+        dataStoreManager.setWatchUid(watchUid)
         return@withContext childUid
     }
 

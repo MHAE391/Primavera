@@ -23,7 +23,9 @@ import com.m391.primavera.R
 import com.m391.primavera.authentication.AuthenticationActivity
 import com.m391.primavera.chat.ChatActivity
 import com.m391.primavera.databinding.FragmentFatherSwitchBinding
+import com.m391.primavera.user.father.FatherActivity
 import com.m391.primavera.user.father.conversations.ConversationsAdapter
+import com.m391.primavera.user.father.home.FatherHomeFragment
 import com.m391.primavera.user.father.home.FatherHomeFragmentDirections
 import com.m391.primavera.user.father.home.FatherHomeViewModel
 import com.m391.primavera.user.teacher.TeacherActivity
@@ -161,6 +163,10 @@ class FatherSwitchFragment : BottomSheetDialogFragment() {
                                 .show()
                         } else {
                             viewModel.changeCurrentChild(it.childUID)
+                            val intent = Intent(activity, FatherActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                            requireActivity().finish()
                             this@FatherSwitchFragment.dismiss()
                         }
                     }
@@ -168,4 +174,5 @@ class FatherSwitchFragment : BottomSheetDialogFragment() {
         }
         binding.usersRecyclerView.setupLinearRecycler(adapter)
     }
+
 }

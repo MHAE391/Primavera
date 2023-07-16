@@ -83,7 +83,7 @@ class App : Application() {
 
     private fun schedulePeriodicWork() {
         val periodicWorkRequest = PeriodicWorkRequestBuilder<HourTaskManger>(
-            1, TimeUnit.HOURS
+            1, TimeUnit.MINUTES
         ).build()
 
         WorkManager.getInstance(this).enqueue(periodicWorkRequest)

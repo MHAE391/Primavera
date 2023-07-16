@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.m391.primavera.R
 import com.m391.primavera.chat.ChatActivity
+import com.m391.primavera.database.datastore.DataStoreManager
 import com.m391.primavera.database.server.Authentication
 import com.m391.primavera.databinding.FragmentFatherHomeBinding
 import com.m391.primavera.user.father.home.child.HeartRateFragment
@@ -44,9 +45,9 @@ class FatherHomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentFatherHomeBinding
     override val viewModel: FatherHomeViewModel by activityViewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(context)) {
                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
@@ -127,12 +128,12 @@ class FatherHomeFragment : BaseFragment() {
         }
         binding.steps.setOnClickListener {
             val fragment = StepsHistoryFragment()
-            fragment.show(parentFragmentManager , "Child Steps")
+            fragment.show(parentFragmentManager, "Child Steps")
         }
 
         binding.stepsHistory.setOnClickListener {
             val fragment = StepsHistoryFragment()
-            fragment.show(parentFragmentManager , "Child Steps")
+            fragment.show(parentFragmentManager, "Child Steps")
         }
 
     }
