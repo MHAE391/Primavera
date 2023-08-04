@@ -99,6 +99,10 @@ class AlarmActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             if (intent.extras!!.getString("running").toString() == "No") {
                 startActivity(Intent(this, FatherActivity::class.java))
+            } else {
+                val intent = Intent(this, FatherActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
             finish()
         }
